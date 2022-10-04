@@ -1,0 +1,5 @@
+*.so
+.pytest_cache
+zig-cache
+zig-out
+_git
