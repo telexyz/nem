@@ -29,6 +29,8 @@ Theo cách mã hóa thường dùng như trong một cuộc thi thêm dấu ti�
 ![](files/aivivn-vietnamese_tone_prediction_utils.png)
 *Nguồn: https://github.com/aivivn/vietnamese_tone_prediction_utils*
 
+Như vậy đã giảm số lượng nhãn đi rất nhiều.
+
 ## Các bước thực hiện
 
 - Thu thập ngữ liệu tiếng Việt, phân tách âm tiết không dấu và nhãn.
