@@ -1,6 +1,6 @@
 ## 2022
 
-- Hoàn thành `dlsys`, tự xây dựng thư viện học sâu `kim`
+- Hoàn thành `10714`, tự xây dựng thư viện học sâu `kim`
 
 - Áp dụng `kim` và `anlp` vào `marktone`
 
