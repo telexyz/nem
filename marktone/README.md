@@ -29,7 +29,7 @@ Theo cách mã hóa thường dùng như trong một cuộc thi thêm dấu ti�
 ![](files/aivivn-vietnamese_tone_prediction_utils.png)
 *Nguồn: https://github.com/aivivn/vietnamese_tone_prediction_utils*
 
-Như vậy đã giảm số lượng nhãn đi rất nhiều.
+Như vậy chỉ cần phân tích dữ liệu khéo léo hơn ta đã giảm số lượng nhãn đi rất nhiều.
 
 ## Các bước thực hiện
 
