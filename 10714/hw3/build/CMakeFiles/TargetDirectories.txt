@@ -1,0 +1,3 @@
+/Users/t/repos/nem/10714/hw3/build/CMakeFiles/ndarray_backend_cpu.dir
+/Users/t/repos/nem/10714/hw3/build/CMakeFiles/edit_cache.dir
+/Users/t/repos/nem/10714/hw3/build/CMakeFiles/rebuild_cache.dir
