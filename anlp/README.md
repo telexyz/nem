@@ -12,3 +12,10 @@ https://www.youtube.com/playlist?list=PLWnsVgP6CzadI4-FT2Po4wsEK7MHCIQ-d
 
 https://www.youtube.com/playlist?list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ
 
+
+# [Deep Learning for NLP](https://harvard-iacs.github.io/CS287)
+
+
+# [NLP4You](https://lena-voita.github.io/nlp_course.html)
+
+https://github.com/yandexdataschool/nlp_course
