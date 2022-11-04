@@ -1,8 +1,5 @@
 https://github.com/BlinkDL/RWKV-LM
 
-RWKV is a RNN with transformer-level performance. It can be directly trained like a GPT (parallelizable). So it's combining the best of RNN and transformer - great performance, fast inference, saves VRAM, fast training, "infinite" `ctx_len`, and free `sentence embedding`.
-
-
 # RWKV: RNN with Transformer-level Performance
 
 RWKV is a RNN with Transformer-level performance, which can also be directly trained like a GPT transformer (parallelizable). And it's attention-free. You only need the hidden state at position `t` to compute the state at position `t+1`. You can use the "GPT" mode to quickly computer the hidden state for the "RNN" mode.
