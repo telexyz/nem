@@ -3,3 +3,9 @@ mv README.md.1 LECTURES_NOTE.md
 
 cd notebooks && mv _git .git && git pull
 mv .git _git && cd ..
+
+cd hw3 && mv _git .git && git pull
+mv .git _git && cd ..
+
+cd hw4 && mv _git .git && git pull
+mv .git _git && cd ..

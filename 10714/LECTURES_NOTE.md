@@ -432,7 +432,7 @@ and let NN decide what activation function to use?
 * Batch Norm was developed as a techique to help optimization or avoid Dropout.<br>
   Then lots of research happened that challange explanations why Batch Norm works.<br>
   And now it's getting a third life as a technique to improve networks robustness to distributional shift.
-* TODO: Add links to Batch Norm eploration papers
+* TODO: Add links to Batch Norm exploration papers
 
 ### Regularization
 * Deep Neural Networks are often **overparameterized models**: 
@@ -726,27 +726,34 @@ and let NN decide what activation function to use?
     does not exceed number of available registers.
   * $v_3$ does not affect loading cost (number of operations).<br>
     We can pick $v_3 = 1$ and then increase $v_1$ and $v_2$ 
-    as large as needed.<br>
-    Ususally we set $v_1 = v_2$, but sometimes
+    as large as needed.
+  * Ususally we set $v_1 = v_2$, but sometimes
     we need a bit of assymetry, 
     if number of available registers is not a perfect square (?)
   * The reason that memory loading cost is reduced is that
     we **reuse** already loaded data.<br>
     We reuse `a` $v_2$ times and reuse `b` $v_1$ times.
 
-#### **Cache line aware tiling**
+#### Cache line aware tiling
   * Prefetch line blocks in L1 cache. No registers are used.
   * Compute dot product for each row pairs of prefetched line blocks.
     This could be done using Regitster tiling as above (leveraging registers that load data from L1 cache now)
 * Combine them together: Cache line aware tiling + internal Register tiling
+
+#### Data reuse patterns
 * Besides parallelizaiton and vectorization we can speed up computations
-  by **reusing data** during computations 
-  instead of performing same data loads in different places.<br>
-  For instance, in Cache line aware tiling we reuse same matrix rows.<br>
-* We can analyse individual equations to find **possibilities to perform tiling**.<br>
-  e.g. in the formula `C[i][j] = sum(A[i][k] * B[j][k], axis=k)`,<br>
-  access to `A` matrix is independent of `j` dimension of `B` matrix.<br>
-  So we can tile the `j` dimension by `v` and reuse A data `v` times.
+  by **reusing data** during computations.
+  * It helps to avoid loading the same data in different places
+  * We can also copy data that is being reused to a faster memory to speed up data read/writes
+* We can analyse individual equations to find **possibilities to perform tiling**
+  * For example, in Cache line aware tiling we reuse same matrix rows
+  * And in inner matrix multiplication operation: `C[i][j] = sum(A[i][k] * B[j][k], axis=k)`<br>
+    access to `A` matrix is independent of `j` dimension of `B` matrix.<br>
+    So we can tile the `j` dimension of B matrix by `v` and reuse A data `v` times<br>
+    (the exact same thing that I come up with during Homework 3 😅. `(i -> k -> j)` order of loops.)
+  * It helps to look for missing iterators to find tiling and memory reuse possibilities.<br>
+    e.g. in `C[i][j] = sum(A[i][k] * B[j][k], axis=k)` example from above<br>
+    for `A[i][k]` the missing iterator is `j` and for `B[j][k]` the missing iterator is `i`.
 
 
 <a id="lec12"></a>
@@ -771,9 +778,9 @@ and let NN decide what activation function to use?
   * Launch GPU kernel
   * Copy result from GPU to CPU memory
   * Release memory on GPU
-* PCIe bus introduces bottleneck to computations by limiting the speed of
-  data copy from GPU to CPU and vice versa. That's why we need to **keep
-  data on GPU as long as possible**!
+* Data transfer from host to device and vice versa takes a lot of time!<br>
+  PCIe bus introduces bottleneck by limiting the speed of memory copy between GPU and CPU.<br>
+  That's why we need to **keep data on GPU as long as possible**!
 
 ### GPU Memory Hierarchy
 
@@ -785,25 +792,73 @@ and let NN decide what activation function to use?
   * There is a **global memory**
   * Each thread block has **shared memory**
   * Each thread has its own **registers**
-* We use shared memory to **reduce number of data loading operations** 
-  by each thread in a block by cooperatively fetching 
-  required data to a shared memory of a thread block.<br>
-  This helps to increase memory reuse across different threads.
-* **Cooperative fetching** means that each thread in a block
-  loads only portion of all shared data.
+* We use shared memory to **reduce number of data loads** from global slow memory (DRAM).
+  Data from global memory is first loaded into a faster shared memory by cooperative fetching, 
+  and then each thread within a block reads data from shared memory.<br>
+  This also helps to increase memory reuse across different threads within the same thread block.
+* **Cooperative fetching** means that multiple threads in a block
+  load corresponding portions of shared data simultaneously.
 
 ### Matrix multiplication on GPU
 
 * We will consider matrix multiplication 
   in a following transposed variant:<br>
   $C = A^T B,\ C_{i,j} = \sum\limits_k A_{k,i} B_{k,j}$<br>
-  All matrices have $n \times n$ size.
-* Thread level: **Register Tiling**
-* Block level: **Shared Memory Tiling**
+  All matrices have $N \times N$ size.
+* Thread level: **Register Tiling**<br>
+  * Load portions of DRAM data into thread registers, 
+  perform calculatation and save resultant tile back to DRAM.<br>
+  Similar to CPU Register tiling from Lecture 11
+  * Does not use thread block shared memory. Uses only thread registers  
+* Thread Block level: **Shared Memory Tiling**
+  * Each of the thread blocks computes $L \times L$ submatrix of C
+  * Each of the threads computes $V \times V$ submatrix
+  * Size of a thread block: $L / V \times L / V = L^2 / V^2$ threads
+  * $S$ is a tiling factor on a reduction dimension
+  * $L \times S$ regions of A and B matrices are loaded into a shared memory by each of a thread block
+  * Number of global memory to shared memory copy operations: $2 N^3 / L$<br>
+    Number of shared memory to registers copy operations: $2 N^3 / V$
+  * The **reason to use a shared memory** is that some threads will use the same data.<br>
+    Instead of loading it each time by each individual thread, it's better to pre-fetch it into a shared memory.
+  * Shared memory fetching is slow (? probably due to the relatively slow nature of a global memory)
+  * GPU is able to do **context switching** and launch computations 
+    even if shared memory fetching is not fully completed (?).<br>
+    In that case GPU launches computations on idle threads that have already loaded their portions of shared data.<br>
+    If sufficient amount of threads is available, this allows for data loading and computations to run concurrently.
+* How to choose S, L, V parameters? 
+  * **tradeoff**: number of registers vs number of threads available - 
+    total amount of registers on each SMT is a constant.<br>
+    If we want to use more registers per thread, than the total number of threads will be lower.<br>
+    The fewer threads are launched, the less (computational?) power we get.
+  * **tradeoff**: amount of shared memory vs number of thread blocks available.<br>
+    Larger amount of shared memory leads to a smaller number of thread blocks that can fit on the same SMP.<br>
+    And if a thread block is stalled (e.g. with data loading) 
+    there might be no other thread blocks to context switch to.
+  * People tend to use **autotune** to find best params for each particular task
+  * One can also perform problem analysis and come up with analytical solution 
+    to choose hyperparams (but it's harder).
 
-#### TODO. Finalize notes on Matrix Multiplication, cooperative fetching, other optimization techniques
+#### Other GPU optimization techniques
+There are techniques other than simple parallel execution (SIMT) and the use of shared memory
+that allow to get a maximum benefit of a GPU accelerator if used in combination:
+* Global memory continuous read.<br>
+  Ensure that all the threads within a thread block read data from a 
+  continuous region
+* Shared memory bank conflict<br>
+  Make sure that each of a thread writes 
+  to a different shared memory banks.
+* Software pipelining<br>
+  Allows to do data loading and computations (transformations?)
+  in a concurrent fashion.
+* Warp level optimizations<br>
+  Perform certain computations at a warp level - a smaller granularity
+  than a thread block.
+* Tensor Core<br>
+  Another type of acceleration unit.
 
+#### CUDA learning resources:
 * [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html)
+* [Slides. CUDA C/C++ Basics. Supercomputing 2011 Tutorial](https://www.nvidia.com/docs/IO/116711/sc11-cuda-c-basics.pdf)
 
 
 <a id="lec13"></a>
@@ -811,9 +866,12 @@ and let NN decide what activation function to use?
 ## [Lecture 13](https://www.youtube.com/watch?v=XdhUZRXA7fg) - Hardware Acceleration Implemention
 
 * Manipulating with array strides, shape and offset change **the view** of the data
-* To peroform calculations (e.g. element-wise addition) we need to use **compact()** function.<br>
+* To perform calculations (e.g. element-wise addition) 
+  we need to use **compact()** function.<br>
   It creates a new tensor from a specified view in order to perform operations correctly
   and not change underlying data of the original view.
+  * For example, to reshape a `x[0, ::3, 1:]` view of a (2,4,3)-tensor `x` we need to call:<br>
+  `x[0, ::3, 1:].compact().reshape((4,))`
 * However, some operations in numpy and pytorch can work with arguments that are not contiguous in memory.
   They do not call **compact()** function and work directly with strides.
 * In some cases it's usefull to explicitly call **compact()**.
