@@ -73,9 +73,12 @@ class TrieNode {
   // int a, a is an l-value, however (a+2) is an r-value.
   // https://en.wikipedia.org/wiki/C%2B%2B11#Rvalue_references_and_move_constructors
 
-  // Khởi tạo trie node mới từ một node có sẵn 
+  // NOTE
+  // https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used
+  // dùng std::move để swap resource thay vì copy
+  // Khởi tạo trie node mới từ một node có sẵn
   TrieNode(TrieNode &&other_trie_node) noexcept {
-    // children_ = other_trie_node.children_;
+    children_ = std::move(other_trie_node.children_);
     key_char_ = other_trie_node.key_char_;
     is_end_ = other_trie_node.is_end_;
   }
@@ -119,7 +122,9 @@ class TrieNode {
    *
    * @return key_char_ of this trie node.
    */
-  char GetKeyChar() const { return key_char_; }
+  char GetKeyChar() const { 
+    return key_char_; 
+  }
 
   /**
    * @brief Insert a child node for this trie node into children_ map, given the key char and
@@ -138,11 +143,17 @@ class TrieNode {
    * @param child Unique pointer created for the child node. This should be added to children_ map.
    * @return Pointer to unique_ptr of the inserted child node. If insertion fails, return nullptr.
    */
-  std::unique_ptr<TrieNode> *InsertChildNode(char key_char, std::unique_ptr<TrieNode> &&child) { return nullptr; }
+  std::unique_ptr<TrieNode> *InsertChildNode(char key_char, std::unique_ptr<TrieNode> &&child) {
+    // https://en.cppreference.com/w/cpp/container/unordered_map/insert
+    bool ok = children_.insert({key_char, std::move(child)}).second;
+    if (ok) {
+      return &children_[key_char]; 
+    } else {
+      return nullptr;
+    }
+  }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Get the child node given its key char. If child node for given key char does
    * not exist, return nullptr.
    *
@@ -150,26 +161,35 @@ class TrieNode {
    * @return Pointer to unique_ptr of the child node, nullptr if child
    *         node does not exist.
    */
-  std::unique_ptr<TrieNode> *GetChildNode(char key_char) { return nullptr; }
+  std::unique_ptr<TrieNode> *GetChildNode(char key_char) {
+    // https://cplusplus.com/reference/unordered_map/unordered_map/find/#example
+    std::unordered_map<char, std::unique_ptr<TrieNode>>::const_iterator got = children_.find(key_char);
+    if ( got == children_.end() )
+      return nullptr; 
+    else
+      return &children_[key_char];
+      // return got->second;
+  }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Remove child node from children_ map.
    * If key_char does not exist in children_, return immediately.
    *
    * @param key_char Key char of child node to be removed
    */
-  void RemoveChildNode(char key_char) {}
+  void RemoveChildNode(char key_char) {
+    // https://cplusplus.com/reference/unordered_map/unordered_map/erase/#example
+    children_.erase(children_.find(key_char));
+  }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Set the is_end_ flag to true or false.
    *
    * @param is_end Whether this trie node is ending char of a key string
    */
-  void SetEndNode(bool is_end) {}
+  void SetEndNode(bool is_end) {
+    is_end_ = is_end;
+  }
 
  protected:
   /** Key character of this trie node */
@@ -193,8 +213,6 @@ class TrieNodeWithValue : public TrieNode {
 
  public:
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Construct a new TrieNodeWithValue object from a TrieNode object and specify its value.
    * This is used when a non-terminal TrieNode is converted to terminal TrieNodeWithValue.
    *
@@ -210,11 +228,14 @@ class TrieNodeWithValue : public TrieNode {
    * @param trieNode TrieNode whose data is to be moved to TrieNodeWithValue
    * @param value
    */
-  TrieNodeWithValue(TrieNode &&trieNode, T value) {}
+  TrieNodeWithValue(TrieNode &&trieNode, T value) 
+  : TrieNode(std::move(trieNode)) {
+  // https://stackoverflow.com/questions/4086800/move-constructor-on-derived-object
+    value_ = value;
+    SetEndNode(true);
+  }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Construct a new TrieNodeWithValue. This is used when a new terminal node is constructed.
    *
    * You should:
@@ -225,7 +246,11 @@ class TrieNodeWithValue : public TrieNode {
    * @param key_char Key char of this node
    * @param value Value of this node
    */
-  TrieNodeWithValue(char key_char, T value) {}
+  TrieNodeWithValue(char key_char, T value)
+  : TrieNode(key_char) {
+    value_ = value;
+    SetEndNode(true);
+  }
 
   /**
    * @brief Destroy the Trie Node With Value object
@@ -253,16 +278,14 @@ class Trie {
 
  public:
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Construct a new Trie object. Initialize the root node with '\0'
    * character.
    */
-  Trie() = default;
+  Trie() {
+    root_ = std::unique_ptr<TrieNode>(new TrieNode('\0'));
+  };
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Insert key-value pair into the trie.
    *
    * If the key is an empty string, return false immediately.
