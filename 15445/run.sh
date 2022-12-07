@@ -6,3 +6,4 @@ cd build
 make format
 make starter_trie_test
 ./test/starter_trie_test
+make check-clang-tidy-p0

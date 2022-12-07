@@ -102,7 +102,7 @@ class TrieNode {
    *
    * @return True if this trie node has any child node, false if it has no child node.
    */
-  bool HasChildren() const { return (children_.size() > 0); }
+  bool HasChildren() const { return !children_.empty(); }
 
   /**
    * @brief Whether this trie node is the ending character of a key string.
@@ -145,9 +145,8 @@ class TrieNode {
     bool ok = children_.insert({key_char, std::move(child)}).second;
     if (ok) {
       return &children_[key_char];
-    } else {
-      return nullptr;
     }
+    return nullptr;
   }
 
   /**
@@ -160,13 +159,11 @@ class TrieNode {
    */
   std::unique_ptr<TrieNode> *GetChildNode(char key_char) {
     // https://cplusplus.com/reference/unordered_map/unordered_map/find/#example
-    std::unordered_map<char, std::unique_ptr<TrieNode>>::const_iterator got = children_.find(key_char);
+    auto got = children_.find(key_char);
     if (got == children_.end()) {
       return nullptr;
-    } else {
-      return &children_[key_char];
-      // return got->second;
     }
+    return &children_[key_char];
   }
 
   /**
@@ -276,7 +273,7 @@ class Trie {
    * character.
    */
   Trie() {
-    root_ = std::unique_ptr<TrieNode>(new TrieNode('\0'));
+    root_ = std::make_unique<TrieNode>('\0');
     root_->IsEndNode();  // test if IsEndNode() work with root_ pointer
     root_->SetEndNode(false);
   };
@@ -308,7 +305,7 @@ class Trie {
   template <typename T>
   bool Insert(const std::string &key, T value) {
     // * If the key is an empty string, return false immediately.
-    if (key.size() == 0) {
+    if (key.empty()) {
       return false;
     }
     std::cout << ">>> " << key;
@@ -321,14 +318,10 @@ class Trie {
     }
 
     auto curr_node = std::move(root_);
-    // auto& curr_node = root_;
-    char curr_key = 0;
-
-    for (auto it = key.cbegin(); it != key.cend(); ++it) {
-      curr_key = *it;
-      auto child = curr_node->GetChildNode(curr_key);
+    for (char curr_char : key) {
+      auto child = curr_node->GetChildNode(curr_char);
       if (child == nullptr) {
-        child = curr_node->InsertChildNode(curr_key, std::make_unique<TrieNode>(curr_key));
+        child = curr_node->InsertChildNode(curr_char, std::make_unique<TrieNode>(curr_char));
       }
       curr_node = std::move(*child);
     }  // for
@@ -373,13 +366,13 @@ class Trie {
   template <typename T>
   T GetValue(const std::string &key, bool *success) {
     // * If the key is an empty string, return false immediately.
-    if (key.size() == 0) {
+    if (key.empty()) {
       *success = false;
     }
 
     auto curr_node = std::move(root_);
-    for (auto it = key.cbegin(); it != key.cend(); ++it) {
-      auto child = curr_node->GetChildNode(*it);
+    for (char curr_char : key) {
+      auto child = curr_node->GetChildNode(curr_char);
       if (child == nullptr) {
         *success = false;
         return {};
