@@ -95,7 +95,7 @@ class TrieNode {
    * @return True if this trie node has a child with given key, false otherwise.
    */
   bool HasChild(char key_char) const {
-    return (children_.find(key_char) != children_.end());
+    return ( children_.find(key_char) != children_.end() );
   }
 
   /**
@@ -105,7 +105,7 @@ class TrieNode {
    * @return True if this trie node has any child node, false if it has no child node.
    */
   bool HasChildren() const {
-    return (children_.size() > 0);
+    return ( children_.size() > 0 );
   }
 
   /**
@@ -145,8 +145,13 @@ class TrieNode {
    */
   std::unique_ptr<TrieNode> *InsertChildNode(char key_char, std::unique_ptr<TrieNode> &&child) {
     // https://en.cppreference.com/w/cpp/container/unordered_map/insert
+    // When same key is inserted twice, insert should return nullptr
+    // When inserted key and unique_ptr's key does not match, return nullptr
+    if ( key_char != child->GetKeyChar() ) {
+      return nullptr;
+    }
     bool ok = children_.insert({key_char, std::move(child)}).second;
-    if (ok) {
+    if ( ok ) {
       return &children_[key_char]; 
     } else {
       return nullptr;
@@ -164,11 +169,12 @@ class TrieNode {
   std::unique_ptr<TrieNode> *GetChildNode(char key_char) {
     // https://cplusplus.com/reference/unordered_map/unordered_map/find/#example
     std::unordered_map<char, std::unique_ptr<TrieNode>>::const_iterator got = children_.find(key_char);
-    if ( got == children_.end() )
+    if ( got == children_.end() ) {
       return nullptr; 
-    else
+    } else {
       return &children_[key_char];
       // return got->second;
+    }
   }
 
   /**

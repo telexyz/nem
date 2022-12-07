@@ -41,9 +41,9 @@ std::vector<std::string> GenerateNRandomString(int n) {
   return rand_strs;
 }
 
-TEST(StarterTest, DISABLED_TrieNodeInsertTest) {
+TEST(StarterTest, TrieNodeInsertTest) {
   // Test Insert
-  //  When same key is inserted twice, insert should return nullptr
+  // When same key is inserted twice, insert should return nullptr
   // When inserted key and unique_ptr's key does not match, return nullptr
   auto t = TrieNode('a');
   auto child_node = t.InsertChildNode('b', std::make_unique<TrieNode>('b'));
@@ -60,7 +60,7 @@ TEST(StarterTest, DISABLED_TrieNodeInsertTest) {
   EXPECT_EQ((*child_node)->GetKeyChar(), 'c');
 }
 
-TEST(StarterTest, DISABLED_TrieNodeRemoveTest) {
+TEST(StarterTest, TrieNodeRemoveTest) {
   auto t = TrieNode('a');
   __attribute__((unused)) auto child_node = t.InsertChildNode('b', std::make_unique<TrieNode>('b'));
   child_node = t.InsertChildNode('c', std::make_unique<TrieNode>('c'));
