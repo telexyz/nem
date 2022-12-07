@@ -40,9 +40,9 @@ class TrieNode {
 
   // NOTE
   // https://www.geeksforgeeks.org/use-of-explicit-keyword-in-cpp
-  // Từ khóa explicit dùng để đánh dấu constructor không tự động convert kiểu, 
+  // Từ khóa explicit dùng để đánh dấu constructor không tự động convert kiểu,
   // khi mà constructor này nhận đầu vào là một tham số. Nếu ko có từ khóa này thì
-  // nó sẽ tự động convert kiểu. 
+  // nó sẽ tự động convert kiểu.
   // VD: có thể viết trie_node == 'c' (nếu đã định nghĩa operator ==)
 
   // Khởi tạo một trie node mới với ký tự key_char, gán flag is_end_ thành false
@@ -65,11 +65,11 @@ class TrieNode {
 
   // NOTE
   // https://stackoverflow.com/questions/4549151/c-double-address-operator
-  // int&& a means "a" is an r-value reference. 
-  // && is normally only used to declare a parameter of a function. 
-  // And it only takes a r-value expression. If you don't know what an r-value is, 
-  // the simple explanation is that it doesn't have a memory address. 
-  // E.g. the number 6, and character 'v' are both r-values. 
+  // int&& a means "a" is an r-value reference.
+  // && is normally only used to declare a parameter of a function.
+  // And it only takes a r-value expression. If you don't know what an r-value is,
+  // the simple explanation is that it doesn't have a memory address.
+  // E.g. the number 6, and character 'v' are both r-values.
   // int a, a is an l-value, however (a+2) is an r-value.
   // https://en.wikipedia.org/wiki/C%2B%2B11#Rvalue_references_and_move_constructors
 
@@ -94,9 +94,7 @@ class TrieNode {
    * @param key_char Key char of child node.
    * @return True if this trie node has a child with given key, false otherwise.
    */
-  bool HasChild(char key_char) const {
-    return ( children_.find(key_char) != children_.end() );
-  }
+  bool HasChild(char key_char) const { return (children_.find(key_char) != children_.end()); }
 
   /**
    * @brief Whether this trie node has any children at all. This is useful
@@ -104,27 +102,21 @@ class TrieNode {
    *
    * @return True if this trie node has any child node, false if it has no child node.
    */
-  bool HasChildren() const {
-    return ( children_.size() > 0 );
-  }
+  bool HasChildren() const { return (children_.size() > 0); }
 
   /**
    * @brief Whether this trie node is the ending character of a key string.
    *
    * @return True if is_end_ flag is true, false if is_end_ is false.
    */
-  bool IsEndNode() const {
-    return is_end_;
-  }
+  bool IsEndNode() const { return is_end_; }
 
   /**
    * @brief Return key char of this trie node.
    *
    * @return key_char_ of this trie node.
    */
-  char GetKeyChar() const { 
-    return key_char_; 
-  }
+  char GetKeyChar() const { return key_char_; }
 
   /**
    * @brief Insert a child node for this trie node into children_ map, given the key char and
@@ -147,12 +139,12 @@ class TrieNode {
     // https://en.cppreference.com/w/cpp/container/unordered_map/insert
     // When same key is inserted twice, insert should return nullptr
     // When inserted key and unique_ptr's key does not match, return nullptr
-    if ( key_char != child->GetKeyChar() ) {
+    if (key_char != child->GetKeyChar()) {
       return nullptr;
     }
     bool ok = children_.insert({key_char, std::move(child)}).second;
-    if ( ok ) {
-      return &children_[key_char]; 
+    if (ok) {
+      return &children_[key_char];
     } else {
       return nullptr;
     }
@@ -169,8 +161,8 @@ class TrieNode {
   std::unique_ptr<TrieNode> *GetChildNode(char key_char) {
     // https://cplusplus.com/reference/unordered_map/unordered_map/find/#example
     std::unordered_map<char, std::unique_ptr<TrieNode>>::const_iterator got = children_.find(key_char);
-    if ( got == children_.end() ) {
-      return nullptr; 
+    if (got == children_.end()) {
+      return nullptr;
     } else {
       return &children_[key_char];
       // return got->second;
@@ -193,9 +185,7 @@ class TrieNode {
    *
    * @param is_end Whether this trie node is ending char of a key string
    */
-  void SetEndNode(bool is_end) {
-    is_end_ = is_end;
-  }
+  void SetEndNode(bool is_end) { is_end_ = is_end; }
 
  protected:
   /** Key character of this trie node */
@@ -234,9 +224,8 @@ class TrieNodeWithValue : public TrieNode {
    * @param trieNode TrieNode whose data is to be moved to TrieNodeWithValue
    * @param value
    */
-  TrieNodeWithValue(TrieNode &&trieNode, T value) 
-  : TrieNode(std::move(trieNode)) {
-  // https://stackoverflow.com/questions/4086800/move-constructor-on-derived-object
+  TrieNodeWithValue(TrieNode &&trieNode, T value) : TrieNode(std::move(trieNode)) {
+    // https://stackoverflow.com/questions/4086800/move-constructor-on-derived-object
     value_ = value;
     SetEndNode(true);
   }
@@ -252,8 +241,7 @@ class TrieNodeWithValue : public TrieNode {
    * @param key_char Key char of this node
    * @param value Value of this node
    */
-  TrieNodeWithValue(char key_char, T value)
-  : TrieNode(key_char) {
+  TrieNodeWithValue(char key_char, T value) : TrieNode(key_char) {
     value_ = value;
     SetEndNode(true);
   }
@@ -289,7 +277,7 @@ class Trie {
    */
   Trie() {
     root_ = std::unique_ptr<TrieNode>(new TrieNode('\0'));
-    root_->IsEndNode(); // test if IsEndNode() work with root_ pointer
+    root_->IsEndNode();  // test if IsEndNode() work with root_ pointer
     root_->SetEndNode(false);
   };
 
@@ -320,26 +308,30 @@ class Trie {
   template <typename T>
   bool Insert(const std::string &key, T value) {
     // * If the key is an empty string, return false immediately.
-    if ( key.size() == 0 ) { return false; }
+    if (key.size() == 0) {
+      return false;
+    }
     std::cout << ">>> " << key;
     // * If the key already exists, return false. Duplicated keys are not allowed and
     // * you should never overwrite value of an existing key.
     bool success = false;
     GetValue<T>(key, &success);
-    if ( success ) { return false; }
+    if (success) {
+      return false;
+    }
 
     auto curr_node = std::move(root_);
     // auto& curr_node = root_;
     char curr_key = 0;
 
-    for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
+    for (auto it = key.cbegin(); it != key.cend(); ++it) {
       curr_key = *it;
-      auto child = curr_node->GetChildNode( curr_key );
-      if ( child == nullptr ) {
-        child = curr_node->InsertChildNode( curr_key, std::make_unique<TrieNode>(curr_key) );
+      auto child = curr_node->GetChildNode(curr_key);
+      if (child == nullptr) {
+        child = curr_node->InsertChildNode(curr_key, std::make_unique<TrieNode>(curr_key));
       }
       curr_node = std::move(*child);
-    } // for
+    }  // for
     return true;
   }
 
@@ -360,9 +352,7 @@ class Trie {
    * @param key Key used to traverse the trie and find the correct node
    * @return True if the key exists and is removed, false otherwise
    */
-  bool Remove(const std::string &key) {
-    return false;
-  }
+  bool Remove(const std::string &key) { return false; }
 
   /**
    * @brief Get the corresponding value of type T given its key.
@@ -383,19 +373,21 @@ class Trie {
   template <typename T>
   T GetValue(const std::string &key, bool *success) {
     // * If the key is an empty string, return false immediately.
-    if ( key.size() == 0 ) { *success = false; }
+    if (key.size() == 0) {
+      *success = false;
+    }
 
     auto curr_node = std::move(root_);
-    for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
-      auto child = curr_node->GetChildNode( *it );
-      if ( child == nullptr ) {
+    for (auto it = key.cbegin(); it != key.cend(); ++it) {
+      auto child = curr_node->GetChildNode(*it);
+      if (child == nullptr) {
         *success = false;
         return {};
       }
       curr_node = std::move(*child);
-    } // for
+    }  // for
 
-    *success = curr_node->IsEndNode();   
+    *success = curr_node->IsEndNode();
     return {};
   }
 };
