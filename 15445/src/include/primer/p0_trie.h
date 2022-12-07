@@ -159,8 +159,10 @@ class TrieNode {
    */
   std::unique_ptr<TrieNode> *GetChildNode(char key_char) {
     // https://cplusplus.com/reference/unordered_map/unordered_map/find/#example
-    auto got = children_.find(key_char);
-    if (got == children_.end()) {
+    if (children_.empty()) {
+      return nullptr;
+    }
+    if (children_.find(key_char) == children_.end()) {
       return nullptr;
     }
     return &children_[key_char];
@@ -221,10 +223,10 @@ class TrieNodeWithValue : public TrieNode {
    * @param trieNode TrieNode whose data is to be moved to TrieNodeWithValue
    * @param value
    */
-  TrieNodeWithValue(TrieNode &&trieNode, T value) : TrieNode(std::move(trieNode)) {
+  TrieNodeWithValue(TrieNode &&trieNode, T value) : TrieNode(std::forward<TrieNode>(trieNode)) {
     // https://stackoverflow.com/questions/4086800/move-constructor-on-derived-object
-    value_ = value;
-    SetEndNode(true);
+    this->value_ = value;
+    this->is_end_ = true;
   }
 
   /**
@@ -274,9 +276,8 @@ class Trie {
    */
   Trie() {
     root_ = std::make_unique<TrieNode>('\0');
-    root_->IsEndNode();  // test if IsEndNode() work with root_ pointer
     root_->SetEndNode(false);
-  };
+  }
 
   /**
    * @brief Insert key-value pair into the trie.
@@ -308,7 +309,8 @@ class Trie {
     if (key.empty()) {
       return false;
     }
-    std::cout << ">>> " << key;
+    // std::cout << ">>> " << key;
+
     // * If the key already exists, return false. Duplicated keys are not allowed and
     // * you should never overwrite value of an existing key.
     bool success = false;
@@ -317,14 +319,28 @@ class Trie {
       return false;
     }
 
-    auto curr_node = std::move(root_);
+    auto curr_node = &root_;
     for (char curr_char : key) {
-      auto child = curr_node->GetChildNode(curr_char);
+      auto child = (*curr_node)->GetChildNode(curr_char);
       if (child == nullptr) {
-        child = curr_node->InsertChildNode(curr_char, std::make_unique<TrieNode>(curr_char));
+        child = (*curr_node)->InsertChildNode(curr_char, std::make_unique<TrieNode>(curr_char));
       }
-      curr_node = std::move(*child);
-    }  // for
+      curr_node = child;
+    }
+
+    // * When you reach the ending character of a key:
+    // * 1. If TrieNode with this ending character does not exist, create new TrieNodeWithValue
+    // * and add it to parent node's children_ map.
+    // * 2. If the terminal node is a TrieNode, then convert it into TrieNodeWithValue by
+    // * invoking the appropriate constructor.
+    // * 3. If it is already a TrieNodeWithValue,
+    // * then insertion fails and returns false. Do not overwrite existing data with new data.
+    if ((*curr_node)->IsEndNode()) {
+      return false;
+    }
+
+    (*curr_node) = std::make_unique<TrieNodeWithValue<T>>(std::move(*(*curr_node)), value);
+
     return true;
   }
 
@@ -370,17 +386,24 @@ class Trie {
       *success = false;
     }
 
-    auto curr_node = std::move(root_);
+    auto curr_node = &root_;
     for (char curr_char : key) {
-      auto child = curr_node->GetChildNode(curr_char);
-      if (child == nullptr) {
+      curr_node = (*curr_node)->GetChildNode(curr_char);
+      if (curr_node == nullptr) {
         *success = false;
         return {};
       }
-      curr_node = std::move(*child);
-    }  // for
+    }
 
-    *success = curr_node->IsEndNode();
+    *success = (*curr_node)->IsEndNode();
+    if (*success) {
+      auto casted = dynamic_cast<TrieNodeWithValue<T> *>(&(*(*curr_node)));
+      if (casted == nullptr) {
+        *success = false;
+        return {};
+      }
+      return casted->GetValue();
+    }
     return {};
   }
 };

@@ -81,8 +81,11 @@ TEST(StarterTest, TrieNodeRemoveTest) {
 TEST(StarterTest, TrieInsertTest) {
   {
     Trie trie;
-    trie.Insert<std::string>("abc", "d");
     bool success = true;
+    trie.GetValue<std::string>("abc", &success);
+    EXPECT_EQ(success, false);
+
+    trie.Insert<std::string>("abc", "d");
     auto val = trie.GetValue<std::string>("abc", &success);
     EXPECT_EQ(success, true);
     EXPECT_EQ(val, "d");
