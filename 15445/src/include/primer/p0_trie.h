@@ -289,6 +289,8 @@ class Trie {
    */
   Trie() {
     root_ = std::unique_ptr<TrieNode>(new TrieNode('\0'));
+    root_->IsEndNode(); // test if IsEndNode() work with root_ pointer
+    root_->SetEndNode(false);
   };
 
   /**
@@ -317,6 +319,38 @@ class Trie {
    */
   template <typename T>
   bool Insert(const std::string &key, T value) {
+    // * If the key is an empty string, return false immediately.
+    if ( key.size() == 0 ) { return false; }
+
+    // auto curr_node = std::move(root_);
+    auto& curr_node = root_;
+    char curr_key = 0;
+
+    for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
+      curr_key = *it;
+      bool is_end_key = ( next(it) == key.end() );
+      auto child = curr_node->GetChildNode( curr_key );
+      if ( child == nullptr ) {
+        if (is_end_key) {
+          child = curr_node->InsertChildNode( curr_key, 
+            std::make_unique<TrieNodeWithValue>(curr_key, value) );
+          return true;
+        } else {
+          child = curr_node->InsertChildNode( curr_key, 
+            std::make_unique<TrieNode>(curr_key) );
+        }
+       continue;
+      } 
+
+      // https://learn.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances
+      if ( (*child)->IsEndNode() ) {
+        if ( is_end_key ) return false;
+        child = curr_node->InsertChildNode( curr_key, 
+          std::make_unique<TrieNode>(curr_key) );
+      }
+
+      curr_node = std::move(*child);
+    } // for
     return false;
   }
 
@@ -337,11 +371,11 @@ class Trie {
    * @param key Key used to traverse the trie and find the correct node
    * @return True if the key exists and is removed, false otherwise
    */
-  bool Remove(const std::string &key) { return false; }
+  bool Remove(const std::string &key) {
+    return false;
+  }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Get the corresponding value of type T given its key.
    * If key is empty, set success to false.
    * If key does not exist in trie, set success to false.
@@ -359,7 +393,23 @@ class Trie {
    */
   template <typename T>
   T GetValue(const std::string &key, bool *success) {
-    *success = false;
+    // * If the key is an empty string, return false immediately.
+    if ( key.size() == 0 ) { *success = false; }
+
+    auto curr_node = std::move(root_);
+    char curr_key = 0;
+
+    for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
+      curr_key = *it;
+      auto child = curr_node->GetChildNode( curr_key );
+      if ( child == nullptr ) {
+        *success = false;
+        return {};
+      }
+      curr_node = std::move(*child);
+    } // for
+    
+    *success = curr_node->IsEndNode();   
     return {};
   }
 };
