@@ -321,37 +321,26 @@ class Trie {
   bool Insert(const std::string &key, T value) {
     // * If the key is an empty string, return false immediately.
     if ( key.size() == 0 ) { return false; }
+    std::cout << ">>> " << key;
+    // * If the key already exists, return false. Duplicated keys are not allowed and
+    // * you should never overwrite value of an existing key.
+    bool success = false;
+    GetValue<T>(key, &success);
+    if ( success ) { return false; }
 
-    // auto curr_node = std::move(root_);
-    auto& curr_node = root_;
+    auto curr_node = std::move(root_);
+    // auto& curr_node = root_;
     char curr_key = 0;
 
     for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
       curr_key = *it;
-      bool is_end_key = ( next(it) == key.end() );
       auto child = curr_node->GetChildNode( curr_key );
       if ( child == nullptr ) {
-        if (is_end_key) {
-          child = curr_node->InsertChildNode( curr_key, 
-            std::make_unique<TrieNodeWithValue>(curr_key, value) );
-          return true;
-        } else {
-          child = curr_node->InsertChildNode( curr_key, 
-            std::make_unique<TrieNode>(curr_key) );
-        }
-       continue;
-      } 
-
-      // https://learn.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances
-      if ( (*child)->IsEndNode() ) {
-        if ( is_end_key ) return false;
-        child = curr_node->InsertChildNode( curr_key, 
-          std::make_unique<TrieNode>(curr_key) );
+        child = curr_node->InsertChildNode( curr_key, std::make_unique<TrieNode>(curr_key) );
       }
-
       curr_node = std::move(*child);
     } // for
-    return false;
+    return true;
   }
 
   /**
@@ -397,18 +386,15 @@ class Trie {
     if ( key.size() == 0 ) { *success = false; }
 
     auto curr_node = std::move(root_);
-    char curr_key = 0;
-
     for ( auto it = key.cbegin(); it != key.cend(); ++it ) {
-      curr_key = *it;
-      auto child = curr_node->GetChildNode( curr_key );
+      auto child = curr_node->GetChildNode( *it );
       if ( child == nullptr ) {
         *success = false;
         return {};
       }
       curr_node = std::move(*child);
     } // for
-    
+
     *success = curr_node->IsEndNode();   
     return {};
   }
