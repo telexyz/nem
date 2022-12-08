@@ -26,6 +26,12 @@ Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và 
 
 https://github.com/telexyz/nem/tree/main/marktone#readme
 
+## Train mô hình ngôn ngữ RWKV cho tiếng Việt
+
+Ưu điểm train nhanh, độ chính xác ~ Transformer, inference cực nhanh (chỉ cần nhân vector với matrix), có thể triển khai trên smartphone.
+
+https://github.com/BlinkDL/RWKV-LM
+
 ## Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
 
 https://github.com/telexyz/bon
