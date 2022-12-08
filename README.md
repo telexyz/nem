@@ -18,12 +18,9 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 
 ## 07/2023-xxx
 
-Tự viết một trình thông dịch ngôn ngữ https://wren.io theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
+Tự viết một trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
 
 Rồi tìm hiểu sâu hơn về trình biên dịch và LLVM bằng cách tìm hiểu mã nguồn Zig bắt đầu từ https://mitchellh.com/zig
-
-### Tại sao chọn Wren?
-Đơn giản, hiệu quả, syntax đẹp, có cả sách và mã nguồn của cùng một tác giả.
 
 ### Tại sao chọn Zig?
 Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản và mạnh mẽ. Có thể học syntax trong buổi sáng và chiều làm dự án luôn. Zig mới và chưa ra bản 1.0 (có lẽ vào cuối 2023) nhưng đã có 2 startups thành công sử dụng Zig (Bun.js và TigerBeetle). Cộng đồng rất mạnh.
@@ -82,10 +79,7 @@ https://github.com/telexyz/bon
 
 - Có thể viết lại bằng Zig nếu Zig hỗ trợ nvptx đủ tốt. Tập trung data-oriented và thuần perf.
 
-- Có thể viết bằng C/C++,
-	- tham khảo https://github.com/fengwang/ceras 
-	- nhúng https://wren.io trong C, để có thể dùng scripting language (như dùng Python với Pytorch). Wren là một ngôn ngữ nhẹ, nhanh, class-first, syntax đẹp
-
+- Có thể viết bằng C++ tham khảo https://github.com/fengwang/ceras 
 
 - - -
 
