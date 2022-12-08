@@ -1,12 +1,38 @@
-## 2022
+# Học
+
+## 09/2022-12/2022
 
 - Hoàn thành `10714`, tự xây dựng thư viện học sâu `kim`
 
+## 12/2022-03/2023
+
 - Hoàn thành `15445`, hiểu cách xây dựng một database cơ bản
+
+## 03/2023-06/2023
+
+- Hoàn thành `15721`, Advanced Database Systems
+
+Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
+
+# Dự án
+
+Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu và giải thuật, kiến trúc máy tính cơ bản (phân cấp bộ nhớ, cache, nhân xử lý ...), lập trình hướng dữ liệu, lập trình song song / phân tán, lập trình hiệu năng cao.
+
+## Bộ gõ tiếng Việt thông minh (chốt ý tưởng)
+
+https://github.com/telexyz/nem/tree/main/marktone#readme
+
+## Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
+
+https://github.com/telexyz/bon
+
+## Viết lại Deep Learning Framework `kim` bằng ngôn ngữ lập trình hiệu năng cao (ý tưởng)
+
+https://github.com/telexyz/kim
 
 - - -
 
-### Others
+### Other interests
 
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2/sp21)
 - [Efficient Computing for Deep Learning](https://www.youtube.com/watch?v=WbLQqPw_n88) | 
