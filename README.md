@@ -30,9 +30,11 @@ https://github.com/telexyz/nem/tree/main/marktone#readme
 
 https://github.com/telexyz/bon
 
-## Viết lại Deep Learning bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
+## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
 
 https://github.com/telexyz/kim
+
+Có thể thử dùng https://cupy.dev làm backend device cho `kim` trước
 
 - - -
 
