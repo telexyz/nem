@@ -3,8 +3,9 @@
 Notes for CMU DL Systems Course (2022 online public run).
 
 # Resources:
-* [Course main page](https://dlsyscourse.org/)
-* [YouTube channel](https://www.youtube.com/channel/UC3-KIvmiIaZimgXMNt7F99g)
+* 💻 [Course main page](https://dlsyscourse.org/)
+* 🎥 [YouTube channel](https://www.youtube.com/channel/UC3-KIvmiIaZimgXMNt7F99g)
+* 📒 [Public jupyter notebooks from lectures](https://github.com/dlsyscourse/public_notebooks)
 
 # Table of Contents
 * Lecture 3
@@ -20,6 +21,8 @@ Notes for CMU DL Systems Course (2022 online public run).
 * [Lecture 11 - Hardware Acceleration](#lec11)
 * [Lecture 12 - GPU Acceleration](#lec12)
 * [Lecture 13 - Hardware Acceleration Implemention](#lec13)
+* [Lecture 14 - Implementing Convolutions](#lec14)
+* [Lecture 15 - Training Large Models](#lec15)
 
 # Notes
 
@@ -553,7 +556,7 @@ and let NN decide what activation function to use?
     $\large z_{i,j} = [k=3] = x_{i-1,j-1} W_{i-1, j-1} + x_{i-1,j} W_{i-1, j} + ... + x_{i+1,j+1} W_{i+1, j+1}$
 * Such way of thinking helps to represent a single convolution as a set of
   $k \times k$ matrix multiplications, and their result is then summed.<br>
-  This **helps to implement convolutions** (in what way? next sections tells that we are using atomic operations. TODO)
+  This **helps to implement convolutions**
 * Usually, only odd-sized filters are used. Because it's more convenient
   to calculate output shapes, padding size compared to even-sized filters.
 * To build high level representations and reduce computations we often 
@@ -591,17 +594,17 @@ and let NN decide what activation function to use?
 * Using this version of convolution, we can derive partial derivative $\dfrac{df}{dx}$ as:<br>
   $\dfrac{df}{dx} = \dfrac{d \widehat{W} x}{dx} = \widehat{W}$
 
-  And the adjoint $\overline{x}$ is derived as follows:
+  And the adjoint $\large \overline{x}$ is derived as follows:
   
-  $\overline{x} = \dfrac{dy}{dx} = \dfrac{dy}{df} \dfrac{df}{dx} = \widehat{W}^T \dfrac{dy}{df}$
+  $\large \overline{x} = \dfrac{dy}{dx} = \dfrac{dy}{df} \dfrac{df}{dx} = \widehat{W}^T \dfrac{dy}{df}$
 
   $\widehat{W}^T = band(w_{k \times k}, ..., w_2, w_1)$ - 
   is also a banded matrix, but with reverse order of diagonals.
   
-  * Based on that we can **represent adjoint $\overline{x}$ as convolution** 
+  * Based on that we can **represent adjoint $\large \overline{x}$ as convolution** 
     of incoming gradient $\dfrac{dy}{df}$ with a flipped filter (flipped order of filter-values):
   
-    $\overline{x} = \widehat{W}^T \dfrac{dy}{df} = conv(\dfrac{dy}{df}, flip(W))$
+    $\large \overline{x} = \widehat{W}^T \dfrac{dy}{df} = conv(\dfrac{dy}{df}, flip(W))$
 
     i.e. **multiplying by the transpose of a convolution is equivalent 
     to convolving with a flipped version of the filter.**
@@ -610,7 +613,7 @@ and let NN decide what activation function to use?
     It would also be impractical because these matrices contain a lot of 0s.
 
 
-* To compute another adjoint, $\overline{W}$, we can similarly rewrite the convolution as a matrix-vector
+* To compute another adjoint, $\large \overline{W}$, we can similarly rewrite the convolution as a matrix-vector
   product, now treating the **filter** as a vector (instead of treating input as a vector, like previously)
   and expanding $x$ vector to a $\widehat{X}$ matrix using **im2col** operation:
 
@@ -619,9 +622,9 @@ and let NN decide what activation function to use?
   $\dfrac{df}{dW} = \widehat{X}$
 
   * Matrix $\widehat{X}$ is much more dense compared to a $\widehat{W}$
-  * And it turns out that in many cases the most efficient way to implement convolultions
+  * And it turns out that in many cases **the most efficient way to implement convolultions**<br>
     is to first explicity construct $\widehat{X}$ im2col matrix 
-    and then perform the convolution as a matrix-matrix product 
+    and then perform the convolution as a matrix-matrix product (see [Lecture 14](#lec14))<br>
     $f = conv(x, W) = \widehat{X} w$
   * Matrix $\widehat{X}$ has duplicated values from $x$ (e.g. multiple copies of $x_1$).<br>
     And it often ends up been worthwhile to duplicate the memory 
@@ -636,15 +639,11 @@ and let NN decide what activation function to use?
   Convolutions may be implemented efficiently by manipulating stride operations 
   in the internal representation of matrices.
 
-### Questions:
-* There are 2 ways to represent convolutions:
-  * as a matrix-vector product, when we use sum of matrix multiplications to calculate each separate "pixel" of output.
-    all channels are processed at single matrix multiplication.<br>
-    described in "elements of practical convolutions"
-  * as matrix-vector product when we process single (input channel, output channel) pair at a time.<br>
-    described in "differentiating" section
-  
-  When to used each of them? It was mentioned that both of them are effective.
+### Convolution implementations comparison
+* If the kernel size is small, convolution via im2col is the fastest one.<br>
+  When kernel is large, it is still faster than a bunch of matrix multiplications (?)
+* When the kernel is small a number of other optimizations can be implemented (as in pytorch)
+* Practical comparison is performed in [Lecture 14](#lec14) and in `Lecture_14_code_notes.ipynb` notebook
 
 
 <a id="lec11"></a>
@@ -876,3 +875,147 @@ that allow to get a maximum benefit of a GPU accelerator if used in combination:
   They do not call **compact()** function and work directly with strides.
 * In some cases it's usefull to explicitly call **compact()**.
   For example for Matrix Multiplications or Convolutions it's helpful to use compacted (flattened) arrays
+
+
+<a id="lec14"></a>
+
+## [Lecture 14](https://www.youtube.com/watch?v=XdhUZRXA7fg) - Implementing Convolutions
+
+### Implementation
+* See `Lecture_14_code_notes.ipynb` notebook 
+  and [Public jupyter notebooks from lectures repo](https://github.com/dlsyscourse/public_notebooks) 
+  for implementation details
+
+### Notes
+* We are going to store inputs as $N \times H \times W \times C_{in}$ tensor as opposed to pytorch way of $N \times C_{in} \times H \times W$. The reason is that it makes more sense when dealing with matrix multiplications
+* And we are going to store filters as $K \times K \times C_{in} \times C_{out}$ tensor as opposed to pytorch way of $C_{out} \times C_{in} \times K \times K$
+
+### Naive implementation. 7 loops :)
+* very slow, obviously. ~10 seconds vs 2ms in pytorch convolutions on CPU 
+  for `(10, 32, 32, 8), (3, 3, 8, 16)` shaped inputs
+* ```python
+  def conv_naive(Z, weight):
+    N, H, W, C_in = Z.shape
+    K, _, _, C_out = weight.shape
+    assert K % 2 == 1
+
+    out = np.zeros(shape=(N, H - K + 1, W - K + 1, C_out))
+
+    # batch
+    for ib in range(N):
+        # image
+        for i in range(H - K + 1):
+            for j in range(W - K + 1):
+                # channels
+                for icin in range(C_in):
+                    for icout in range(C_out):
+                        # kernel
+                        for ik in range(0, K):
+                            for jk in range(0, K):
+                                out[ib, i, j, icout] += Z[ib, i + ik, j + jk, icin] * weight[ik, jk, icin, icout]
+    
+    return out
+  ```
+
+### Convolution as number of matrix multiplications
+* much better compared to a naive implementation
+* still not good: 
+  * 2 `for` loops in python
+  * too many calls in automatic differentiation tool
+  * not efficient for large filter sizes
+* we leverage batch type of matrix multiplication:
+  ```python
+  def conv_matrix_mult(Z, weight):
+    N, H, W, C_in = Z.shape
+    K, _, _, C_out = weight.shape
+    assert K % 2 == 1
+
+    out = np.zeros(shape=(N, H - K + 1, W - K + 1, C_out))
+
+    for i in range(K):
+        for j in range(K):
+            out += Z[:, i:i + H - K + 1, j:j + W - K + 1, :] @ weight[i, j, :, :]
+
+    return out
+    ```
+* 2-3 times slower than pytorch implementation on CPU
+
+### Convolution as single matrix multiplication. im2col opeartion
+* We can easily (if implemented correctly 🙃) index tensors and create complex subtensors
+  by manipulating underlying memory using strides and shapes.<br>
+  Here are [nice examples](https://towardsdatascience.com/advanced-numpy-master-stride-tricks-with-25-illustrated-exercises-923a9393ab20) to illustrate the point.
+* im2col constructs a tensor by using $O(K^2)$ more memory than the original image, which can be quite costly for large kernel sizes.
+
+#### Implementation
+* The main idea: im2col -> reshape (makes tensor to be contiguous in memory, duplicates required tensor elements) ->
+  matrix multiplication -> reshape:
+  ```python
+  def im2col(arr: np.ndarray, K):
+    B, H, W, Cin = arr.shape
+    Bs, Hs, Ws, Cs = arr.strides
+
+    out = np.lib.stride_tricks.as_strided(
+        arr, 
+        shape=(B, H - K + 1, W - K + 1, K, K, Cin),
+        strides=(Bs, Hs, Ws, Hs, Ws, Cs)
+    )
+    # numpy makes array contiguous in memory before reshape if needed - like in this case.
+    # here we not only change the shape, but also duplicate needed values of input tensor.
+    # thus, underlying data copy is required.
+    out = out.reshape(-1, K * K * Cin)
+    
+    return out
+
+  def conv_im2col(Z, weight):
+    N, H, W, C_in = Z.shape
+    K, _, _, C_out = weight.shape
+    assert K % 2 == 1
+
+    Z_im2col = im2col(Z, K)
+    out = Z_im2col @ weight.reshape(-1, C_out)
+    out = out.reshape(N, H - K + 1, W - K + 1, C_out)
+
+    return out
+  ```
+
+### Questions
+* I guess it's easier to add padding when treating convolutions as single matrix multiplication via im2col
+* TODO: What happens to gradients computation if we use multi-channel version of im2col? They should remain the same.
+  Need to derive them and check.
+
+
+<a id="lec15"></a>
+
+## [Lecture 15](https://www.youtube.com/watch?v=HSzVogM5IPo) - Training Large Models
+
+* Main sources of memory consumption:
+  * Model weights
+  * Optimizer states
+  * Intermediate activation values (used during backward pass)
+
+### Techniques for memory saving
+* For inference we need only $O(1)$ memory to compute the result. We don't need to keep track of intermediate
+  activation values. And in fact we can use only 2 memory buffers (for simple case, e.g. without skip connections): 
+  buffer A to store `x` and buffer B to store `f(x)`. Then we write `f(x)` to A and `g(f(x))` to B and proceed. 
+  For more complex cases, due to locality of intermediate activation nodes dependencies, we still can perform
+  inference with a constant memory usage.
+* Training N-layer network requires $O(N)$ memory without any optimizations.
+  The reason is that intermediate activation values being used 
+  during backward pass.
+* **Activation checkpointing** (or simply **checkpointing**, or **re-materialization technique**) helps to 
+  reduce amount of memory needed to run training.
+  * The idea is that we save (checkpoint) only a portion of intermediate activations during a forward pass
+  * While doing backward pass we recompute only the needed portion of intermediate activations starting from the 
+    last checkpoint available.<br>
+    For that we use additional memory buffer.
+  * If we checkpoint only each K-th intermediate activation, the overall memory cost has following bound:<br>
+    $O(N/K) + O(K)$. checkpoint cost + re-computation cost
+  * If we choose $K = \sqrt{N}$, then we get sublinear memory cost: $O(\sqrt{N})$
+  * However, recomputations introduce additional computations. We are in fact computing forward pass once again
+    (2 times in total) during recomputation (between each pair of successive checkpoints).
+  * we can choose only to recompute relatively cheap layers (ReLU, Linear) 
+    as opposed to more computationaly heavy layers (matrix multiplication, convolution). 
+    In this case memory saving will be less, but the compute will take less time.
+
+### Parallel and distributed training
+* TODO
