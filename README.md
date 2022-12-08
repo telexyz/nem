@@ -10,7 +10,7 @@
 
 ## 03/2023-06/2023
 
-- Hoàn thành `15721`, Advanced Database Systems
+- Hoàn thành `15721`, [Advanced Database Systems](https://15721.courses.cs.cmu.edu/spring2020/schedule.html)
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
@@ -18,7 +18,11 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 
 Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu và giải thuật, kiến trúc máy tính cơ bản (phân cấp bộ nhớ, cache, nhân xử lý ...), lập trình hướng dữ liệu, lập trình song song / phân tán, lập trình hiệu năng cao.
 
-## Bộ gõ tiếng Việt thông minh (chốt ý tưởng)
+## Dùng GPU xử lý dữ liệu lớn (ý tưởng)
+
+Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database.
+
+## Bộ gõ tiếng Việt thông minh (demo)
 
 https://github.com/telexyz/nem/tree/main/marktone#readme
 
@@ -26,7 +30,7 @@ https://github.com/telexyz/nem/tree/main/marktone#readme
 
 https://github.com/telexyz/bon
 
-## Viết lại Deep Learning Framework `kim` bằng ngôn ngữ lập trình hiệu năng cao (ý tưởng)
+## Viết lại Deep Learning bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
 
 https://github.com/telexyz/kim
 
