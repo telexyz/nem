@@ -1,5 +1,7 @@
 # Học
 
+Thích gì học nấy từ deep learning, database, programming language cho tới system programming.
+
 ## 09/2022-12/2022
 
 - Hoàn thành `10714`, tự xây dựng thư viện học sâu `kim`
@@ -14,17 +16,47 @@
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
+## 07/2023-xxx
+
+Tự viết một trình thông dịch ngôn ngữ https://wren.io theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
+
+Rồi tìm hiểu sâu hơn về trình biên dịch và LLVM bằng cách tìm hiểu mã nguồn Zig bắt đầu từ https://mitchellh.com/zig
+
+### Tại sao chọn Wren?
+Đơn giản, hiệu quả, syntax đẹp (giống Ruby), có cả sách và mã nguồn đi kèm để tìm hiểu.
+
+### Tại sao chọn Zig?
+Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản và mạnh mẽ. Có thể học syntax trong buổi sáng và chiều làm dự án luôn. Zig mới và chưa ra bản 1.0 (có lẽ vào cuối 2023) nhưng đã có 2 startups thành công sử dụng Zig (Bun.js và TigerBeetle). Cộng đồng rất mạnh.
+
+Có thể tham gia sâu hơn và Zig bằng cách:
+
+- Chữa những lỗi đơn giản như một người mới
+- Cải tiến nvptx backend https://github.com/ziglang/zig/issues/10064 chạy mượt [cuda](https://github.com/gwenzek/cudaz)
+- ...
+
+## xxx-xxx
+
+Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS/serenity
+Dự án khởi đầu của một cựu lập trình viên Apple, tự code một hệ điều hành lý tưởng theo cách bạn ấy tưởng tượng (Unix style + retro windows 9.x ui/ux) như là một cách phục hồi sau khi cai nghiện. Bạn này chia sẻ những gì mình làm trên youtube và nhận được hưởng ứng lớn từ cộng đồng với gần 1000 contributors. Mọi thứ được viết từ đầu hết mà ko dùng thư viện có sẵn, kể cả web browser. Nghe có vẻ điên rồ nhưng bạn ấy và cộng đồng đã và đang làm rất tốt.
+
+
+- - -
+
+
 # Dự án
 
 Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu và giải thuật, kiến trúc máy tính cơ bản (phân cấp bộ nhớ, cache, nhân xử lý ...), lập trình hướng dữ liệu, lập trình song song / phân tán, lập trình hiệu năng cao.
+
 
 ## Dùng GPU xử lý dữ liệu lớn (ý tưởng)
 
 Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
 
+
 ## Bộ gõ tiếng Việt thông minh (xem demo)
 
 https://github.com/telexyz/nem/tree/main/marktone#readme
+
 
 ## Train mô hình ngôn ngữ RWKV cho tiếng Việt
 
@@ -33,13 +65,19 @@ Nhược điểm không phổ biến và được hỗ trợ rộng rãi như tr
 
 https://github.com/BlinkDL/RWKV-LM
 
+
 ## Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
 
 https://github.com/telexyz/bon
 
+
 ## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
 
-https://github.com/telexyz/kim
+- Base https://github.com/telexyz/kim
+- Có thể viết lại bằng Zig nếu Zig hỗ trợ nvptx đủ tốt. Tập trung data-oriented và thuần perf.
+- Có thể viết bằng C/C++,
+	- tham khảo https://github.com/fengwang/ceras 
+	- nhúng https://wren.io trong C, để có thể dùng scripting language (như dùng Python với Pytorch). Wren là một ngôn ngữ nhẹ, nhanh, class-first, syntax đẹp (giống Ruby)
 
 - - -
 
