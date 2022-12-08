@@ -309,7 +309,6 @@ class Trie {
     if (key.empty()) {
       return false;
     }
-    // std::cout << ">>> " << key;
 
     // * If the key already exists, return false. Duplicated keys are not allowed and
     // * you should never overwrite value of an existing key.
@@ -339,14 +338,14 @@ class Trie {
       return false;
     }
 
-    (*curr_node) = std::make_unique<TrieNodeWithValue<T>>(std::move(*(*curr_node)), value);
+    // curr_note is a pointer to std::unique_ptr<TrieNode>
+    // => Use `**curr_node` to access to the TrieNode data
+    *curr_node = std::make_unique<TrieNodeWithValue<T>>(std::move(**curr_node), value);
 
     return true;
   }
 
   /**
-   * TODO(P0): Add implementation
-   *
    * @brief Remove key value pair from the trie.
    * This function should also remove nodes that are no longer part of another
    * key. If key is empty or not found, return false.
@@ -395,15 +394,30 @@ class Trie {
       }
     }
 
-    *success = (*curr_node)->IsEndNode();
-    if (*success) {
-      auto casted = dynamic_cast<TrieNodeWithValue<T> *>(&(*(*curr_node)));
+    bool is_end_node = (*curr_node)->IsEndNode();
+    if (is_end_node) {
+      // curr_note is a pointer to std::unique_ptr<TrieNode>
+      // => Use `**curr_node` to access to the TrieNode data
+      // => Use `&**curr_node` lấy địa chỉ (con trỏ) tới TrieNode data
+
+      // Vì curr_node là end_node nên chắc chắn nó là TrieNodeWithValue
+      // Cast con trỏ tới TrieNode data sang TrieNodeWithValue<T> chỉ để xem
+      // value có đúng là kiểu T hay không
+      auto casted = dynamic_cast<TrieNodeWithValue<T> *>(&**curr_node);
+
+      // Nếu value ko phải kiểu T thì casted sẽ là nullprt
       if (casted == nullptr) {
         *success = false;
         return {};
       }
+
+      // value đúng là kiểu T thì tìm kiếm thành công và trả về giá trị
+      *success = true;
       return casted->GetValue();
     }
+
+    // curr_node không phải end_node tức ko tìm thấy key trong trie
+    *success = false;
     return {};
   }
 };
