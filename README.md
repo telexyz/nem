@@ -23,7 +23,7 @@ Tự viết một trình thông dịch ngôn ngữ https://wren.io theo hướng
 Rồi tìm hiểu sâu hơn về trình biên dịch và LLVM bằng cách tìm hiểu mã nguồn Zig bắt đầu từ https://mitchellh.com/zig
 
 ### Tại sao chọn Wren?
-Đơn giản, hiệu quả, syntax đẹp (giống Ruby), có cả sách và mã nguồn đi kèm để tìm hiểu.
+Đơn giản, hiệu quả, syntax đẹp, có cả sách và mã nguồn đi kèm để tìm hiểu.
 
 ### Tại sao chọn Zig?
 Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản và mạnh mẽ. Có thể học syntax trong buổi sáng và chiều làm dự án luôn. Zig mới và chưa ra bản 1.0 (có lẽ vào cuối 2023) nhưng đã có 2 startups thành công sử dụng Zig (Bun.js và TigerBeetle). Cộng đồng rất mạnh.
@@ -84,7 +84,7 @@ https://github.com/telexyz/bon
 
 - Có thể viết bằng C/C++,
 	- tham khảo https://github.com/fengwang/ceras 
-	- nhúng https://wren.io trong C, để có thể dùng scripting language (như dùng Python với Pytorch). Wren là một ngôn ngữ nhẹ, nhanh, class-first, syntax đẹp (giống Ruby)
+	- nhúng https://wren.io trong C, để có thể dùng scripting language (như dùng Python với Pytorch). Wren là một ngôn ngữ nhẹ, nhanh, class-first, syntax đẹp
 
 
 - - -
