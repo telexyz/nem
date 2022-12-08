@@ -20,7 +20,7 @@ Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu v�
 
 ## Dùng GPU xử lý dữ liệu lớn (ý tưởng)
 
-Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database.
+Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
 
 ## Bộ gõ tiếng Việt thông minh (demo)
 
