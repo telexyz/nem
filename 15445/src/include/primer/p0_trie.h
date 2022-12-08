@@ -26,6 +26,22 @@
 
 namespace bustub {
 
+class RLock {
+  ReaderWriterLatch *latch_;
+
+ public:
+  explicit RLock(ReaderWriterLatch *latch) : latch_(latch) { latch_->RLock(); }
+  ~RLock() { latch_->RUnlock(); }
+};
+
+class WLock {
+  ReaderWriterLatch *latch_;
+
+ public:
+  explicit WLock(ReaderWriterLatch *latch) : latch_(latch) { latch_->WLock(); }
+  ~WLock() { latch_->WUnlock(); }
+};
+
 /**
  * TrieNode is a generic container for any node in Trie.
  */
@@ -312,6 +328,8 @@ class Trie {
       return false;
     }
 
+    WLock lock(&latch_);
+
     // * If the key already exists, return false. Duplicated keys are not allowed and
     // * you should never overwrite value of an existing key.
     bool success = false;
@@ -366,6 +384,8 @@ class Trie {
     if (key.empty()) {
       return false;
     }
+
+    WLock lock(&latch_);
 
     auto curr_node = &root_;
     std::list<std::unique_ptr<TrieNode> *> nodes_path = {};
@@ -429,6 +449,8 @@ class Trie {
     if (key.empty()) {
       *success = false;
     }
+
+    // RLock lock(&latch_);
 
     auto curr_node = &root_;
     for (char curr_char : key) {
