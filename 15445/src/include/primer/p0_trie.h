@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <list>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -20,6 +21,7 @@
 #include <vector>
 
 #include "common/exception.h"
+#include "common/logger.h"
 #include "common/rwlatch.h"
 
 namespace bustub {
@@ -360,7 +362,50 @@ class Trie {
    * @param key Key used to traverse the trie and find the correct node
    * @return True if the key exists and is removed, false otherwise
    */
-  bool Remove(const std::string &key) { return false; }
+  bool Remove(const std::string &key) {
+    if (key.empty()) {
+      return false;
+    }
+
+    auto curr_node = &root_;
+    std::list<std::unique_ptr<TrieNode> *> nodes_path = {};
+    for (char curr_char : key) {
+      nodes_path.push_front(curr_node);
+      curr_node = (*curr_node)->GetChildNode(curr_char);
+      if (curr_node == nullptr) {
+        LOG_INFO(">>> key `%s` not exists", key.c_str());
+        // key ko có trong trie
+        return false;
+      }
+    }
+
+    // Sau khi đi hết char trong key, nếu node cuối là end_node thì key đó có trong trie
+    bool remove_node = (*curr_node)->IsEndNode();
+    LOG_INFO(">>> key `%s` is not end_node", key.c_str());
+    if (!remove_node) {
+      return false;
+    }
+
+    LOG_INFO(">>> key `%s` removing", key.c_str());
+
+    if ((*curr_node)->HasChildren()) {
+      (*curr_node)->SetEndNode(false);
+      LOG_DEBUG(">>> has children, set end note to fail");
+      return true;
+    }
+
+    // Recursively remove nodes that have no children and is not end note
+    char remove_char = (*curr_node)->GetKeyChar();
+    for (auto node : nodes_path) {
+      (*node)->RemoveChildNode(remove_char);
+      LOG_DEBUG(">>> remove child `%c`", remove_char);
+      if ((*node)->HasChildren() || (*node)->IsEndNode()) {
+        break;
+      }
+      remove_char = (*node)->GetKeyChar();
+    }
+    return true;
+  }
 
   /**
    * @brief Get the corresponding value of type T given its key.

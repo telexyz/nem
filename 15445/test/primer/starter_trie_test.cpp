@@ -132,16 +132,29 @@ TEST(StarterTest, TrieInsertTest) {
   }
 }
 
-TEST(StarterTrieTest, DISABLED_TrieRemoveTest) {
+TEST(StarterTrieTest, TrieRemoveTest) {
   {
+    // Trie insert 3 (key, value) pairs
     Trie trie;
     bool success = trie.Insert<int>("a", 5);
     EXPECT_EQ(success, true);
-    success = trie.Insert<int>("aa", 6);
-    EXPECT_EQ(success, true);
-    success = trie.Insert<int>("aaa", 7);
+    EXPECT_EQ(trie.GetValue<int>("a", &success), 5);
     EXPECT_EQ(success, true);
 
+    success = trie.Insert<int>("aa", 6);
+    EXPECT_EQ(success, true);
+    EXPECT_EQ(trie.GetValue<int>("aa", &success), 6);
+    EXPECT_EQ(success, true);
+
+    success = trie.Insert<int>("aaa", 7);
+    EXPECT_EQ(success, true);
+    EXPECT_EQ(trie.GetValue<int>("aaa", &success), 7);
+    EXPECT_EQ(success, true);
+
+    success = trie.Remove("a");
+    EXPECT_EQ(success, true);
+
+    // Trie remove aaa and insert aaa with diff value
     success = trie.Remove("aaa");
     EXPECT_EQ(success, true);
     trie.GetValue<int>("aaa", &success);
@@ -158,8 +171,10 @@ TEST(StarterTrieTest, DISABLED_TrieRemoveTest) {
 
     success = trie.Remove("aa");
     EXPECT_EQ(success, true);
+
     success = trie.Remove("a");
-    EXPECT_EQ(success, true);
+    EXPECT_EQ(success, false);
+
     success = trie.Remove("aaa");
     EXPECT_EQ(success, true);
   }
