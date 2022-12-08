@@ -29,6 +29,7 @@ https://github.com/telexyz/nem/tree/main/marktone#readme
 ## Train mô hình ngôn ngữ RWKV cho tiếng Việt
 
 Ưu điểm train nhanh, độ chính xác ~ Transformer, inference cực nhanh (chỉ cần nhân vector với matrix), có thể triển khai trên smartphone.
+Nhược điểm không phổ biến và được hỗ trợ rộng rãi như transformer
 
 https://github.com/BlinkDL/RWKV-LM
 
@@ -39,8 +40,6 @@ https://github.com/telexyz/bon
 ## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
 
 https://github.com/telexyz/kim
-
-Có thể thử dùng https://cupy.dev làm backend device cho `kim` trước
 
 - - -
 
