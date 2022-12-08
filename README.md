@@ -1,6 +1,6 @@
 # Học
 
-Thích gì học nấy từ deep learning, database, programming language cho tới system programming.
+Thích gì học nấy từ deep learning, database, intepreter - compiler - programming language cho tới system programming.
 
 ## 09/2022-12/2022
 
@@ -31,8 +31,13 @@ Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản 
 Có thể tham gia sâu hơn và Zig bằng cách:
 
 - Chữa những lỗi đơn giản như một người mới
-- Cải tiến nvptx backend https://github.com/ziglang/zig/issues/10064 chạy mượt [cuda](https://github.com/gwenzek/cudaz)
+- Cải tiến nvptx backend chạy mượt [zcuda](https://github.com/gwenzek/cudaz) (xem [video](https://www.youtube.com/watch?v=rvfsWm6TckA&t=5351s))
 - ...
+
+## xxx-xxx
+
+Tìm hiểu deep learning compiling có thể là Triton, MLIR, ...
+
 
 ## xxx-xxx
 
@@ -43,7 +48,7 @@ Dự án khởi đầu của một cựu lập trình viên Apple, tự code m�
 - - -
 
 
-# Dự án
+# Làm (dự án)
 
 Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu và giải thuật, kiến trúc máy tính cơ bản (phân cấp bộ nhớ, cache, nhân xử lý ...), lập trình hướng dữ liệu, lập trình song song / phân tán, lập trình hiệu năng cao.
 
@@ -74,15 +79,22 @@ https://github.com/telexyz/bon
 ## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
 
 - Base https://github.com/telexyz/kim
+
 - Có thể viết lại bằng Zig nếu Zig hỗ trợ nvptx đủ tốt. Tập trung data-oriented và thuần perf.
+
 - Có thể viết bằng C/C++,
 	- tham khảo https://github.com/fengwang/ceras 
 	- nhúng https://wren.io trong C, để có thể dùng scripting language (như dùng Python với Pytorch). Wren là một ngôn ngữ nhẹ, nhanh, class-first, syntax đẹp (giống Ruby)
 
+
 - - -
 
+
 ### Other interests
+
 - [System programming](https://www.cs.cornell.edu/courses/cs4414/2021fa/Schedule.htm)
+
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2/sp21)
+
 - [Efficient Computing for Deep Learning](https://www.youtube.com/watch?v=WbLQqPw_n88) | 
 [slides](https://www.rle.mit.edu/eems/wp-content/uploads/2020/09/2020_uwisconsin_compressed.pdf)
