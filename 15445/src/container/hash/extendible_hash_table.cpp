@@ -66,8 +66,11 @@ auto ExtendibleHashTable<K, V>::GetNumBucketsInternal() const -> int {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Find(const K &key, V &value) -> bool {
-  UNREACHABLE("not implemented");
+  auto index = IndexOf(key);
+  
 }
+// IndexOf(key) = hash(key) & (mask = (1 << global_depth_) - 1)
+
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Remove(const K &key) -> bool {
