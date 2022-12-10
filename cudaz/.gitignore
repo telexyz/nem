@@ -1,0 +1,8 @@
+_git*
+
+zig-cache/
+zig-out/
+
+output*.png
+*.o
+samples/*

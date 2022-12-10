@@ -1,0 +1,3 @@
+[submodule "CS344/lodepng"]
+	path = CS344/lodepng
+	url = https://github.com/gwenzek/lodepng
