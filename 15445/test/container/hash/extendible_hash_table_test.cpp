@@ -10,8 +10,9 @@
 
 namespace bustub {
 
-TEST(ExtendibleHashTableTest, DISABLED_SampleTest) {
+TEST(ExtendibleHashTableTest, SampleTest) {
   auto table = std::make_unique<ExtendibleHashTable<int, std::string>>(2);
+  // => global_depth_ = 0, bucket_size_ = 2, num_buckets_ = 1
 
   table->Insert(1, "a");
   table->Insert(2, "b");
