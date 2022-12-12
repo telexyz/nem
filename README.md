@@ -73,13 +73,15 @@ https://github.com/BlinkDL/RWKV-LM
 https://github.com/telexyz/bon
 
 
-## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao (đã có base framework)
+## Viết lại Deep Learning Framework bằng ngôn ngữ lập trình hiệu năng cao
 
-- Base https://github.com/telexyz/kim
+- Python baseline https://github.com/telexyz/kim
+
+- Có thể viết bằng https://github.com/exaloop/codon để sử dụng lại Python baseline
 
 - Có thể viết lại bằng Zig nếu Zig hỗ trợ nvptx đủ tốt. Tập trung data-oriented và thuần perf.
 
-- Có thể viết bằng C++ tham khảo https://github.com/fengwang/ceras 
+- Tham khảo https://github.com/fengwang/ceras 
 
 - - -
 
