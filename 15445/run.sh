@@ -5,13 +5,6 @@ cd build
 make format
 make check-lint
 
-# Project 1
-# - - - - -
-# https://15445.courses.cs.cmu.edu/fall2022/project1/
-make extendible_hash_table_test -j8
-# make check-clang-tidy-p1
-./test/extendible_hash_table_test
-
 # Project 0
 # - - - - -
 # https://15445.courses.cs.cmu.edu/fall2022/project0/
@@ -28,3 +21,10 @@ make extendible_hash_table_test -j8
 
 # zip project0-submission.zip \
 #     src/include/primer/p0_trie.h 
+
+# Project 1
+# - - - - -
+# https://15445.courses.cs.cmu.edu/fall2022/project1/
+make extendible_hash_table_test -j8
+# make check-clang-tidy-p1
+./test/extendible_hash_table_test
