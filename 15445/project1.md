@@ -8,7 +8,7 @@ https://devimam.github.io/exhash
 
 https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms
 
-![](files/Basic-Structure-of-Extendible-Hashing.png)
+![](files/p1-Basic-Structure-of-Extendible-Hashing.png)
 
 * `Directories`: These containers store pointers to buckets. Each directory is given a unique id which may change each time when expansion takes place. The hash function returns this directory id which is used to navigate to the appropriate bucket. Number of Directories = 2^Global Depth.
 
@@ -22,6 +22,16 @@ https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms
 
 * `Directory Expansion`: Directory Expansion Takes place when a bucket overflows. Directory Expansion is performed when the local depth of the overflowing bucket is equal to the global depth.
 
+- - -
+
+Một điểm ko được giải thích kỹ là directory expansion nên làm như thế nào? Xem ví dụ này:
+
+!! Cần đối chiếu phần bit của local depth ngược trở lại với phần bit trong directory !!
+
+![](files/p1-04.png)
+
+
+![](files/p1-05.png)
 
 - - -
 
