@@ -1,6 +1,12 @@
-# https://www.youtube.com/watch?v=Y9H2HaRKOIw
+https://youtu.be/9yUlSabzVwQ?t=3856
 
-# https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms/
+https://devimam.github.io/exhash
+
+
+- - -
+
+
+https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms
 
 ![](files/Basic-Structure-of-Extendible-Hashing.png)
 
@@ -19,7 +25,8 @@
 
 - - -
 
-# https://15445.courses.cs.cmu.edu/fall2022/project1/
+
+https://15445.courses.cs.cmu.edu/fall2022/project1/
 
 `extendible_hash_table`
 

@@ -13,22 +13,33 @@ namespace bustub {
 TEST(ExtendibleHashTableTest, SampleTest) {
   auto table = std::make_unique<ExtendibleHashTable<int, std::string>>(2);
   // => global_depth_ = 0, bucket_size_ = 2, num_buckets_ = 1
+  std::string result;
 
   table->Insert(1, "a");
+  EXPECT_EQ(table->Find(1, result), true);
   table->Insert(2, "b");
+  EXPECT_EQ(table->Find(2, result), true);
   table->Insert(3, "c");
+  EXPECT_EQ(table->Find(3, result), true);
   table->Insert(4, "d");
+  EXPECT_EQ(table->Find(4, result), true);
+
   table->Insert(5, "e");
+  EXPECT_EQ(table->Find(5, result), true);
   table->Insert(6, "f");
+  EXPECT_EQ(table->Find(6, result), true);
   table->Insert(7, "g");
+  EXPECT_EQ(table->Find(7, result), true);
   table->Insert(8, "h");
+  EXPECT_EQ(table->Find(8, result), true);
   table->Insert(9, "i");
+  EXPECT_EQ(table->Find(9, result), true);
+
   EXPECT_EQ(2, table->GetLocalDepth(0));
   EXPECT_EQ(3, table->GetLocalDepth(1));
   EXPECT_EQ(2, table->GetLocalDepth(2));
   EXPECT_EQ(2, table->GetLocalDepth(3));
 
-  std::string result;
   table->Find(9, result);
   EXPECT_EQ("i", result);
   table->Find(8, result);
