@@ -88,11 +88,15 @@ https://github.com/telexyz/bon
 
 ### Other interests
 
+- [PingCAP open source training courses about distributed database and distributed systems](https://github.com/pingcap/talent-plan)
+
 - [System programming](https://www.cs.cornell.edu/courses/cs4414/2021fa/Schedule.htm)
 
 - [Operating System Engineering](https://pdos.csail.mit.edu/6.828/2021/schedule.html)
 
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2/sp21)
+
+- [TinyML and Efficient Deep Learning](https://efficientml.ai/schedule/)
 
 - [Efficient Computing for Deep Learning](https://www.youtube.com/watch?v=WbLQqPw_n88) | 
 [slides](https://www.rle.mit.edu/eems/wp-content/uploads/2020/09/2020_uwisconsin_compressed.pdf)
