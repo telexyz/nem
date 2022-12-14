@@ -165,7 +165,8 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   auto list = &bucket->GetItems();
   auto it = list->begin();
 
-  int n = list->size(), m = bucket_size_;
+  int n = list->size();
+  int m = bucket_size_;
   LOG_INFO("Redis: bucket capacity %d/%d", n, m);
 
   while (it != list->end()) {
@@ -192,12 +193,12 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
 //===--------------------------------------------------------------------===//
 template <typename K, typename V>
 ExtendibleHashTable<K, V>::Bucket::Bucket(size_t array_size, int depth) : size_(array_size), depth_(depth) {
-  assert(list_.size() == 0);
+  assert(list_.empty());
 }
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) -> bool {
-  for (auto kv : list_) {
+  for (auto &kv : list_) {
     if (kv.first == key) {
       value = kv.second;
       return true;
