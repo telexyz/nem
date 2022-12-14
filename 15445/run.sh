@@ -24,12 +24,21 @@ make check-lint
 
 # Project 1
 # - - - - -
-# https://15445.courses.cs.cmu.edu/fall2022/project1/
+# https://15445.courses.cs.cmu.edu/fall2022/project1
+
+# Task 1
+# https://skyfan2002.github.io
+# - - -
 rm ./test/extendible_hash_table_test
 make extendible_hash_table_test -j8
-make check-clang-tidy-p1
-rm project1-submission.zip
-make submit-p1
 ./test/extendible_hash_table_test
-# https://skyfan2002.github.io
 
+# Task 2
+# - - -
+rm ./test/lru_replacer_test
+make lru_replacer_test -j8
+./test/lru_replacer_test
+
+# make check-clang-tidy-p1
+rm ../project1-submission.zip
+make submit-p1

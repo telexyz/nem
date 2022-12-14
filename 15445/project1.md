@@ -1,4 +1,9 @@
-# https://15445.courses.cs.cmu.edu/fall2022/project1/
+## [Task #2 - LRU-K Replacement Policy](https://15445.courses.cs.cmu.edu/fall2022/project1/#lru-k-replacer)
+
+
+
+
+## Task #1 - Extendible Hash Table
 
 https://youtu.be/9yUlSabzVwQ?t=3856
 
