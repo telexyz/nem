@@ -53,6 +53,13 @@ TEST(ExtendibleHashTableTest, SampleTest) {
   EXPECT_FALSE(table->Remove(20));
 }
 
+TEST(ExtendibleHashTableTest, InsertMultipleSplit) {
+  auto table = std::make_unique<ExtendibleHashTable<int, int>>(2);
+  table->Insert(0, 0);
+  table->Insert(1024, 1024);
+  table->Insert(4, 4);
+}
+
 TEST(ExtendibleHashTableTest, ConcurrentInsertTest) {
   const int num_runs = 50;
   const int num_threads = 3;

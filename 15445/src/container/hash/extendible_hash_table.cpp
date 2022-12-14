@@ -123,11 +123,9 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
       LOG_INFO("!!! global_depth changed %d", global_depth_);
     }
 
-    // Redis sẽ chuyển bớt dữ liệu ra khỏi bucket
     RedistributeBucket(bucket);
-    // Nên khi insert lần nữa chắc chắn sẽ thành công!
-    assert(dir_[IndexOf(key)]->Insert(key, value));
-  };
+    InsertInternal(key, value);
+  }
 }
 
 template <typename K, typename V>
@@ -155,9 +153,10 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   auto list = &bucket->GetItems();
   auto it = list->begin();
 
+  int l = new_bucket->GetItems().size();
   int n = list->size();
   int m = bucket_size_;
-  LOG_INFO("Redis: bucket capacity %d/%d", n, m);
+  LOG_INFO("Redis: bucket %d/%d, new_bucket %d/%d", n, m, l, m);
 
   while (it != list->end()) {
     int index = IndexOf(it->first);
@@ -173,9 +172,11 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
       ++it;
     }
   }
+
+  l = new_bucket->GetItems().size();
   n = list->size();
-  LOG_INFO("Redis: bucket capacity %d/%d", n, m);
-  assert(!bucket->IsFull());
+  LOG_INFO("Redis: bucket %d/%d, new_bucket %d/%d", n, m, l, m);
+  assert(!bucket->IsFull() || !new_bucket->IsFull());
 }
 
 //===--------------------------------------------------------------------===//
