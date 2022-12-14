@@ -67,7 +67,9 @@ TEST(ExtendibleHashTableTest, ConcurrentInsertTest) {
       threads.emplace_back([tid, &table]() { table->Insert(tid, tid); });
       // table->Insert(tid, tid);
     }
-    for (int i = 0; i < num_threads; i++) { threads[i].join(); }
+    for (int i = 0; i < num_threads; i++) {
+      threads[i].join();
+    }
 
     EXPECT_EQ(table->GetGlobalDepth(), 1);
     for (int i = 0; i < num_threads; i++) {

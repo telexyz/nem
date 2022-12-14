@@ -26,5 +26,8 @@ make check-lint
 # - - - - -
 # https://15445.courses.cs.cmu.edu/fall2022/project1/
 make extendible_hash_table_test -j8
-# make check-clang-tidy-p1
-./test/extendible_hash_table_test
+make check-clang-tidy-p1
+# ./test/extendible_hash_table_test
+# make submit-p1
+
+# https://skyfan2002.github.io

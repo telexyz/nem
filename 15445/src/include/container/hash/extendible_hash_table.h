@@ -173,7 +173,6 @@ class ExtendibleHashTable : public HashTable<K, V> {
    */
   auto IndexOf(const K &key) -> size_t;
 
-  
   auto InsertInternal(const K &key, const V &value) -> void;
   auto GetGlobalDepthInternal() const -> int;
   auto GetLocalDepthInternal(int dir_index) const -> int;

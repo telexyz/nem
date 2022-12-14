@@ -130,7 +130,6 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   };
 }
 
-
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucket) {
   // Split the bucket
