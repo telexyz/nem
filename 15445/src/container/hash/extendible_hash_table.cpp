@@ -55,7 +55,7 @@ auto ExtendibleHashTable<K, V>::GetLocalDepth(int dir_index) const -> int {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::GetLocalDepthInternal(int dir_index) const -> int {
-  int dir_size = dir_.size();
+  int dir_size = dir_.size();  // convert thành int trước để có thể so sánh với dir_index
   assert(dir_index < dir_size);
   return dir_[dir_index]->GetDepth();
 }
@@ -73,9 +73,12 @@ auto ExtendibleHashTable<K, V>::GetNumBucketsInternal() const -> int {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Find(const K &key, V &value) -> bool {
+  latch_.lock();
   auto index = IndexOf(key);
   assert(index < dir_.size());
-  return dir_[index]->Find(key, value);
+  bool result = dir_[index]->Find(key, value);
+  latch_.unlock();
+  return result;
 }
 
 template <typename K, typename V>
@@ -83,8 +86,9 @@ auto ExtendibleHashTable<K, V>::Remove(const K &key) -> bool {
   latch_.lock();
   auto index = IndexOf(key);
   assert(index < dir_.size());
+  bool result = dir_[index]->Remove(key);
   latch_.unlock();
-  return dir_[index]->Remove(key);
+  return result;
 }
 
 template <typename K, typename V>
@@ -104,6 +108,7 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
 
   num_inserts_++;
   LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
+
   if (!inserted) {
     assert(bucket->IsFull());
     // Assert dir_ size is consistent with global depth before double size of dir_
@@ -125,7 +130,6 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
 
     RedistributeBucket(bucket);
     InsertInternal(key, value);
-  }
 }
 
 template <typename K, typename V>
