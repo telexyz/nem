@@ -97,7 +97,9 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
   num_inserts_++;
   // assert(num_inserts_ < 15); // TODO: Remove after finish debugging
   LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
-  if (inserted) { return; };
+  if (inserted) {
+    return;
+  };
 
   /**
    * If the bucket is full and can't be inserted, do the following steps before retrying:
@@ -126,7 +128,7 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
     RedistributeBucket(bucket);
 
   } else {
-    // Case2: In case the local depth is less than the global depth, only Bucket Split takes place. 
+    // Case2: In case the local depth is less than the global depth, only Bucket Split takes place.
     // Then increment only the local depth value by 1. And, assign appropriate pointers.
     LOG_INFO("Local: local_depth %d", bucket->GetDepth());
     RedistributeBucket(bucket);
@@ -135,10 +137,8 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
   Insert(key, value);
 }
 
-
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucket) {
-
   // Split the bucket
   bucket->IncrementDepth();
   auto new_bucket = std::make_shared<Bucket>(Bucket(bucket_size_, bucket->GetDepth()));
@@ -149,7 +149,7 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   std::list<int> new_indexes;
   int new_bit_mask = 1 << (bucket->GetDepth() - 1);
   for (int i = 0, n = dir_.size(); i < n; i++) {
-    if (dir_[i] == bucket) { // tìm thấy vị trí của bucket khi chưa split
+    if (dir_[i] == bucket) {  // tìm thấy vị trí của bucket khi chưa split
       LOG_INFO(">>> i %d & %d => %d", i, new_bit_mask, i & new_bit_mask);
       if ((i & new_bit_mask) > 0) {
         LOG_INFO("!!! new_bucket at %d", i);
@@ -161,12 +161,12 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
     }
   }
 
-  // Redistribute 
+  // Redistribute
   auto list = &bucket->GetItems();
   auto it = list->begin();
 
   int n = list->size(), m = bucket_size_;
-  LOG_INFO("Redis: bucket capacity %d/%d", n, m);  
+  LOG_INFO("Redis: bucket capacity %d/%d", n, m);
 
   while (it != list->end()) {
     int index = IndexOf(it->first);
