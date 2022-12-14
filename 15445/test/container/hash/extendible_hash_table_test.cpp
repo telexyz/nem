@@ -16,24 +16,23 @@ TEST(ExtendibleHashTableTest, SampleTest) {
   std::string result;
 
   table->Insert(1, "a");
-  EXPECT_EQ(table->Find(1, result), true);
+  EXPECT_TRUE(table->Find(1, result));
   table->Insert(2, "b");
-  EXPECT_EQ(table->Find(2, result), true);
+  EXPECT_TRUE(table->Find(2, result));
   table->Insert(3, "c");
-  EXPECT_EQ(table->Find(3, result), true);
+  EXPECT_TRUE(table->Find(3, result));
   table->Insert(4, "d");
-  EXPECT_EQ(table->Find(4, result), true);
-
+  EXPECT_TRUE(table->Find(4, result));
   table->Insert(5, "e");
-  EXPECT_EQ(table->Find(5, result), true);
+  EXPECT_TRUE(table->Find(5, result));
   table->Insert(6, "f");
-  EXPECT_EQ(table->Find(6, result), true);
+  EXPECT_TRUE(table->Find(6, result));
   table->Insert(7, "g");
-  EXPECT_EQ(table->Find(7, result), true);
+  EXPECT_TRUE(table->Find(7, result));
   table->Insert(8, "h");
-  EXPECT_EQ(table->Find(8, result), true);
+  EXPECT_TRUE(table->Find(8, result));
   table->Insert(9, "i");
-  EXPECT_EQ(table->Find(9, result), true);
+  EXPECT_TRUE(table->Find(9, result));
 
   EXPECT_EQ(2, table->GetLocalDepth(0));
   EXPECT_EQ(3, table->GetLocalDepth(1));
@@ -48,13 +47,13 @@ TEST(ExtendibleHashTableTest, SampleTest) {
   EXPECT_EQ("b", result);
   EXPECT_FALSE(table->Find(10, result));
 
-  // EXPECT_TRUE(table->Remove(8));
-  // EXPECT_TRUE(table->Remove(4));
-  // EXPECT_TRUE(table->Remove(1));
-  // EXPECT_FALSE(table->Remove(20));
+  EXPECT_TRUE(table->Remove(8));
+  EXPECT_TRUE(table->Remove(4));
+  EXPECT_TRUE(table->Remove(1));
+  EXPECT_FALSE(table->Remove(20));
 }
 
-TEST(ExtendibleHashTableTest, DISABLED_ConcurrentInsertTest) {
+TEST(ExtendibleHashTableTest, ConcurrentInsertTest) {
   const int num_runs = 50;
   const int num_threads = 3;
 
@@ -66,10 +65,9 @@ TEST(ExtendibleHashTableTest, DISABLED_ConcurrentInsertTest) {
 
     for (int tid = 0; tid < num_threads; tid++) {
       threads.emplace_back([tid, &table]() { table->Insert(tid, tid); });
+      // table->Insert(tid, tid);
     }
-    for (int i = 0; i < num_threads; i++) {
-      threads[i].join();
-    }
+    for (int i = 0; i < num_threads; i++) { threads[i].join(); }
 
     EXPECT_EQ(table->GetGlobalDepth(), 1);
     for (int i = 0; i < num_threads; i++) {

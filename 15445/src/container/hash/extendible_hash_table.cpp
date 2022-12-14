@@ -80,13 +80,21 @@ auto ExtendibleHashTable<K, V>::Find(const K &key, V &value) -> bool {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Remove(const K &key) -> bool {
+  latch_.lock();
   auto index = IndexOf(key);
   assert(index < dir_.size());
+  latch_.unlock();
   return dir_[index]->Remove(key);
 }
 
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
+  std::scoped_lock<std::mutex> lock(latch_);
+  InsertInternal(key, value);
+}
+
+template <typename K, typename V>
+void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   int index = IndexOf(key);
   auto bucket = dir_[index];
   bool inserted = bucket->Insert(key, value);
@@ -95,47 +103,33 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
   int hash = std::hash<K>()(key);
 
   num_inserts_++;
-  // assert(num_inserts_ < 15); // TODO: Remove after finish debugging
   LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
-  if (inserted) {
-    return;
-  };
+  if (!inserted) {
+    assert(bucket->IsFull());
+    // Assert dir_ size is consistent with global depth before double size of dir_
+    assert(dir_.size() == (1 << global_depth_));
+    if (bucket->GetDepth() == global_depth_) {
+      // Redistribute directory pointers
+      for (int i = 0, n = dir_.size(); i < n; i++) {
+        // tham chiếu tới bucket đang có
+        dir_.push_back(dir_[i]);
+        assert(dir_[i + n] == dir_[i]);
+      }
 
-  /**
-   * If the bucket is full and can't be inserted, do the following steps before retrying:
-   *    1. If the local depth of the bucket is equal to the global depth,
-   *        increment the global depth and double the size of the directory.
-   *    2. Increment the local depth of the bucket.
-   *    3. Split the bucket and redistribute directory pointers & the kv pairs in the bucket.
-   */
-  assert(bucket->IsFull());
-  // Assert dir_ size is consistent with global depth before double size of dir_
-  assert(dir_.size() == (1 << global_depth_));
+      // Assert dir_ size is consistent with global depth after double size of dir_
+      global_depth_++;
+      assert(dir_.size() == (1 << global_depth_));
 
-  if (bucket->GetDepth() == global_depth_) {
-    // Redistribute directory pointers
-    for (int i = 0, n = dir_.size(); i < n; i++) {
-      // tham chiếu tới bucket đang có
-      dir_.push_back(dir_[i]);
-      assert(dir_[i + n] == dir_[i]);
+      LOG_INFO("!!! global_depth changed %d", global_depth_);
     }
 
-    // Assert dir_ size is consistent with global depth after double size of dir_
-    global_depth_++;
-    assert(dir_.size() == (1 << global_depth_));
-
-    LOG_INFO("Global: global_depth %d", global_depth_);
+    // Redis sẽ chuyển bớt dữ liệu ra khỏi bucket
     RedistributeBucket(bucket);
-
-  } else {
-    // Case2: In case the local depth is less than the global depth, only Bucket Split takes place.
-    // Then increment only the local depth value by 1. And, assign appropriate pointers.
-    LOG_INFO("Local: local_depth %d", bucket->GetDepth());
-    RedistributeBucket(bucket);
-  }
-  // Try to insert again
-  Insert(key, value);
+    // Nên khi insert lần nữa chắc chắn sẽ thành công!
+    assert(dir_[IndexOf(key)]->Insert(key, value));
+  };
 }
+
 
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucket) {
@@ -144,19 +138,16 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   auto new_bucket = std::make_shared<Bucket>(Bucket(bucket_size_, bucket->GetDepth()));
   num_buckets_++;
 
+  // Bit mới được mở ra do tăng local depth
+  int unlock_bit = 1 << (bucket->GetDepth() - 1);
   // Tìm vị trí để insert new bucket
-  std::list<int> old_indexes;
-  std::list<int> new_indexes;
-  int new_bit_mask = 1 << (bucket->GetDepth() - 1);
   for (int i = 0, n = dir_.size(); i < n; i++) {
     if (dir_[i] == bucket) {  // tìm thấy vị trí của bucket khi chưa split
-      LOG_INFO(">>> i %d & %d => %d", i, new_bit_mask, i & new_bit_mask);
-      if ((i & new_bit_mask) > 0) {
+      LOG_INFO(">>> i %d & %d => %d", i, unlock_bit, i & unlock_bit);
+      if ((i & unlock_bit) > 0) {
         LOG_INFO("!!! new_bucket at %d", i);
         dir_[i] = new_bucket;
-        new_indexes.push_back(i);
       } else {
-        old_indexes.push_back(i);
       }
     }
   }
