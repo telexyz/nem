@@ -99,20 +99,52 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
 
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
-  int index = IndexOf(key);
-  auto bucket = dir_[index];
-  bool inserted = bucket->Insert(key, value);
+  while (true) {
+    int index = IndexOf(key);
+    auto bucket = dir_[index];
+    bool inserted = bucket->Insert(key, value);
 
-  int mask = (1 << global_depth_) - 1;
-  int hash = std::hash<K>()(key);
+    int mask = (1 << global_depth_) - 1;
+    int hash = std::hash<K>()(key);
 
-  num_inserts_++;
-  LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
+    num_inserts_++;
+    LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
 
-  if (!inserted) {
+    if (inserted) {
+      // in ra kết quả
+      std::vector<std::shared_ptr<ExtendibleHashTable<K, V>::Bucket>> buckets;
+      for (int i = 0, n = dir_.size(); i < n; i++) {
+        auto bucket = dir_[i];
+        int k = 0;
+        int m = buckets.size();
+        for (; k < m; k++) {
+          if (buckets[k] == bucket) {
+            break;
+          }
+        }
+        if (k == m) {
+          buckets.push_back(bucket);
+        }
+        LOG_DEBUG("Directory Slot #%d => Bucket #%d:", i, k);
+      }
+
+      LOG_DEBUG("global_depth %d", global_depth_);
+      for (int i = 0, n = buckets.size(); i < n; i++) {
+        auto bucket = buckets[i];
+        LOG_DEBUG("Bucket #%d, local_depth #%d:", i, bucket->GetDepth());
+        auto items = bucket->GetItems();
+        for (auto item : items) {
+          int key = std::hash<K>()(item.first);
+          LOG_DEBUG(" * key %d", key);
+        }
+      }
+      return;
+    }
+
     assert(bucket->IsFull());
     // Assert dir_ size is consistent with global depth before double size of dir_
-    assert(dir_.size() == (1 << global_depth_));
+    // assert(dir_.size() == (1 << global_depth_));
+
     if (bucket->GetDepth() == global_depth_) {
       // Redistribute directory pointers
       for (int i = 0, n = dir_.size(); i < n; i++) {
@@ -121,15 +153,14 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
         assert(dir_[i + n] == dir_[i]);
       }
 
-      // Assert dir_ size is consistent with global depth after double size of dir_
       global_depth_++;
-      assert(dir_.size() == (1 << global_depth_));
-
       LOG_INFO("!!! global_depth changed %d", global_depth_);
+      // Assert dir_ size is consistent with global depth after double size of dir_
+      // assert(dir_.size() == (1 << global_depth_));
     }
 
     RedistributeBucket(bucket);
-    InsertInternal(key, value);
+  }  // while (true)
 }
 
 template <typename K, typename V>

@@ -87,4 +87,24 @@ TEST(ExtendibleHashTableTest, ConcurrentInsertTest) {
   }
 }
 
+TEST(ExtendibleHashTableTest, GetNumBuckets) {
+  auto table = std::make_unique<ExtendibleHashTable<int, int>>(2);
+  table->Insert(4, 0);
+  table->Insert(12, 0);
+  table->Insert(16, 0);
+  table->Insert(64, 0);
+  table->Insert(31, 0);
+  table->Insert(10, 0);
+
+  table->Insert(51, 0);
+  table->Insert(15, 0);
+  table->Insert(18, 0);
+  table->Insert(20, 0);
+
+  table->Insert(7, 0);
+  table->Insert(23, 0);
+  table->Insert(11, 0);
+  table->Insert(19, 0);
+}
+
 }  // namespace bustub
