@@ -101,9 +101,10 @@ https://github.com/telexyz/bon
 
 - - -
 
-- [PingCAP open source training courses about distributed database and distributed systems](https://github.com/pingcap/talent-plan)
+- [Performance Ninja Class](https://github.com/dendibakh/perf-ninja)
 
+- [Open source training courses about distributed database and distributed systems](https://github.com/pingcap/talent-plan)
 
 - https://github.com/codecrafters-io/build-your-own-x
-	* https://github.com/codecrafters-io/sqlite-starter-rust
 	* https://github.com/codecrafters-io/build-your-own-sqlite
+	* https://github.com/codecrafters-io/sqlite-starter-rust

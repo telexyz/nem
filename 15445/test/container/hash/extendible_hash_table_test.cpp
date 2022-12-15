@@ -107,4 +107,26 @@ TEST(ExtendibleHashTableTest, GetNumBuckets) {
   table->Insert(19, 0);
 }
 
+TEST(ExtendibleHashTableTest, GRADER_GetNumBuckets) {
+  auto table = std::make_unique<ExtendibleHashTable<int, std::string>>(4);
+
+  table->Insert(4, "a");
+  table->Insert(12, "a");
+  table->Insert(16, "a");
+  table->Insert(64, "a");
+  table->Insert(31, "a");
+  table->Insert(10, "a");
+  table->Insert(51, "a");
+  table->Insert(15, "a");
+  table->Insert(18, "a");
+  table->Insert(20, "a");
+  table->Insert(7, "a");
+  table->Insert(23, "a");
+
+// [4,12,16,64,31,10,51,15,18,20,7,23].map((f) => f.toString(2))
+// [ 4: '100', 12: '1100', 16: '10000', 64: '1000000', 31: '11111', 10: '1010', 51: '110011', 15: '1111', 18: '10010', 20: '10100', 7: '111', 23: '10111']
+
+  EXPECT_EQ(6, table->GetNumBuckets());
+}
+
 }  // namespace bustub

@@ -1,19 +1,23 @@
+## [Task #3 - Buffer Pool Manager Instance](https://15445.courses.cs.cmu.edu/fall2022/project1/#buffer-pool-instance)
+
+
 ## [Task #2 - LRU-K Replacement Policy](https://15445.courses.cs.cmu.edu/fall2022/project1/#lru-k-replacer)
 
+* Terms:
+  - `LRU` least recent use
+
+* Đọc note https://15445.courses.cs.cmu.edu/fall2022/notes/06-bufferpool.pdf
+
+* Đọc slide 24+ https://15445.courses.cs.cmu.edu/fall2022/slides/06-bufferpool.pdf
 
 
+## [Task #1 - Extendible Hash Table](https://15445.courses.cs.cmu.edu/fall2022/project1/#extendible-hash-table)
 
-## Task #1 - Extendible Hash Table
+* Related lecture video https://youtu.be/9yUlSabzVwQ?t=3856
 
-https://youtu.be/9yUlSabzVwQ?t=3856
+* Demo trực quan dùng MSB như trong lecture https://devimam.github.io/exhash
 
-https://devimam.github.io/exhash
-
-
-- - -
-
-
-https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms
+* Đọc mô tả cụ thể của thuật toán [tại đây](https://www.geeksforgeeks.org/extendible-hashing-dynamic-approach-to-dbms). Mô tả này sát với thuật toán cần implement. Các ví dụ chưa đủ phức tạp. Cần kết hợp với demo ở trên để hiểu chi tiết cách implement thuật toán.
 
 ![](files/p1-Basic-Structure-of-Extendible-Hashing.png)
 
@@ -42,12 +46,8 @@ Một điểm ko được giải thích kỹ là directory expansion nên làm n
 
 - - -
 
-
-https://15445.courses.cs.cmu.edu/fall2022/project1/
-
-`extendible_hash_table`
-
-# https://discord.com/channels/724929902075445281/1014055928619872276
+Tham khảo thêm ...
+https://discord.com/channels/724929902075445281/1014055928619872276
 
 ![](files/p1-00.png)
 ```c

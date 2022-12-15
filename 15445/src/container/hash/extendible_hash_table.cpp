@@ -123,7 +123,7 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
       }
       std::cout << "Directory Slot #" << i << " => Bucket #" << k;
       if (k == m) {
-        std::cout << " ( ";
+        std::cout  << ", depth " << bucket->GetDepth() << " ( ";
         buckets.push_back(bucket);
         for (auto const &item : bucket->GetItems()) {
           std::cout << item.first << ", ";
