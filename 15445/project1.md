@@ -3,12 +3,55 @@
 
 ## [Task #2 - LRU-K Replacement Policy](https://15445.courses.cs.cmu.edu/fall2022/project1/#lru-k-replacer)
 
-* Terms:
-  - `LRU` least recent use
+`lru_k_replacer.*` (`LRU`: least recent use)
 
-* Đọc note https://15445.courses.cs.cmu.edu/fall2022/notes/06-bufferpool.pdf
+https://blog.csdn.net/Altair_alpha/article/details/127745308#LRUK__57
 
-* Đọc slide 24+ https://15445.courses.cs.cmu.edu/fall2022/slides/06-bufferpool.pdf
+The LRU-K replacement strategy can be summed up in one sentence, which is to always kick out the elements that have not reached K visits first, otherwise, the elements that have reached K visits will be kicked out according to LRU
+
+__Backward K-distance__:
+```
+b_t(p, K) = x,        if r_(t-x) has the value p and there have been 
+                      exactly K-1 other values i with t - x < i <= t, where r_i = p
+
+b_t(p, K) = infinity, if p does not appear at least K times in r_1, r_2 ..., r_t
+```
+=> Với các phần tử ko được visited ít nhất K làn thì khoảng cách là infinity, sẽ được loại bỏ trước.
+=> Nếu ko, loại bỏ phần tử có access record time sớm nhất (FIFO)
+
+__Thực thi__:
+
+- Maintain access history queue (record elements that have not reached K visits) and
+a cache queue (recording elements that have reached K visits).
+
+- When an element is accessed K times, move it from history queue to cache queue.
+
+- When replacing. Kick out from history queue first, then cache queue.
+
+__Note__:
+
+- The cache queue is based on LRU so when an element is accessed, it must moved to the head of the queue.
+
+- History queue use FIFO, so no need to move 
+
+- We need to record the `number of visits` and the `position in the queue` of each element.
+
+- Each element has an `evictable` tag , and if it is false, it cannot be kicked out anyway. 
+Therefore, design a structure `FrameEntry` to record this information.
+
+
+https://techoverflow.net/2021/09/06/how-to-get-time-since-epoch-in-milliseconds-in-c
+```c
+#include <chrono>
+uint64_t timeSinceEpochMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+    std::chrono::system_clock::now().time_since_epoch()
+).count();
+```
+
+- - -
+
+More [Multi-step LRU: SIMD-based Cache Replacement
+for Lower Overhead and Higher Precision (2021)](https://arxiv.org/ftp/arxiv/papers/2112/2112.09981.pdf)
 
 
 ## [Task #1 - Extendible Hash Table](https://15445.courses.cs.cmu.edu/fall2022/project1/#extendible-hash-table)

@@ -29,16 +29,16 @@ make check-lint
 # Task 1
 # https://skyfan2002.github.io
 # - - -
-rm ./test/extendible_hash_table_test
-make extendible_hash_table_test -j8
-./test/extendible_hash_table_test
+# rm ./test/extendible_hash_table_test
+# make extendible_hash_table_test -j8
+# ./test/extendible_hash_table_test
 
 # Task 2
 # - - -
-rm ./test/lru_replacer_test
-make lru_replacer_test -j8
-./test/lru_replacer_test
+rm ./test/lru_k_replacer_test
+make lru_k_replacer_test -j8
+./test/lru_k_replacer_test
 
 # make check-clang-tidy-p1
-rm ../project1-submission.zip
-make submit-p1
+# rm ../project1-submission.zip
+# make submit-p1
