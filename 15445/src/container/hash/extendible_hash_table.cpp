@@ -27,6 +27,7 @@ ExtendibleHashTable<K, V>::ExtendibleHashTable(size_t bucket_size)
     : global_depth_(0), bucket_size_(bucket_size), num_buckets_(1), num_inserts_(0) {
   // khởi tạo bucket đầu tiên của hashtable với local depth = global depth = 0
   dir_.push_back(std::make_shared<Bucket>(Bucket(bucket_size, 0)));
+  dir_[0]->id_ = 0;
 }
 
 template <typename K, typename V>
@@ -97,47 +98,56 @@ void ExtendibleHashTable<K, V>::Insert(const K &key, const V &value) {
   InsertInternal(key, value);
 }
 
+void Bin(int n) {
+  // https://www.geeksforgeeks.org/binary-representation-of-a-given-number/
+  for (int i = 1 << 7; i > 0; i = i >> 1) {
+    std::cout << ((n & i) != 0 ? 1 : 0);
+  }
+}
+
 template <typename K, typename V>
 void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   int index = IndexOf(key);
   auto bucket = dir_[index];
   bool inserted = bucket->Insert(key, value);
 
-  int mask = (1 << global_depth_) - 1;
+  // int mask = (1 << global_depth_) - 1;
   int hash = std::hash<K>()(key);
 
   num_inserts_++;
-  LOG_INFO("\n\n[%d] hash %d, mask %d, index %d, inserted %i", num_inserts_, hash, mask, index, inserted);
+  std::cout << "\n\n[" << num_inserts_ << "] Insert key " << key << " (";
+  Bin(hash);
+  std::cout << ")"
+            << ", index " << index << ", inserted " << inserted << "\n";
 
-  if (inserted) {
-    // in ra kết quả
-    std::vector<std::shared_ptr<ExtendibleHashTable<K, V>::Bucket>> buckets;
-    for (int i = 0, n = dir_.size(); i < n; i++) {
-      auto bucket = dir_[i];
-      int k = 0;
-      int m = buckets.size();
-      for (; k < m; k++) {
-        if (buckets[k] == bucket) {
-          break;
-        }
+  // in ra kết quả
+  std::vector<std::shared_ptr<ExtendibleHashTable<K, V>::Bucket>> buckets;
+  for (int i = 0, n = dir_.size(); i < n; i++) {
+    auto bucket = dir_[i];
+    int k = 0;
+    int m = buckets.size();
+    for (; k < m; k++) {
+      if (buckets[k] == bucket) {
+        break;
       }
-      std::cout << "Directory Slot #" << i << " => Bucket #" << k;
-      if (k == m) {
-        std::cout  << ", depth " << bucket->GetDepth() << " ( ";
-        buckets.push_back(bucket);
-        for (auto const &item : bucket->GetItems()) {
-          std::cout << item.first << ", ";
-        }
-        std::cout << ")";
-      }
-      std::cout << "\n";
     }
-    std::cout << "\nglobal_depth " << global_depth_ << "\n\n";
+    std::cout << "dir_[" << i << "] -> bucket #" << bucket->id_;
+    if (k == m) {
+      std::cout << ", depth " << bucket->GetDepth() << " ( ";
+      buckets.push_back(bucket);
+      for (auto const &item : bucket->GetItems()) {
+        std::cout << item.first << ", ";
+      }
+      std::cout << ")";
+    }
+    std::cout << "\n";
+  }
+  std::cout << "\nglobal_depth " << global_depth_ << "\n\n";
 
-  } else {
+  if (!inserted) {
     assert(bucket->IsFull());
     // Assert dir_ size is consistent with global depth before double size of dir_
-    // assert(dir_.size() == (1 << global_depth_));
+    assert(dir_.size() == (1 << global_depth_));
 
     if (bucket->GetDepth() == global_depth_) {
       // Redistribute directory pointers
@@ -148,9 +158,9 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
       }
 
       global_depth_++;
-      LOG_INFO("!!! global_depth changed %d", global_depth_);
+      std::cout << "!!! global_depth change to" << global_depth_;
       // Assert dir_ size is consistent with global depth after double size of dir_
-      // assert(dir_.size() == (1 << global_depth_));
+      assert(dir_.size() == (1 << global_depth_));
     }
 
     RedistributeBucket(bucket);
@@ -163,19 +173,27 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   // Split the bucket
   bucket->IncrementDepth();
   auto new_bucket = std::make_shared<Bucket>(Bucket(bucket_size_, bucket->GetDepth()));
+  new_bucket->id_ = num_buckets_;
   num_buckets_++;
+
+  std::cout << "\n[" << num_inserts_ << "] Split bucket #" << bucket->id_ << " to new bucket #" << new_bucket->id_
+            << ", and remap directory pointers:\n";
 
   // Bit mới được mở ra do tăng local depth
   int unlock_bit = 1 << (bucket->GetDepth() - 1);
   // Tìm vị trí để insert new bucket
   for (int i = 0, n = dir_.size(); i < n; i++) {
     if (dir_[i] == bucket) {  // tìm thấy vị trí của bucket khi chưa split
-      LOG_INFO(">>> i %d & %d => %d", i, unlock_bit, i & unlock_bit);
+      std::cout << ">>> index " << i << " (";
+      Bin(i);
+      std::cout << "), unlock_bit ";
+      Bin(unlock_bit);
+
       if ((i & unlock_bit) > 0) {
-        LOG_INFO("!!! new_bucket at %d", i);
+        std::cout << " => point to new bucket #" << new_bucket->id_;
         dir_[i] = new_bucket;
-      } else {
       }
+      std::cout << std::endl;
     }
   }
 
@@ -186,26 +204,28 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   int l = new_bucket->GetItems().size();
   int n = list->size();
   int m = bucket_size_;
-  LOG_INFO("Redis: bucket %d/%d, new_bucket %d/%d", n, m, l, m);
+  std::cout << "\n[" << num_inserts_ << "] Redistribute bucket #" << bucket->id_ << " items:\n";
+  std::cout << "Before redis capacity: bucket " << n << "/" << m << ", new_bucket " << l << "/" << m << "\n";
 
   while (it != list->end()) {
     int index = IndexOf(it->first);
     auto move_to_bucket = dir_[index];
-    int hash = std::hash<K>()(it->first);
-    LOG_INFO(">>> hash %d, index %d, move? %d", hash, index, move_to_bucket != bucket);
-    if (move_to_bucket != bucket) {
+    bool move = (move_to_bucket != bucket);
+    std::cout << ">>> key" << it->first << ", index " << index;
+    if (move) {
       assert(move_to_bucket == new_bucket);
-      LOG_INFO("Redistribute to index %d", index);
+      std::cout << "move to dir_ index " << index;
       assert(move_to_bucket->Insert(it->first, it->second));
       it = list->erase(it);
     } else {
       ++it;
     }
+    std::cout << std::endl;
   }
 
   l = new_bucket->GetItems().size();
   n = list->size();
-  LOG_INFO("Redis: bucket %d/%d, new_bucket %d/%d", n, m, l, m);
+  std::cout << "After redis capacity: bucket " << n << "/" << m << ", new_bucket " << l << "/" << m << "\n";
   assert(!bucket->IsFull() || !new_bucket->IsFull());
 }
 

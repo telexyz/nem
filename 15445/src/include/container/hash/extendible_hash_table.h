@@ -136,6 +136,8 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Insert(const K &key, const V &value) -> bool;
 
+    int id_;  // helper for better printout final result
+
    private:
     // TODO(student): You may add additional private members and helper functions
     size_t size_;
