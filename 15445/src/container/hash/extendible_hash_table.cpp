@@ -113,7 +113,7 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   bool inserted = insert_bucket->Insert(key, value);
 
   num_inserts_++;
-  std::cout << "\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n";
+  std::cout << "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n";
   std::cout << "[" << num_inserts_ << "] Insert key " << key << " (";
   Bin(std::hash<K>()(key), global_depth_);
   std::cout << ")"
@@ -184,26 +184,25 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   new_bucket->id_ = num_buckets_;
   num_buckets_++;
 
-  std::cout << "\nSplit bucket #" << bucket->id_ << " to new bucket #" << new_bucket->id_
-            << ", and remap directory pointers:\n";
-
   // Bit mới được mở ra do tăng local depth
   int unlock_bit = 1 << (bucket->GetDepth() - 1);
-  // Tìm vị trí để insert new bucket
+
+  std::cout << "\nCreate new bucket #" << new_bucket->id_ << ", unlock_bit (";
+  Bin(unlock_bit, bucket->GetDepth());
+  std::cout << ").\nThen map ";
+
+  // Tìm dir_ index map tới new bucket
   for (int i = 0, n = dir_.size(); i < n; i++) {
     if (dir_[i] == bucket) {  // tìm thấy vị trí của bucket khi chưa split
-      std::cout << ">>> index " << i << " (";
-      Bin(i, global_depth_);
-      std::cout << "), unlock_bit ";
-      Bin(unlock_bit, bucket->GetDepth());
-
       if ((i & unlock_bit) > 0) {
-        std::cout << " => point to new bucket #" << new_bucket->id_;
+        std::cout << "index " << i << " (";
+        Bin(i, global_depth_);
+        std::cout << "), ";
         dir_[i] = new_bucket;
       }
-      std::cout << std::endl;
     }
   }
+  std::cout << "to new bucket #" << new_bucket->id_ << std::endl;
 
   // Redistribute
   auto list = &bucket->GetItems();
@@ -213,28 +212,26 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   int n = list->size();
   int m = bucket_size_;
   std::cout << "\nRedistribute bucket #" << bucket->id_ << " items:\n";
-  std::cout << "(( bucket " << n << "/" << m << ", new_bucket " << l << "/" << m << " ))\n";
+  std::cout << "(( bucket " << n << "/" << m << ", new_bucket " << l << "/" << m << " ))\nMove keys ";
 
   while (it != list->end()) {
     auto key = it->first;
     int index = IndexOf(key);
     auto move_to_bucket = dir_[index];
     bool move = (move_to_bucket != bucket);
-
-    std::cout << ">>> key " << key << " (";
-    Bin(std::hash<K>()(key), global_depth_);
-
     if (move) {
       assert(move_to_bucket == new_bucket);
-      std::cout << "), move to index " << index;
       assert(move_to_bucket->Insert(key, it->second));
       it = list->erase(it);
+
+      std::cout << key << " (";
+      Bin(std::hash<K>()(key), global_depth_);
+      std::cout << "), ";
     } else {
-      std::cout << "), stay at index " << index;
       ++it;
     }
-    std::cout << std::endl;
   }
+  std::cout << "to new bucket #" << new_bucket->id_ << std::endl;
 
   l = new_bucket->GetItems().size();
   n = list->size();
