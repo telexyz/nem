@@ -111,32 +111,29 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
 
   if (inserted) {
     // in ra kết quả
-    // std::vector<std::shared_ptr<ExtendibleHashTable<K, V>::Bucket>> buckets;
-    // for (int i = 0, n = dir_.size(); i < n; i++) {
-    //   auto bucket = dir_[i];
-    //   int k = 0;
-    //   int m = buckets.size();
-    //   for (; k < m; k++) {
-    //     if (buckets[k] == bucket) {
-    //       break;
-    //     }
-    //   }
-    //   if (k == m) {
-    //     buckets.push_back(bucket);
-    //   }
-    //   LOG_DEBUG("Directory Slot #%d => Bucket #%d:", i, k);
-    // }
+    std::vector<std::shared_ptr<ExtendibleHashTable<K, V>::Bucket>> buckets;
+    for (int i = 0, n = dir_.size(); i < n; i++) {
+      auto bucket = dir_[i];
+      int k = 0;
+      int m = buckets.size();
+      for (; k < m; k++) {
+        if (buckets[k] == bucket) {
+          break;
+        }
+      }
+      std::cout << "Directory Slot #" << i << " => Bucket #" << k;
+      if (k == m) {
+        std::cout << " ( ";
+        buckets.push_back(bucket);
+        for (auto const &item : bucket->GetItems()) {
+          std::cout << item.first << ", ";
+        }
+        std::cout << ")";
+      }
+      std::cout << "\n";
+    }
+    std::cout << "\nglobal_depth " << global_depth_ << "\n\n";
 
-    // LOG_DEBUG("global_depth %d", global_depth_);
-    // for (int i = 0, n = buckets.size(); i < n; i++) {
-    //   auto bucket = buckets[i];
-    //   LOG_DEBUG("Bucket #%d, local_depth #%d:", i, bucket->GetDepth());
-    //   auto items = bucket->GetItems();
-    //   for (auto const &item : items) {
-    //     int key = std::hash<K>()(item.first);
-    //     LOG_DEBUG(" * key %d", key);
-    //   }
-    // }
   } else {
     assert(bucket->IsFull());
     // Assert dir_ size is consistent with global depth before double size of dir_
