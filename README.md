@@ -17,7 +17,7 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 - [cs61c](https://inst.eecs.berkeley.edu/~cs61c/fa20/#lectures) Great Ideas in Computer Architecture
 - [cs4414](https://www.cs.cornell.edu/courses/cs4414) System programming
 - [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
-- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.distributedsystemscourse.com) [resources](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
+- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
 
 > Coi videos ở [15418](http://15418.courses.cs.cmu.edu/spring2016) làm bài tập ở [cs149](https://gfxcourses.stanford.edu/cs149/fall21) vì 2 khóa này của cùng 1 giáo.
 _source https://csdiy.wiki_
