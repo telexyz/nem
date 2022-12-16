@@ -108,4 +108,24 @@ TEST(LRUKReplacerTest, SampleTest) {
   lru_replacer.Remove(1);
   ASSERT_EQ(0, lru_replacer.Size());
 }
+
+TEST(LRUKReplacerTest, gradescopeEvict) {
+  LRUKReplacer lru_replacer(1000, 3);
+  int value;
+
+  for (int i = 0; i < 10; i++) {
+    lru_replacer.RecordAccess(i);
+    lru_replacer.SetEvictable(i, true);
+  }
+
+  for (int i = 5; i < 10; i++) {
+    lru_replacer.SetEvictable(i, false);
+  }
+
+  for (int i = 0; i < 3; i++) {
+    lru_replacer.Remove(i);
+  }
+
+  lru_replacer.Evict(&value);
+}
 }  // namespace bustub
