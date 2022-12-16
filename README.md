@@ -1,26 +1,32 @@
 # Học
 
-Thích gì học nấy từ deep learning, database, intepreter - compiler - programming language cho tới system programming.
+Thích gì học nấy deep learning, database, intepreter - compiler - programming language, system programming, parallel and distributed programming.
 
 ## 09/2022-12/2022
 
 - Hoàn thành `10714`, tự xây dựng thư viện học sâu `kim`
 
-## 12/2022-03/2023
+## 12/2022-06/2023
 
 - Hoàn thành `15445`, hiểu cách xây dựng một database cơ bản
-
-## 03/2023-06/2023
 
 - Hoàn thành `15721`, [Advanced Database Systems](https://15721.courses.cs.cmu.edu/spring2020/schedule.html)
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
+- [cs4414](https://www.cs.cornell.edu/courses/cs4414) System programming
+- [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
+- [CS149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
+- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System
+
+> Coi videos ở [15418](http://15418.courses.cs.cmu.edu/spring2016) làm bài tập ở [cs149](https://gfxcourses.stanford.edu/cs149/fall21) vì 2 khóa này của cùng 1 giáo.
+_source https://csdiy.wiki_
+
 ## 07/2023-xxx
 
-Học viết trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
+Có thể học viết trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
 
-Rồi tìm hiểu sâu hơn về trình biên dịch và LLVM qua mã nguồn Zig bắt đầu từ https://mitchellh.com/zig
+Hoặc tìm hiểu về trình biên dịch và LLVM qua mã nguồn Zig, bắt đầu từ https://mitchellh.com/zig
 
 ### Tại sao chọn Zig?
 Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản và mạnh mẽ. Có thể học syntax trong buổi sáng và chiều làm dự án luôn. Zig mới và chưa ra bản 1.0 (có lẽ vào cuối 2023) nhưng đã có 2 startups thành công sử dụng Zig (Bun.js và TigerBeetle). Cộng đồng rất mạnh.
@@ -30,11 +36,6 @@ Có thể tham gia sâu hơn và Zig bằng cách:
 - Chữa những lỗi đơn giản như một người mới
 - Cải tiến nvptx backend chạy mượt [zcuda](https://github.com/gwenzek/cudaz) (xem [video](https://www.youtube.com/watch?v=rvfsWm6TckA&t=5351s))
 - ...
-
-## xxx-xxx
-
-Tìm hiểu deep learning compiling có thể là Triton, MLIR, ...
-
 
 ## xxx-xxx
 
@@ -88,7 +89,7 @@ https://github.com/telexyz/bon
 
 ### Others
 
-- [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2/sp21)
+- [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2)
 
 - [TinyML and Efficient Deep Learning](https://efficientml.ai/schedule/)
 
@@ -97,18 +98,16 @@ https://github.com/telexyz/bon
 
 - - -
 
-#### CS Self-study Guide https://csdiy.wiki
+- https://github.com/dendibakh/perf-ninja
+- https://github.com/pingcap/talent-plan
+- https://github.com/codecrafters-io/build-your-own-x
+
+- - -
 
 - [CS61A](https://cs61a.org) Structure and Interpretation of Computer Programs
-
 - [14002](https://github.com/courseworks) Advanced Programming Course
-
 - [CS162](https://cs162.org) Operating Systems and Systems Programming
 - [6S081](https://pdos.csail.mit.edu/6.828) Operating System Engineering
-
-- [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
-- [CS149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
-- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System
 
 - [cs161](https://cs161.org) Computer Security
 - [6.858](http://css.csail.mit.edu/6.858) Computer System Security
@@ -117,30 +116,4 @@ https://github.com/telexyz/bon
 - [CS122](http://courses.cms.caltech.edu/cs122) Database System Implementation
 - [CS346](https://web.stanford.edu/class/cs346) Database System Implementation
 
-
-> Professor Kayvon Fatahalian previously opened the [15418](http://15418.courses.cs.cmu.edu/spring2016) course at CMU, and later he opened a similar course [cs149](https://gfxcourses.stanford.edu/cs149/fall21) after he became an assistant professor at Stanford. But in general, 15-418 contains richer course content and has course replays, but CS149's programming assignments are more fashionable. Personally, I watched the 15-418 course video but completed the CS149 homework.
-
-- - -
-
-
-- [System programming](https://www.cs.cornell.edu/courses/cs4414/2021fa/Schedule.htm)
-
-- [Performance Ninja Class](https://github.com/dendibakh/perf-ninja)
-
-- [Open source training courses about distributed database and distributed systems](https://github.com/pingcap/talent-plan)
-
-- https://github.com/codecrafters-io/build-your-own-x
-	* https://github.com/codecrafters-io/build-your-own-sqlite
-	* https://github.com/codecrafters-io/sqlite-starter-rust
-
-- - -
-
-#### [Tools](https://csdiy.wiki/%E5%BF%85%E5%AD%A6%E5%B7%A5%E5%85%B7/tools)
-
-Z-library : eBook download site (currently only runs on Tor).
-
-https://www.pdfdrive.com : PDF e-book search engine.
-
-https://excalidraw.com : A hand-drawn drawing tool, very suitable for drawing course reports or schematic diagrams
-
-https://www.tldraw.com : A drawing tool, suitable for drawing flowcharts, architecture diagrams, etc.
+_source https://csdiy.wiki_
