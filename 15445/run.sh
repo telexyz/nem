@@ -40,5 +40,4 @@ make lru_k_replacer_test -j8
 ./test/lru_k_replacer_test
 
 # make check-clang-tidy-p1
-# rm ../project1-submission.zip
-# make submit-p1
+# rm ../project1-submission.zip && make submit-p1

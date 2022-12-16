@@ -118,6 +118,7 @@ class LRUKReplacer {
   auto Size() -> size_t;
 
  private:
+  auto EvictInternal(frame_id_t *frame_id) -> bool;
   struct FrameEntry {
     size_t hits_count_{0};
     bool evictable_{true};
