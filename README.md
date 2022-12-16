@@ -86,11 +86,7 @@ https://github.com/telexyz/bon
 - - -
 
 
-### Other interests
-
-- [System programming](https://www.cs.cornell.edu/courses/cs4414/2021fa/Schedule.htm)
-
-- [Operating System Engineering](https://pdos.csail.mit.edu/6.828/2021/schedule.html)
+### Others
 
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2/sp21)
 
@@ -100,6 +96,39 @@ https://github.com/telexyz/bon
 [slides](https://www.rle.mit.edu/eems/wp-content/uploads/2020/09/2020_uwisconsin_compressed.pdf)
 
 - - -
+
+#### CS Self-study Guide https://csdiy.wiki
+
+- [CS61A](https://cs61a.org) Structure and Interpretation of Computer Programs
+
+- [14002](https://github.com/courseworks) Advanced Programming Course
+
+- [CS162](https://cs162.org) Operating Systems and Systems Programming
+- [6S081](https://pdos.csail.mit.edu/6.828) Operating System Engineering
+
+- [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
+- [CS149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
+- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System
+
+- [cs161](https://cs161.org) Computer Security
+- [6.858](http://css.csail.mit.edu/6.858) Computer System Security
+
+- [CS186](https://cs186berkeley.net) Introduction to Database Systems
+- [CS122](http://courses.cms.caltech.edu/cs122) Database System Implementation
+- [CS346](https://web.stanford.edu/class/cs346) Database System Implementation
+
+
+> Professor Kayvon Fatahalian previously opened the [15418](http://15418.courses.cs.cmu.edu/spring2016) course at CMU, and later he opened a similar course [cs149](https://gfxcourses.stanford.edu/cs149/fall21) after he became an assistant professor at Stanford. But in general, 15-418 contains richer course content and has course replays, but CS149's programming assignments are more fashionable. Personally, I watched the 15-418 course video but completed the CS149 homework.
+
+> If you can build the entire CS basic building in less than three years, have a relatively solid mathematical foundation and coding ability, have experienced the baptism of dozens of projects with thousands of lines of code, and master at least C /C++/Java/JS/Python/Go/Rust and other mainstream languages, for algorithms, circuits, systems, networks, operating systems, compilation, artificial intelligence, machine learning, computer vision, natural language processing, reinforcement learning, cryptography, information theory , Game theory, numerical analysis, statistics, distribution, database, graphics, Web development, cloud services, supercomputing, etc. have been involved. I think you will have enough confidence and confidence to choose the direction you are interested in. Whether it is employment or scientific research, you will be quite competitive.
+
+> The biggest advantage of self-study is that you can adjust the learning speed completely according to your own progress. For some difficult knowledge points, I can watch the video repeatedly, Google related content on the Internet, and _ask questions on StackOverflow_ until I fully understand it. As for the content that you have mastered relatively quickly, you can skip it at double or even triple speed.
+
+
+- - -
+
+
+- [System programming](https://www.cs.cornell.edu/courses/cs4414/2021fa/Schedule.htm)
 
 - [Performance Ninja Class](https://github.com/dendibakh/perf-ninja)
 
