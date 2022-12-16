@@ -14,9 +14,9 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
+- [cs61c](https://cs61c.org) Great Ideas in Computer Architecture
 - [cs4414](https://www.cs.cornell.edu/courses/cs4414) System programming
 - [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
-- [CS149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
 - [6.824](https://pdos.csail.mit.edu/6.824) Distributed System
 
 > Coi videos ở [15418](http://15418.courses.cs.cmu.edu/spring2016) làm bài tập ở [cs149](https://gfxcourses.stanford.edu/cs149/fall21) vì 2 khóa này của cùng 1 giáo.
