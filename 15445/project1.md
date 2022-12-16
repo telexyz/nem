@@ -1,5 +1,8 @@
 ## [Task #3 - Buffer Pool Manager Instance](https://15445.courses.cs.cmu.edu/fall2022/project1/#buffer-pool-instance)
 
+https://blog.csdn.net/Altair_alpha/article/details/127745308#Buffer_Pool_Manager_104
+
+
 
 ## [Task #2 - LRU-K Replacement Policy](https://15445.courses.cs.cmu.edu/fall2022/project1/#lru-k-replacer)
 

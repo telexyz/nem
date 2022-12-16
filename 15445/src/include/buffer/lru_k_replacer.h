@@ -50,24 +50,6 @@ class LRUKReplacer {
   ~LRUKReplacer() = default;
 
   /**
-   * TODO(P1): Add implementation
-   *
-   * @brief Find the frame with largest backward k-distance and evict that frame. Only frames
-   * that are marked as 'evictable' are candidates for eviction.
-   *
-   * A frame with less than k historical references is given +inf as its backward k-distance.
-   * If multiple frames have inf backward k-distance, then evict the frame with the earliest
-   * timestamp overall.
-   *
-   * Successful eviction of a frame should decrement the size of replacer and remove the frame's
-   * access history.
-   *
-   * @param[out] frame_id id of frame that is evicted.
-   * @return true if a frame is evicted successfully, false if no frames can be evicted.
-   */
-  auto Evict(frame_id_t *frame_id) -> bool;
-
-  /**
    * @brief Record the event that the given frame id is accessed at current timestamp.
    * Create a new entry for access history if frame id has not been seen before.
    *
@@ -96,8 +78,22 @@ class LRUKReplacer {
   void SetEvictable(frame_id_t frame_id, bool set_evictable);
 
   /**
-   * TODO(P1): Add implementation
+   * @brief Find the frame with largest backward k-distance and evict that frame. Only frames
+   * that are marked as 'evictable' are candidates for eviction.
    *
+   * A frame with less than k historical references is given +inf as its backward k-distance.
+   * If multiple frames have inf backward k-distance, then evict the frame with the earliest
+   * timestamp overall.
+   *
+   * Successful eviction of a frame should decrement the size of replacer and remove the frame's
+   * access history.
+   *
+   * @param[out] frame_id id of frame that is evicted.
+   * @return true if a frame is evicted successfully, false if no frames can be evicted.
+   */
+  auto Evict(frame_id_t *frame_id) -> bool;
+
+  /**
    * @brief Remove an evictable frame from replacer, along with its access history.
    * This function should also decrement replacer's size if removal is successful.
    *
@@ -115,8 +111,6 @@ class LRUKReplacer {
   void Remove(frame_id_t frame_id);
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Return replacer's size, which tracks the number of evictable frames.
    *
    * @return size_t
@@ -125,25 +119,20 @@ class LRUKReplacer {
 
  private:
   struct FrameEntry {
-    size_t hits_count_{1};
+    size_t hits_count_{0};
     bool evictable_{true};
     std::list<frame_id_t>::iterator pos_;
   };
   std::unordered_map<frame_id_t, FrameEntry> frame_entries_;
-  std::list<frame_id_t> hits_list_;
-  std::list<frame_id_t> hits_cache_;
-
+  std::list<frame_id_t> history_list_;
+  std::list<frame_id_t> cache_list_;
   // You can replace these member variables as you like.
   // Remove maybe_unused if you start using them.
   [[maybe_unused]] size_t current_timestamp_{0};
-  // [[maybe_unused]] size_t curr_size_{0};
-  [[maybe_unused]] size_t replacer_size_;
-  [[maybe_unused]] size_t k_;
-
-  // size_t current_timestamp_{0};
+  size_t curr_history_size_{0};
   size_t curr_size_{0};
-  // size_t replacer_size_;
-  // size_t k_;
+  size_t replacer_size_;
+  size_t k_;
 
   std::mutex latch_;
 };
