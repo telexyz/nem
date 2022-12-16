@@ -120,11 +120,6 @@ https://github.com/telexyz/bon
 
 > Professor Kayvon Fatahalian previously opened the [15418](http://15418.courses.cs.cmu.edu/spring2016) course at CMU, and later he opened a similar course [cs149](https://gfxcourses.stanford.edu/cs149/fall21) after he became an assistant professor at Stanford. But in general, 15-418 contains richer course content and has course replays, but CS149's programming assignments are more fashionable. Personally, I watched the 15-418 course video but completed the CS149 homework.
 
-> If you can build the entire CS basic building in less than three years, have a relatively solid mathematical foundation and coding ability, have experienced the baptism of dozens of projects with thousands of lines of code, and master at least C /C++/Java/JS/Python/Go/Rust and other mainstream languages, for algorithms, circuits, systems, networks, operating systems, compilation, artificial intelligence, machine learning, computer vision, natural language processing, reinforcement learning, cryptography, information theory , Game theory, numerical analysis, statistics, distribution, database, graphics, Web development, cloud services, supercomputing, etc. have been involved. I think you will have enough confidence and confidence to choose the direction you are interested in. Whether it is employment or scientific research, you will be quite competitive.
-
-> The biggest advantage of self-study is that you can adjust the learning speed completely according to your own progress. For some difficult knowledge points, I can watch the video repeatedly, Google related content on the Internet, and _ask questions on StackOverflow_ until I fully understand it. As for the content that you have mastered relatively quickly, you can skip it at double or even triple speed.
-
-
 - - -
 
 
