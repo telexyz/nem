@@ -137,3 +137,15 @@ https://github.com/telexyz/bon
 - https://github.com/codecrafters-io/build-your-own-x
 	* https://github.com/codecrafters-io/build-your-own-sqlite
 	* https://github.com/codecrafters-io/sqlite-starter-rust
+
+- - -
+
+#### [Tools](https://csdiy.wiki/%E5%BF%85%E5%AD%A6%E5%B7%A5%E5%85%B7/tools)
+
+Z-library : eBook download site (currently only runs on Tor).
+
+https://www.pdfdrive.com : PDF e-book search engine.
+
+https://excalidraw.com : A hand-drawn drawing tool, very suitable for drawing course reports or schematic diagrams
+
+https://www.tldraw.com : A drawing tool, suitable for drawing flowcharts, architecture diagrams, etc.
