@@ -111,15 +111,11 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   auto FlushPgImp(page_id_t page_id) -> bool override;
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Flush all the pages in the buffer pool to disk.
    */
   void FlushAllPgsImp() override;
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Delete a page from the buffer pool. If page_id is not in the buffer pool, do nothing and return true. If the
    * page is pinned and cannot be deleted, return false immediately.
    *
@@ -170,7 +166,7 @@ class BufferPoolManagerInstance : public BufferPoolManager {
 
   // You may add additional private members and helper functions
   auto PrepareFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
-  auto showPages() -> void {
+  auto ShowPages() -> void {
     for (size_t i = 0; i < pool_size_; i++) {
       if (pages_[i].page_id_ == INVALID_PAGE_ID) {
         continue;

@@ -99,7 +99,7 @@ TEST(BufferPoolManagerInstanceTest, SampleTest) {
 
   page_id_t page_id_temp;
   auto *page0 = bpm->NewPage(&page_id_temp);
-  std::cout << "!!! page_id_temp " << page_id_temp << "\n";
+  // std::cout << "!!! page_id_temp " << page_id_temp << "\n";
 
   // Scenario: The buffer pool is empty. We should be able to create a new page.
   ASSERT_NE(nullptr, page0);
@@ -142,6 +142,77 @@ TEST(BufferPoolManagerInstanceTest, SampleTest) {
   disk_manager->ShutDown();
   remove("test.db");
 
+  delete bpm;
+  delete disk_manager;
+}
+
+TEST(BufferPoolManagerInstanceTest, SampleTest11) {
+  const std::string db_name = "test.db";
+  page_id_t page_id_temp;
+
+  auto *disk_manager = new DiskManager(db_name);
+  auto *bpm = new BufferPoolManagerInstance(2, disk_manager, 5);
+  // auto page0 = bpm->NewPage(&page_id_temp);
+  // Scenario: Once we have a page, we should be able to read and write content.
+  // snprintf(page0->GetData(), BUSTUB_PAGE_SIZE, "page0");
+  // EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
+
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(0, true);
+  bpm->UnpinPage(1, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(2, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(3, true);
+  bpm->FetchPage(0);
+  bpm->FetchPage(1);
+  bpm->UnpinPage(0, false);
+  bpm->UnpinPage(1, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(4, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(5, true);
+  bpm->FetchPage(0);
+  // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:24Failure
+  // Expected equality of these values:
+  // 0
+  // strcmp(page->GetData(), "page0")
+  //   Which is: -1
+  disk_manager->ShutDown();
+  remove("test.db");
+
+  delete bpm;
+  delete disk_manager;
+}
+
+TEST(BufferPoolManagerInstanceTest, gradescope8) {
+  const std::string db_name = "test.db";
+  page_id_t page_id_temp;
+
+  auto *disk_manager = new DiskManager(db_name);
+  auto *bpm = new BufferPoolManagerInstance(10, disk_manager, 5);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->NewPage(&page_id_temp);
+  bpm->FetchPage(0);
+  bpm->UnpinPage(0, true);
+  bpm->UnpinPage(0, true);
+  // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:285: Failure
+  // Expected equality of these values:
+  //   1
+  //   bpm->UnpinPage(page_ids[i], true)
+  //     Which is: false
+
+  disk_manager->ShutDown();
+  remove("test.db");
   delete bpm;
   delete disk_manager;
 }
