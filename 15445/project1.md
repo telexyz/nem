@@ -1,7 +1,17 @@
 ## [Task #3 - Buffer Pool Manager Instance](https://15445.courses.cs.cmu.edu/fall2022/project1/#buffer-pool-instance)
 
+`buffer_pool_manager_instance`
+
 https://blog.csdn.net/Altair_alpha/article/details/127745308#Buffer_Pool_Manager_104
 
+Buffer Pool Manager (BPM) acts as a buffer between the upper-level facilities of the database and disk files, similar to the role of Cache between CPU and memory. There are concepts of Page and Frame in bustub. Page is a class that carries 4K data, which can be read and written (from/to disk files) via DiskManager, with information such as `page_id` serial number and `is_dirty` logo. Frame is not a specific class, but can be understood as a slot for Page in BPM. Specifically, there is a Page array in BPM, which frame_id is the index of a certain Page in the array.
+
+outside world only knows `page_id` that when querying the BPM, the BPM needs to determine whether the Page exists and its location, so it needs `page_id` to `frame_id` mapping ExtendibleHashTable. In order to distinguish idle and occupied Pages, maintain one `free_list_` to save idle ones frame_id. In the initial state, all Pages are idle. When the upper layer needs to fetch a Page, if the Page already exists in the BP, it will return directly; otherwise, it needs to be read from the disk to the BP. At this time, take the idle Page first, otherwise we can only kick out a certain Page from all occupied Pages with the LRUKReplacer policy.
+
+
+https://jameywoo.github.io/post/cmu15-445/project1-buffer-pool
+
+https://github.com/WenbinZhu/cmu-15-445/blob/master/src/buffer/buffer_pool_manager.cpp
 
 
 ## [Task #2 - LRU-K Replacement Policy](https://15445.courses.cs.cmu.edu/fall2022/project1/#lru-k-replacer)

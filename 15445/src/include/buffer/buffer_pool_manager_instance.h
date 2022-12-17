@@ -54,8 +54,6 @@ class BufferPoolManagerInstance : public BufferPoolManager {
 
  protected:
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Create a new page in the buffer pool. Set page_id to the new page's id, or nullptr if all frames
    * are currently in use and not evictable (in another word, pinned).
    *
@@ -73,8 +71,6 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   auto NewPgImp(page_id_t *page_id) -> Page * override;
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Fetch the requested page from the buffer pool. Return nullptr if page_id needs to be fetched from the disk
    * but all frames are currently in use and not evictable (in another word, pinned).
    *
@@ -91,8 +87,6 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   auto FetchPgImp(page_id_t page_id) -> Page * override;
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Unpin the target page from the buffer pool. If page_id is not in the buffer pool or its pin count is already
    * 0, return false.
    *
@@ -106,8 +100,6 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   auto UnpinPgImp(page_id_t page_id, bool is_dirty) -> bool override;
 
   /**
-   * TODO(P1): Add implementation
-   *
    * @brief Flush the target page to disk.
    *
    * Use the DiskManager::WritePage() method to flush a page to disk, REGARDLESS of the dirty flag.
@@ -176,6 +168,23 @@ class BufferPoolManagerInstance : public BufferPoolManager {
     // This is a no-nop right now without a more complex data structure to track deallocated pages
   }
 
-  // TODO(student): You may add additional private members and helper functions
+  // You may add additional private members and helper functions
+  auto GetFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
+  auto showPages() -> void {
+    for (size_t i = 0; i < pool_size_; i++) {
+      if (pages_[i].page_id_ == INVALID_PAGE_ID) {
+        continue;
+      }
+      auto p = &pages_[i];
+      std::cout << "$$$ frame " << i << " => page " << p->page_id_ << ", pin " << p->pin_count_ << ", dirty "
+                << p->is_dirty_ << ", data `" << p->data_ << "`\n";
+    }
+  }
+  auto ResetPage(Page *evict_page) -> void {
+    memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
+    evict_page->pin_count_ = 0;
+    evict_page->is_dirty_ = false;
+    evict_page->page_id_ = INVALID_PAGE_ID;
+  }
 };
 }  // namespace bustub

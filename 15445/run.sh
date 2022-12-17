@@ -26,18 +26,14 @@ make check-lint
 # - - - - -
 # https://15445.courses.cs.cmu.edu/fall2022/project1
 
-# Task 1
-# https://skyfan2002.github.io
-# - - -
-# rm ./test/extendible_hash_table_test
-# make extendible_hash_table_test -j8
-# ./test/extendible_hash_table_test
-
-# Task 2
-# - - -
+rm ./test/extendible_hash_table_test
 rm ./test/lru_k_replacer_test
-make lru_k_replacer_test -j8
-./test/lru_k_replacer_test
+rm ./test/buffer_pool_manager_instance_test
+make buffer_pool_manager_instance_test -j8
+# make extendible_hash_table_test lru_k_replacer_test buffer_pool_manager_instance_test -j8
+# ./test/extendible_hash_table_test
+# ./test/lru_k_replacer_test
+./test/buffer_pool_manager_instance_test
 
 # make format && make check-lint && make check-clang-tidy-p1
 
