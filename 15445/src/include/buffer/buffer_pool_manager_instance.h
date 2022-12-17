@@ -52,6 +52,20 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   /** @brief Return the pointer to all the pages in the buffer pool. */
   auto GetPages() -> Page * { return pages_; }
 
+  // helper
+  auto ShowPages() -> void {
+    std::cout << "\n$$$ evictable: " << replacer_->Size() << ", free: " << free_list_.size() << "\n";
+    for (size_t i = 0; i < pool_size_; i++) {
+      auto p = &pages_[i];
+      if (p->page_id_ == INVALID_PAGE_ID) {
+        std::cout << "$$$ frame " << i << " => page " << p->page_id_ << std::endl;
+        continue;
+      }
+      std::cout << "$$$ frame " << i << " => page " << p->page_id_ << ", pin " << p->pin_count_ << ", dirty "
+                << p->is_dirty_ << ", data `" << p->data_ << "`\n";
+    }
+  }
+
  protected:
   /**
    * @brief Create a new page in the buffer pool. Set page_id to the new page's id, or nullptr if all frames
@@ -166,16 +180,13 @@ class BufferPoolManagerInstance : public BufferPoolManager {
 
   // You may add additional private members and helper functions
   auto PrepareFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
-  auto ShowPages() -> void {
-    for (size_t i = 0; i < pool_size_; i++) {
-      if (pages_[i].page_id_ == INVALID_PAGE_ID) {
-        continue;
-      }
-      auto p = &pages_[i];
-      std::cout << "$$$ frame " << i << " => page " << p->page_id_ << ", pin " << p->pin_count_ << ", dirty "
-                << p->is_dirty_ << ", data `" << p->data_ << "`\n";
-    }
+
+  auto PinFrame(frame_id_t frame_id) -> void {
+    pages_[frame_id].pin_count_++;
+    replacer_->RecordAccess(frame_id);
+    replacer_->SetEvictable(frame_id, false);
   }
+
   auto ResetPage(Page *evict_page) -> void {
     memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
     evict_page->is_dirty_ = false;

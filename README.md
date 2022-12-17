@@ -96,6 +96,8 @@ https://github.com/telexyz/bon
 - [Efficient Computing for Deep Learning](https://www.youtube.com/watch?v=WbLQqPw_n88) | 
 [slides](https://www.rle.mit.edu/eems/wp-content/uploads/2020/09/2020_uwisconsin_compressed.pdf)
 
+- [Machine Learning Systems Design](https://stanford-cs329s.github.io/syllabus.html)
+
 - - -
 
 - https://github.com/dendibakh/perf-ninja

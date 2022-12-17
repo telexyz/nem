@@ -20,11 +20,11 @@
 // const bool LOG_INPUT = true;
 // const bool LOG_DEBUG = false;
 
-// const bool LOG_INPUT = false;
-// const bool LOG_DEBUG = true;
-
 const bool LOG_INPUT = false;
-const bool LOG_DEBUG = false;
+const bool LOG_DEBUG = true;
+
+// const bool LOG_INPUT = false;
+// const bool LOG_DEBUG = false;
 
 namespace bustub {
 
@@ -55,6 +55,10 @@ BufferPoolManagerInstance::~BufferPoolManagerInstance() {
 
 // helper
 auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
+  if (LOG_DEBUG) {
+    std::cout << "\n*** PrepareFrame: evictable " << replacer_->Size() << ", free " << free_list_.size();
+    ;
+  }
   frame_id_t frame_id = -1;   // -1 = invalid frame_id
   if (!free_list_.empty()) {  // pick a new frame from free_list_ first
     frame_id = free_list_.front();
@@ -68,7 +72,7 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
 
     bool page_in_table = page_table_->Remove(pid);
     if (page_in_table && LOG_DEBUG) {
-      std::cout << "\n   *** PrepareFrame: remove page_id " << pid << " from page_table_\n";
+      std::cout << "\n    - remove page_id " << pid << " from page_table_";
     }
 
     if (evict_page->IsDirty()) {
@@ -76,18 +80,21 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
 
       disk_manager_->WritePage(pid, dat);
       if (LOG_DEBUG) {
-        std::cout << "\n   *** PrepareFrame: write to disk dirty page " << pid << ", data `" << dat << "`\n";
+        std::cout << "\n    - write to disk dirty page " << pid << ", data `" << dat;
       }
 
-      /* DEBUG begin */
+      /* DEBUG begin: đảm bảo việc ghi data vào disk và đọc trở lại thành công */
       // ResetPage(evict_page);
-      // std::cout << "   *** PrepareFrame: reset page " << pid << ", data `" << dat << "`\n";
+      // std::cout << "*** PrepareFrame: reset page " << pid << ", data `" << dat << "`\n";
       // disk_manager_->ReadPage(pid, dat);
-      // std::cout << "   *** PrepareFrame: reread from disk page " << pid << ", data `" << dat << "`\n\n";
+      // std::cout << "*** PrepareFrame: reread from disk page " << pid << ", data `" << dat << "`\n\n";
       /* DEBUG end */
     }
     // * You also need to reset the memory and metadata for the new page.
     ResetPage(evict_page);
+  }
+  if (LOG_DEBUG) {
+    std::cout << "`\n";
   }
   return frame_id;
 }
@@ -124,34 +131,26 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
 
   assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));  // ensure valid frame_id
 
+  *page_id = AllocatePage();
+  pages_[frame_id].page_id_ = *page_id;
+  page_table_->Insert(*page_id, frame_id);
+  // frame_id_t tmp;
+  // assert(page_table_->Find(*page_id, tmp));  // đảm bảo insert thành công
+  if (LOG_DEBUG) {
+    snprintf(pages_[frame_id].data_, BUSTUB_PAGE_SIZE, "page%d", *page_id);
+    std::cout << ", page_id " << *page_id << std::endl;
+  }
+
   // * Remember to "Pin" the frame by calling replacer.SetEvictable(frame_id, false)
   // * so that the replacer wouldn't evict the frame before the buffer pool manager "Unpin"s it.
   // * Also, remember to record the access history of the frame in the replacer for the lru-k algorithm to work.
-  replacer_->RecordAccess(frame_id);
-  replacer_->SetEvictable(frame_id, false);
-
-  *page_id = AllocatePage();
-  page_table_->Insert(*page_id, frame_id);
-
-  frame_id_t tmp;
-  assert(page_table_->Find(*page_id, tmp));  // đảm bảo insert thành công
-
-  if (LOG_DEBUG) {
-    std::cout << ", page_id " << *page_id << std::endl;
-  }
-  pages_[frame_id].page_id_ = *page_id;
-  pages_[frame_id].pin_count_ = 1; // pin the frame
-
-  if (LOG_DEBUG) {
-    snprintf(pages_[frame_id].data_, BUSTUB_PAGE_SIZE, "page%d", *page_id);
-  }
-  // ShowPages();  // DEBUG
+  PinFrame(frame_id);
   return &pages_[frame_id];
 }
 
-// - - - - - - - - - 
+// - - - - - - - - -
 // Cấu trúc dữ liệu:
-// - - - - - - - - - 
+// - - - - - - - - -
 // `Page` là một đơn vị lưu trữ dữ liệu của database, được persistent trên disk và load vào memory qua `pages_`
 // `pages_` mảng bộ nhớ được cấp phát cố định cho buffer pool, được chia ra thành `frames`
 // `page_table_` là 1 ExtendibleHash để trỏ page_id (Page) tới frame_id (stt của mảng pages_)
@@ -162,7 +161,7 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
 // - - -
 // 2 thao tác cung cấp page cho layer cao hơn của DB là NewPgImp() và FetchPgImp()
 // cần tăng page.pin_count_ lên 1
-// - - - - - - - - - 
+// - - - - - - - - -
 
 /**
  * @brief Fetch the requested page from the buffer pool. Return nullptr if page_id needs to be fetched from the disk
@@ -183,49 +182,41 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
   if (LOG_INPUT) {
     std::cout << "  bpm->FetchPage(" << page_id << ");\n";
   }
-  if (LOG_DEBUG) {
-    std::cout << ">>> FetchPgImp: page_id " << page_id << " => frame_id ";
-  }
 
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {  // in memory page
     assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
     if (LOG_DEBUG) {
+      std::cout << ">>> FetchPgImp: page_id " << page_id << " => frame_id ";
       std::cout << frame_id << ", in-memory data `" << pages_[frame_id].data_ << "`\n";
     }
-    pages_[frame_id].pin_count_++;
-    return &pages_[frame_id];
-  }
 
-  frame_id = PrepareFrame();
-  if (LOG_DEBUG) {
-    std::cout << frame_id;
-  }
-
-  if (frame_id == -1) {
+  } else {
+    frame_id = PrepareFrame();
     if (LOG_DEBUG) {
-      std::cout << ", no frame to load\n";
+      std::cout << ">>> FetchPgImp: page_id " << page_id << " => frame_id " << frame_id;
     }
-    return nullptr;
+
+    if (frame_id == -1) {
+      if (LOG_DEBUG) {
+        std::cout << ", no frame to load\n";
+      }
+      return nullptr;
+    }
+
+    assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
+
+    // Load page từ disk vào frame
+    disk_manager_->ReadPage(page_id, pages_[frame_id].data_);
+    pages_[frame_id].page_id_ = page_id;
+    page_table_->Insert(page_id, frame_id);  // map page_id to frame_id
+
+    if (LOG_DEBUG) {
+      std::cout << ", load from disk data `" << pages_[frame_id].data_ << "`\n";
+    }
   }
 
-  assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
-
-  replacer_->RecordAccess(frame_id);
-  replacer_->SetEvictable(frame_id, false);
-
-  // Load page từ disk vào frame
-  disk_manager_->ReadPage(page_id, pages_[frame_id].data_);
-  page_table_->Insert(page_id, frame_id);  // map page_id to frame_id
-
-  frame_id_t tmp;
-  assert(page_table_->Find(page_id, tmp));  // đảm bảo insert thành công
-
-  if (LOG_DEBUG) {
-    std::cout << ", load from disk data `" << pages_[frame_id].data_ << "`\n";
-  }
-  pages_[frame_id].pin_count_ = 1; // pin the frame
-  pages_[frame_id].page_id_ = page_id;
+  PinFrame(frame_id);
   return &pages_[frame_id];
 }
 
@@ -276,6 +267,7 @@ auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> 
     if (LOG_DEBUG) {
       std::cout << " => true: page in memory\n";
     }
+
     if (is_dirty) {
       unpin_page->is_dirty_ = true;
     }

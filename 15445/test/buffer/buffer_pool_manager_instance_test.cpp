@@ -175,7 +175,6 @@ TEST(BufferPoolManagerInstanceTest, gradescope7) {
   bpm->UnpinPage(5, true);
   Page *page0 = bpm->FetchPage(0);
   EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
-
   // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:24Failure
   // Expected equality of these values:
   // 0
@@ -257,6 +256,7 @@ TEST(BufferPoolManagerInstanceTest, gradescope8) {
   bpm->NewPage(&page_id_temp);
   bpm->FetchPage(5);
   bpm->FetchPage(7);
+  bpm->ShowPages();
   EXPECT_EQ(nullptr, bpm->FetchPage(6));
 
   // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:334: Failure
