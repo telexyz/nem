@@ -57,7 +57,6 @@ BufferPoolManagerInstance::~BufferPoolManagerInstance() {
 auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
   if (LOG_DEBUG) {
     std::cout << "\n*** PrepareFrame: evictable " << replacer_->Size() << ", free " << free_list_.size();
-    ;
   }
   frame_id_t frame_id = -1;   // -1 = invalid frame_id
   if (!free_list_.empty()) {  // pick a new frame from free_list_ first
