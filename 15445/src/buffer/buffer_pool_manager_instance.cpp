@@ -20,8 +20,11 @@
 // const bool LOG_INPUT = true;
 // const bool LOG_DEBUG = false;
 
+// const bool LOG_INPUT = false;
+// const bool LOG_DEBUG = true;
+
 const bool LOG_INPUT = false;
-const bool LOG_DEBUG = true;
+const bool LOG_DEBUG = false;
 
 namespace bustub {
 
@@ -42,11 +45,6 @@ BufferPoolManagerInstance::BufferPoolManagerInstance(size_t pool_size, DiskManag
   for (size_t i = 0; i < pool_size_; ++i) {
     free_list_.emplace_back(static_cast<int>(i));
   }
-
-  // TODO(students): remove this line after you have implemented the buffer pool manager
-  // throw NotImplementedException(
-  //     "BufferPoolManager is not implemented yet. If you have finished implementing BPM, please remove the throw "
-  //     "exception line in `buffer_pool_manager_instance.cpp`.");
 }
 
 BufferPoolManagerInstance::~BufferPoolManagerInstance() {
@@ -70,7 +68,7 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
 
     bool page_in_table = page_table_->Remove(pid);
     if (page_in_table && LOG_DEBUG) {
-      std::cout << "   *** PrepareFrame: remove page_id " << pid << " from page_table_\n";
+      std::cout << "\n   *** PrepareFrame: remove page_id " << pid << " from page_table_\n";
     }
 
     if (evict_page->IsDirty()) {
@@ -142,7 +140,7 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
     std::cout << ", page_id " << *page_id << std::endl;
   }
   pages_[frame_id].page_id_ = *page_id;
-  pages_[frame_id].pin_count_ = 1;
+  pages_[frame_id].pin_count_ = 1; // pin the frame
 
   if (LOG_DEBUG) {
     snprintf(pages_[frame_id].data_, BUSTUB_PAGE_SIZE, "page%d", *page_id);
@@ -151,16 +149,30 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
   return &pages_[frame_id];
 }
 
+// - - - - - - - - - 
 // Cấu trúc dữ liệu:
+// - - - - - - - - - 
 // `Page` là một đơn vị lưu trữ dữ liệu của database, được persistent trên disk và load vào memory qua `pages_`
 // `pages_` mảng bộ nhớ được cấp phát cố định cho buffer pool, được chia ra thành `frames`
 // `page_table_` là 1 ExtendibleHash để trỏ page_id (Page) tới frame_id (stt của mảng pages_)
 // `replacer_` LRU-K replacer để quản lý xem frame nào có thể evict
 // `free_list_` chứa các frames chưa được dùng tới (luôn cấp phát frames từ đây trước)
+// - - -
+// Chú ý:
+// - - -
+// 2 thao tác cung cấp page cho layer cao hơn của DB là NewPgImp() và FetchPgImp()
+// cần tăng page.pin_count_ lên 1
+// - - - - - - - - - 
 
 /**
  * @brief Fetch the requested page from the buffer pool. Return nullptr if page_id needs to be fetched from the disk
  * but all frames are currently in use and not evictable (in another word, pinned).
+ *
+ * First search for page_id in the buffer pool. If not found, pick a replacement frame from either the free list or
+ * the replacer (always find from the free list first), read the page from disk by calling disk_manager_->ReadPage(),
+ * and replace the old page in the frame. Similar to NewPgImp(), if the old page is dirty, you need to write it back
+ * to disk and update the metadata of the new page
+ *
  * In addition, remember to disable eviction and record the access history of the frame like you did for NewPgImp().
  *
  * @param page_id id of page to be fetched
@@ -181,6 +193,7 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
     if (LOG_DEBUG) {
       std::cout << frame_id << ", in-memory data `" << pages_[frame_id].data_ << "`\n";
     }
+    pages_[frame_id].pin_count_++;
     return &pages_[frame_id];
   }
 
@@ -211,7 +224,7 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
   if (LOG_DEBUG) {
     std::cout << ", load from disk data `" << pages_[frame_id].data_ << "`\n";
   }
-  pages_[frame_id].pin_count_ = 1;
+  pages_[frame_id].pin_count_ = 1; // pin the frame
   pages_[frame_id].page_id_ = page_id;
   return &pages_[frame_id];
 }
@@ -268,6 +281,7 @@ auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> 
     }
     return true;
   }  // end page in memory
+
   if (LOG_DEBUG) {
     std::cout << " => false: page in disk\n";
   }
@@ -292,6 +306,7 @@ auto BufferPoolManagerInstance::FlushPgImp(page_id_t page_id) -> bool {
   if (page_table_->Find(page_id, frame_id)) {
     assert(page_id != INVALID_PAGE_ID);
     disk_manager_->WritePage(page_id, pages_[frame_id].data_);
+    pages_[frame_id].is_dirty_ = false;  // unset dirty flag
   }
   return false;
 }
@@ -309,6 +324,7 @@ void BufferPoolManagerInstance::FlushAllPgsImp() {
     Page *page = &pages_[i];
     if (page->page_id_ != INVALID_PAGE_ID) {
       disk_manager_->WritePage(page->page_id_, page->data_);
+      page->is_dirty_ = false;  // unset dirty flag
     }
   }
 }
@@ -340,7 +356,7 @@ auto BufferPoolManagerInstance::DeletePgImp(page_id_t page_id) -> bool {
     free_list_.emplace_back(frame_id);
     ResetPage(&pages_[frame_id]);
   }
-  return true;
+  return true;  // if page_id not in memory
 }
 
 auto BufferPoolManagerInstance::AllocatePage() -> page_id_t { return next_page_id_++; }

@@ -179,8 +179,8 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   auto ResetPage(Page *evict_page) -> void {
     memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
     evict_page->is_dirty_ = false;
-    // evict_page->pin_count_ = 0;
-    // evict_page->page_id_ = INVALID_PAGE_ID;
+    evict_page->pin_count_ = 0;
+    evict_page->page_id_ = INVALID_PAGE_ID;
   }
 };
 }  // namespace bustub

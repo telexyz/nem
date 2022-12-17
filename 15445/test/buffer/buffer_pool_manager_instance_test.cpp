@@ -146,7 +146,7 @@ TEST(BufferPoolManagerInstanceTest, SampleTest) {
   delete disk_manager;
 }
 
-TEST(BufferPoolManagerInstanceTest, SampleTest11) {
+TEST(BufferPoolManagerInstanceTest, gradescope7) {
   const std::string db_name = "test.db";
   page_id_t page_id_temp;
 
@@ -173,7 +173,9 @@ TEST(BufferPoolManagerInstanceTest, SampleTest11) {
   bpm->UnpinPage(4, true);
   bpm->NewPage(&page_id_temp);
   bpm->UnpinPage(5, true);
-  bpm->FetchPage(0);
+  Page *page0 = bpm->FetchPage(0);
+  EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
+
   // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:24Failure
   // Expected equality of these values:
   // 0
@@ -202,14 +204,67 @@ TEST(BufferPoolManagerInstanceTest, gradescope8) {
   bpm->NewPage(&page_id_temp);
   bpm->NewPage(&page_id_temp);
   bpm->NewPage(&page_id_temp);
+
+  for (page_id_t i = 0; i < 10; i++) {
+    bpm->FetchPage(i);
+    EXPECT_EQ(true, bpm->UnpinPage(i, true));
+    EXPECT_EQ(true, bpm->UnpinPage(i, true));
+    bpm->FlushPage(0);
+  }
+
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(10, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(11, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(12, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(13, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(14, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(15, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(16, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(17, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(18, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->UnpinPage(19, true);
   bpm->FetchPage(0);
-  bpm->UnpinPage(0, true);
-  bpm->UnpinPage(0, true);
-  // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:285: Failure
+  bpm->FetchPage(1);
+  bpm->FetchPage(2);
+  bpm->FetchPage(3);
+  bpm->FetchPage(4);
+  bpm->FetchPage(5);
+  bpm->FetchPage(6);
+  bpm->FetchPage(7);
+  bpm->FetchPage(8);
+  bpm->FetchPage(9);
+  bpm->UnpinPage(4, true);
+  bpm->NewPage(&page_id_temp);
+  bpm->FetchPage(4);
+  bpm->FetchPage(5);
+  bpm->FetchPage(6);
+  bpm->FetchPage(7);
+  bpm->UnpinPage(5, false);
+  bpm->UnpinPage(6, false);
+  bpm->UnpinPage(7, false);
+  bpm->UnpinPage(5, false);
+  bpm->UnpinPage(6, false);
+  bpm->UnpinPage(7, false);
+  bpm->NewPage(&page_id_temp);
+  bpm->FetchPage(5);
+  bpm->FetchPage(7);
+  EXPECT_EQ(nullptr, bpm->FetchPage(6));
+
+  // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:334: Failure
   // Expected equality of these values:
-  //   1
-  //   bpm->UnpinPage(page_ids[i], true)
-  //     Which is: false
+  //   nullptr
+  //     Which is: NULL
+  //   bpm->FetchPage(page_ids[6])
+  //     Which is: 0x62e0000075f8
 
   disk_manager->ShutDown();
   remove("test.db");
