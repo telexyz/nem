@@ -169,7 +169,7 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   }
 
   // You may add additional private members and helper functions
-  auto GetFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
+  auto PrepareFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
   auto showPages() -> void {
     for (size_t i = 0; i < pool_size_; i++) {
       if (pages_[i].page_id_ == INVALID_PAGE_ID) {
@@ -182,9 +182,9 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   }
   auto ResetPage(Page *evict_page) -> void {
     memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
-    evict_page->pin_count_ = 0;
     evict_page->is_dirty_ = false;
-    evict_page->page_id_ = INVALID_PAGE_ID;
+    // evict_page->pin_count_ = 0;
+    // evict_page->page_id_ = INVALID_PAGE_ID;
   }
 };
 }  // namespace bustub

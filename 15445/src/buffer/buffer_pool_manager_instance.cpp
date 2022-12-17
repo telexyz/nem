@@ -44,7 +44,7 @@ BufferPoolManagerInstance::~BufferPoolManagerInstance() {
   delete replacer_;
 }
 
-auto BufferPoolManagerInstance::GetFrame() -> frame_id_t {
+auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
   frame_id_t frame_id = -1;   // -1 = invalid frame_id
   if (!free_list_.empty()) {  // pick a new frame from free_list_ first
     frame_id = free_list_.front();
@@ -58,15 +58,18 @@ auto BufferPoolManagerInstance::GetFrame() -> frame_id_t {
       page_id_t pid = evict_page->GetPageId();
       char *dat = evict_page->GetData();
 
-      std::cout << "\n   *** GetFrame: dirty page " << pid << ", data `" << dat << "`\n";
       disk_manager_->WritePage(pid, dat);
-      page_table_->Remove(pid);
+      bool page_in_table = page_table_->Remove(pid);
+      std::cout << "\n   *** PrepareFrame: dirty page " << pid << ", data `" << dat << "`\n";
+      if (page_in_table) {
+        std::cout << "   *** PrepareFrame: remove page_id " << pid << " from page_table_\n";
+      }
 
       /* DEBUG begin */
       // ResetPage(evict_page);
-      // std::cout << "   *** GetFrame: reset page " << pid << ", data `" << dat << "`\n";
+      // std::cout << "   *** PrepareFrame: reset page " << pid << ", data `" << dat << "`\n";
       // disk_manager_->ReadPage(pid, dat);
-      // std::cout << "   *** GetFrame: reread from disk page " << pid << ", data `" << dat << "`\n\n";
+      // std::cout << "   *** PrepareFrame: reread from disk page " << pid << ", data `" << dat << "`\n\n";
       /* DEBUG end */
     }
     // * You also need to reset the memory and metadata for the new page.
@@ -88,7 +91,7 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
   // * You should pick the replacement frame from either the free list or the replacer (always find from the free list
   // * first), and then call the AllocatePage() method to get a new page id.
   std::cout << ">>> NewPgImp: frame_id ";
-  frame_id_t frame_id = GetFrame();
+  frame_id_t frame_id = PrepareFrame();
   std::cout << frame_id;
 
   if (frame_id == -1) {  // there is neither empty nor evictable frame
@@ -107,6 +110,10 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
 
   *page_id = AllocatePage();
   page_table_->Insert(*page_id, frame_id);
+
+  frame_id_t tmp;
+  assert(page_table_->Find(*page_id, tmp));  // đảm bảo insert thành công
+
   std::cout << ", page_id " << *page_id << std::endl;
   pages_[frame_id].page_id_ = *page_id;
   pages_[frame_id].pin_count_ = 1;
@@ -142,13 +149,14 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
     return &pages_[frame_id];
   }
 
-  frame_id = GetFrame();
+  frame_id = PrepareFrame();
   std::cout << frame_id;
 
   if (frame_id == -1) {
     std::cout << ", no frame to load\n";
     return nullptr;
   }
+
   assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
 
   replacer_->RecordAccess(frame_id);
@@ -158,8 +166,12 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
   disk_manager_->ReadPage(page_id, pages_[frame_id].data_);
   page_table_->Insert(page_id, frame_id);  // map page_id to frame_id
 
+  frame_id_t tmp;
+  assert(page_table_->Find(page_id, tmp));  // đảm bảo insert thành công
+
   std::cout << ", load from disk data `" << pages_[frame_id].data_ << "`\n";
   pages_[frame_id].pin_count_ = 1;
+  pages_[frame_id].page_id_ = page_id;
   return &pages_[frame_id];
 }
 
@@ -176,14 +188,13 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
  */
 auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> bool {
   std::scoped_lock<std::mutex> lock(latch_);
-  std::cout << ">>> UnpinPgImp: page_id " << page_id << ", is_dirty " << is_dirty;
+  std::cout << ">>> UnpinPgImp(page_id " << page_id << ", is_dirty " << is_dirty << "):";
 
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {  // page in memory
-
     assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
     Page *unpin_page = &pages_[frame_id];
-    std::cout << ", pin_count " << unpin_page->pin_count_;
+    std::cout << " frame_id " << frame_id << ", pin_count " << unpin_page->pin_count_;
 
     if (unpin_page->pin_count_ <= 0) {
       std::cout << " => false: pin_count is 0\n";
