@@ -283,7 +283,7 @@ TEST(BufferPoolManagerInstanceTest, gradescope8) {
   bpm->NewPage(&page_id_temp);
   bpm->FetchPage(5);
   bpm->FetchPage(7);
-  bpm->ShowPages();
+  // bpm->ShowPages();
   EXPECT_EQ(nullptr, bpm->FetchPage(6));
 
   // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:334: Failure

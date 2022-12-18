@@ -17,11 +17,25 @@
 #include "common/exception.h"
 #include "common/macros.h"
 
+// const bool LOG_INPUT = true;
+// const bool LOG_DEBUG = false;
+
+// const bool LOG_INPUT = false;
+// const bool LOG_DEBUG = true;
+
+const bool LOG_INPUT = false;
+const bool LOG_DEBUG = false;
+
 namespace bustub {
 
 BufferPoolManagerInstance::BufferPoolManagerInstance(size_t pool_size, DiskManager *disk_manager, size_t replacer_k,
                                                      LogManager *log_manager)
     : pool_size_(pool_size), disk_manager_(disk_manager), log_manager_(log_manager) {
+  if (LOG_INPUT) {
+    std::cout << "\n\n  auto *bpm = new BufferPoolManagerInstance(" << pool_size << ", disk_manager, " << replacer_k
+              << ");\n";
+  }
+
   // we allocate a consecutive memory space for the buffer pool
   pages_ = new Page[pool_size_];
   page_table_ = new ExtendibleHashTable<page_id_t, frame_id_t>(bucket_size_);
@@ -41,26 +55,47 @@ BufferPoolManagerInstance::~BufferPoolManagerInstance() {
 
 // helper
 auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
+  if (LOG_DEBUG) {
+    std::cout << "\n*** PrepareFrame: evictable " << replacer_->Size() << ", free " << free_list_.size();
+  }
   frame_id_t frame_id = -1;   // -1 = invalid frame_id
   if (!free_list_.empty()) {  // pick a new frame from free_list_ first
     frame_id = free_list_.front();
     free_list_.pop_front();
 
   } else if (replacer_->Size() > 0) {  // then use replacer_
+    // BUSTUB_ASSERT(replacer_->Evict(&frame_id));  // chắc chắn phải lấy lại được 1 frame
     replacer_->Evict(&frame_id);
-
     // * If the replacement frame has a dirty page, you should write it back to the disk first.
     Page *evict_page = &pages_[frame_id];
     page_id_t pid = evict_page->GetPageId();
-    page_table_->Remove(pid);
+
+    bool page_in_table = page_table_->Remove(pid);
+    if (page_in_table && LOG_DEBUG) {
+      std::cout << "\n    - remove page_id " << pid << " from page_table_";
+    }
 
     if (evict_page->IsDirty()) {
-      disk_manager_->WritePage(pid, evict_page->GetData());
+      char *dat = evict_page->GetData();
+
+      disk_manager_->WritePage(pid, dat);
+      if (LOG_DEBUG) {
+        std::cout << "\n    - write to disk dirty page " << pid << ", data `" << dat;
+      }
+
+      /* DEBUG begin: đảm bảo việc ghi data vào disk và đọc trở lại thành công */
+      // ResetPage(evict_page);
+      // std::cout << "*** PrepareFrame: reset page " << pid << ", data `" << dat << "`\n";
+      // disk_manager_->ReadPage(pid, dat);
+      // std::cout << "*** PrepareFrame: reread from disk page " << pid << ", data `" << dat << "`\n\n";
+      /* DEBUG end */
     }
     // * You also need to reset the memory and metadata for the new page.
     ResetPage(evict_page);
   }
-
+  if (LOG_DEBUG) {
+    std::cout << "\n";
+  }
   return frame_id;
 }
 
@@ -71,14 +106,24 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
 auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
   std::scoped_lock<std::mutex> lock(latch_);
 
+  if (LOG_INPUT) {
+    std::cout << "  bpm->NewPage(&page_id_temp);\n";
+  }
+
   // * Create a new page in the buffer pool. Set page_id to the new page's id, or nullptr if all frames
   // * are currently in use and not evictable (in another word, pinned).
 
   // * You should pick the replacement frame from either the free list or the replacer (always find from the free list
   // * first), and then call the AllocatePage() method to get a new page id.
   frame_id_t frame_id = PrepareFrame();
+  if (LOG_DEBUG) {
+    std::cout << ">>> NewPgImp: frame_id " << frame_id;
+  }
 
   if (frame_id == -1) {  // there is neither empty nor evictable frame
+    if (LOG_DEBUG) {
+      std::cout << ". Cannot issue new page. \n";
+    }
     page_id = nullptr;
     return nullptr;
   }
@@ -88,6 +133,12 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
   *page_id = AllocatePage();
   pages_[frame_id].page_id_ = *page_id;
   page_table_->Insert(*page_id, frame_id);
+  // frame_id_t tmp;
+  // assert(page_table_->Find(*page_id, tmp));  // đảm bảo insert thành công
+  if (LOG_DEBUG) {
+    snprintf(pages_[frame_id].data_, BUSTUB_PAGE_SIZE, "page%d", *page_id);
+    std::cout << ", page_id " << *page_id << std::endl;
+  }
 
   // * Remember to "Pin" the frame by calling replacer.SetEvictable(frame_id, false)
   // * so that the replacer wouldn't evict the frame before the buffer pool manager "Unpin"s it.
@@ -127,25 +178,42 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
  */
 auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
   std::scoped_lock<std::mutex> lock(latch_);
+  if (LOG_INPUT) {
+    std::cout << "  bpm->FetchPage(" << page_id << ");\n";
+  }
 
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {  // in memory page
     assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
-    PinFrame(frame_id);
-    return &pages_[frame_id];
+    if (LOG_DEBUG) {
+      std::cout << ">>> FetchPgImp: page_id " << page_id << " => frame_id ";
+      std::cout << frame_id << ", in-memory data `" << pages_[frame_id].data_ << "`\n";
+    }
+
+  } else {
+    frame_id = PrepareFrame();
+    if (LOG_DEBUG) {
+      std::cout << ">>> FetchPgImp: page_id " << page_id << " => frame_id " << frame_id;
+    }
+
+    if (frame_id == -1) {
+      if (LOG_DEBUG) {
+        std::cout << ", no frame to load\n";
+      }
+      return nullptr;
+    }
+
+    assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
+
+    // Load page từ disk vào frame
+    disk_manager_->ReadPage(page_id, pages_[frame_id].data_);
+    pages_[frame_id].page_id_ = page_id;
+    page_table_->Insert(page_id, frame_id);  // map page_id to frame_id
+
+    if (LOG_DEBUG) {
+      std::cout << ", load from disk data `" << pages_[frame_id].data_ << "`\n";
+    }
   }
-
-  frame_id = PrepareFrame();
-
-  if (frame_id == -1) {
-    return nullptr;
-  }
-  assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
-
-  // Load page từ disk vào frame
-  disk_manager_->ReadPage(page_id, pages_[frame_id].data_);
-  pages_[frame_id].page_id_ = page_id;
-  page_table_->Insert(page_id, frame_id);  // map page_id to frame_id
 
   PinFrame(frame_id);
   return &pages_[frame_id];
@@ -163,26 +231,51 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
  * @return false if the page is not in the page table or its pin count is <= 0 before this call, true otherwise
  */
 auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> bool {
+  if (LOG_INPUT) {
+    std::cout << "  bpm->UnpinPage(" << page_id << ", " << (is_dirty ? "true" : "false") << ");\n";
+  }
+  std::scoped_lock<std::mutex> lock(latch_);
+  if (LOG_DEBUG) {
+    std::cout << ">>> UnpinPgImp(page_id " << page_id << ", is_dirty " << is_dirty << "):";
+  }
+
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {  // page in memory
     assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
     Page *unpin_page = &pages_[frame_id];
+    if (LOG_DEBUG) {
+      std::cout << " frame_id " << frame_id << ", pin_count " << unpin_page->pin_count_;
+    }
 
     if (unpin_page->pin_count_ <= 0) {
+      if (LOG_DEBUG) {
+        std::cout << " => false: pin_count is 0\n";
+      }
       return false;
     }
 
     int decreased_pin_count = --unpin_page->pin_count_;
+    if (LOG_DEBUG) {
+      std::cout << ", decreased_pin_count " << decreased_pin_count;
+    }
+
     if (decreased_pin_count <= 0) {
       replacer_->SetEvictable(frame_id, true);
     }
 
-    unpin_page->is_dirty_ |= is_dirty;
-    // ^^ tương đương với đoạn code:
-    // if (is_dirty) { unpin_page->is_dirty_ = true; }
+    if (LOG_DEBUG) {
+      std::cout << " => true: page in memory\n";
+    }
+
+    if (is_dirty) {
+      unpin_page->is_dirty_ = true;
+    }
     return true;
   }  // end page in memory
 
+  if (LOG_DEBUG) {
+    std::cout << " => false: page in disk\n";
+  }
   return false;
 }
 
@@ -196,9 +289,13 @@ auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> 
  * @return false if the page could not be found in the page table, true otherwise
  */
 auto BufferPoolManagerInstance::FlushPgImp(page_id_t page_id) -> bool {
+  if (LOG_INPUT) {
+    std::cout << "  bpm->FlushPage(" << page_id << ");\n";
+  }
+  std::scoped_lock<std::mutex> lock(latch_);
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {
-    std::scoped_lock<std::mutex> lock(latch_);  // chỉ lock khi có dữ liệu cần thay đổi
+    assert(page_id != INVALID_PAGE_ID);
     disk_manager_->WritePage(page_id, pages_[frame_id].data_);
     pages_[frame_id].is_dirty_ = false;  // unset dirty flag
     return true;
@@ -210,6 +307,10 @@ auto BufferPoolManagerInstance::FlushPgImp(page_id_t page_id) -> bool {
  * @brief Flush all the pages in the buffer pool to disk.
  */
 void BufferPoolManagerInstance::FlushAllPgsImp() {
+  if (LOG_INPUT) {
+    std::cout << "  bpm->FlushAllPages();\n";
+  }
+
   std::scoped_lock<std::mutex> lock(latch_);
   for (size_t i = 0; i < pool_size_; i++) {
     Page *page = &pages_[i];
@@ -232,15 +333,18 @@ void BufferPoolManagerInstance::FlushAllPgsImp() {
  * @return false if the page exists but could not be deleted, true if the page didn't exist or deletion succeeded
  */
 auto BufferPoolManagerInstance::DeletePgImp(page_id_t page_id) -> bool {
+  if (LOG_INPUT) {
+    std::cout << "  bpm->DeletePage(" << page_id << ");\n";
+  }
+  std::scoped_lock<std::mutex> lock(latch_);
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {
     assert(page_id != INVALID_PAGE_ID);
-    if (pages_[frame_id].pin_count_ > 0) {  // cannot delete a pinned page
+    if (pages_[frame_id].pin_count_ > 0) {  // pinned
       return false;
     }
-    std::scoped_lock<std::mutex> lock(latch_);  // chỉ lock khi có dữ liệu cần thay đổi
     page_table_->Remove(page_id);
-    // DeallocatePage(page_id);
+    DeallocatePage(page_id);
     free_list_.emplace_back(frame_id);
     ResetPage(&pages_[frame_id]);
   }
