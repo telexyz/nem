@@ -32,7 +32,7 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
   //   std::cout << "lru_replacer.RecordAccess(" << frame_id << ");\n";
   // }
   // * You can also use BUSTUB_ASSERT to abort the process if frame id is invalid.
-  BUSTUB_ASSERT(frame_id <= static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
+  BUSTUB_ASSERT(frame_id < static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
 
   // frame_entries_[frame_id] có thể đã tồn tại từ trước
   // do SetEvictable(frame_id, ..) được gọi trước
@@ -99,7 +99,7 @@ void LRUKReplacer::SetEvictable(frame_id_t frame_id, bool set_evictable) {
   // if (DEBUG) {
   //   std::cout << "lru_replacer.SetEvictable(" << frame_id << ", " << (set_evictable ? "true" : "false") << ");\n";
   // }
-  BUSTUB_ASSERT(frame_id <= static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
+  BUSTUB_ASSERT(frame_id < static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
 
   auto frame_it = frame_entries_.find(frame_id);
   bool found = (frame_it != frame_entries_.end());
@@ -173,7 +173,7 @@ void LRUKReplacer::Remove(frame_id_t frame_id) {
   // if (DEBUG) {
   //   std::cout << "lru_replacer.Remove(" << frame_id << ");\n";
   // }
-  if (frame_id <= static_cast<frame_id_t>(replacer_size_)) {  // validate frame_id
+  if (frame_id < static_cast<frame_id_t>(replacer_size_)) {  // validate frame_id
     auto it = frame_entries_.find(frame_id);
     if (it != frame_entries_.end()) {
       auto frame_entry = &it->second;
