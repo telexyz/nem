@@ -172,6 +172,7 @@ auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> 
       return false;
     }
 
+    std::scoped_lock<std::mutex> lock(latch_);
     int decreased_pin_count = --unpin_page->pin_count_;
     if (decreased_pin_count <= 0) {
       replacer_->SetEvictable(frame_id, true);
@@ -234,11 +235,11 @@ void BufferPoolManagerInstance::FlushAllPgsImp() {
 auto BufferPoolManagerInstance::DeletePgImp(page_id_t page_id) -> bool {
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {
+    std::scoped_lock<std::mutex> lock(latch_);  // chỉ lock khi có dữ liệu cần thay đổi
     assert(page_id != INVALID_PAGE_ID);
     if (pages_[frame_id].pin_count_ > 0) {  // cannot delete a pinned page
       return false;
     }
-    std::scoped_lock<std::mutex> lock(latch_);  // chỉ lock khi có dữ liệu cần thay đổi
     page_table_->Remove(page_id);
     // DeallocatePage(page_id);
     free_list_.emplace_back(frame_id);

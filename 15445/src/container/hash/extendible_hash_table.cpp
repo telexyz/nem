@@ -167,7 +167,7 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
     }
   }
 
-  assert(before_redis_total_capacity == list.size() + new_bucket->GetItems().size());
+  assert(before_redis_total_capacity == list->size() + new_bucket->GetItems().size());
   assert(!bucket->IsFull() || !new_bucket->IsFull());
 }
 

@@ -47,6 +47,13 @@ TEST(BufferPoolManagerInstanceTest, BuildReleaseTest) {
     EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
     bpm->UnpinPage(page_id_temp, false);
   }
+
+  // Shutdown the disk manager and remove the temporary file we created.
+  disk_manager->ShutDown();
+  remove("test.db");
+
+  delete bpm;
+  delete disk_manager;
 }
 
 // NOLINTNEXTLINE

@@ -37,5 +37,3 @@ make buffer_pool_manager_instance_test \
 	rm testdb.*; ./test/buffer_pool_manager_instance_test
 
 # make format && make check-lint && make check-clang-tidy-p1 && rm ../project1-submission.zip; make submit-p1
-
-# rm ../project1-submission.zip; make submit-p1

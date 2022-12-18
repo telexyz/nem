@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "buffer/buffer_pool_manager_instance.h"
 #include <iostream>
+#include "buffer/buffer_pool_manager_instance.h"
 #include "common/logger.h"
 
 #include "common/exception.h"
