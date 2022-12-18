@@ -163,6 +163,8 @@ auto BufferPoolManagerInstance::FetchPgImp(page_id_t page_id) -> Page * {
  * @return false if the page is not in the page table or its pin count is <= 0 before this call, true otherwise
  */
 auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> bool {
+  std::scoped_lock<std::mutex> lock(latch_);
+
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {  // page in memory
     assert(frame_id >= 0 && frame_id < static_cast<int>(pool_size_));
@@ -172,7 +174,6 @@ auto BufferPoolManagerInstance::UnpinPgImp(page_id_t page_id, bool is_dirty) -> 
       return false;
     }
 
-    std::scoped_lock<std::mutex> lock(latch_);
     int decreased_pin_count = --unpin_page->pin_count_;
     if (decreased_pin_count <= 0) {
       replacer_->SetEvictable(frame_id, true);
@@ -233,9 +234,10 @@ void BufferPoolManagerInstance::FlushAllPgsImp() {
  * @return false if the page exists but could not be deleted, true if the page didn't exist or deletion succeeded
  */
 auto BufferPoolManagerInstance::DeletePgImp(page_id_t page_id) -> bool {
+  std::scoped_lock<std::mutex> lock(latch_);
+
   frame_id_t frame_id = -1;
   if (page_table_->Find(page_id, frame_id)) {
-    std::scoped_lock<std::mutex> lock(latch_);  // chỉ lock khi có dữ liệu cần thay đổi
     assert(page_id != INVALID_PAGE_ID);
     if (pages_[frame_id].pin_count_ > 0) {  // cannot delete a pinned page
       return false;
