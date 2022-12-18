@@ -26,14 +26,21 @@ make check-lint
 # - - - - -
 # https://15445.courses.cs.cmu.edu/fall2022/project1
 
-rm ./test/extendible_hash_table_test
-rm ./test/lru_k_replacer_test
-rm ./test/buffer_pool_manager_instance_test
-make buffer_pool_manager_instance_test \
- 	extendible_hash_table_test lru_k_replacer_test \
- 	buffer_pool_manager_instance_test -j8
-./test/extendible_hash_table_test && \
-	./test/lru_k_replacer_test && \
-	rm testdb.*; ./test/buffer_pool_manager_instance_test
+# rm ./test/extendible_hash_table_test
+# rm ./test/lru_k_replacer_test
+# rm ./test/buffer_pool_manager_instance_test
+# make buffer_pool_manager_instance_test \
+#  	extendible_hash_table_test lru_k_replacer_test \
+#  	buffer_pool_manager_instance_test -j8
+# ./test/extendible_hash_table_test && \
+# 	./test/lru_k_replacer_test && \
+# 	rm testdb.*; ./test/buffer_pool_manager_instance_test
+
+# Project 2
+# - - - - -
+
+rm test/b_plus_tree_concurrent_test
+make b_plus_tree_concurrent_test -j8
+./test/b_plus_tree_concurrent_test
 
 # make format && make check-lint && make check-clang-tidy-p1 && rm ../project1-submission.zip; make submit-p1
