@@ -1,3 +1,8 @@
+## Fix Segmentation Fault
+
+1/ Re-compile your code in release mode to re-produce the bug
+
+
 ## [Task #3 - Buffer Pool Manager Instance](https://15445.courses.cs.cmu.edu/fall2022/project1/#buffer-pool-instance)
 
 `buffer_pool_manager_instance`

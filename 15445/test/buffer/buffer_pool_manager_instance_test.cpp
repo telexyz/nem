@@ -21,6 +21,34 @@
 
 namespace bustub {
 
+TEST(BufferPoolManagerInstanceTest, BuildReleaseTest) {
+  const std::string db_name = "test.db";
+  const size_t buffer_pool_size = 3;
+  const size_t k = 5;
+  page_id_t page_id_temp;
+
+  auto *disk_manager = new DiskManager(db_name);
+  auto *bpm = new BufferPoolManagerInstance(buffer_pool_size, disk_manager, k);
+
+  // Scenario: We should be able to create new pages until we fill up the buffer pool.
+  for (size_t i = 0; i < buffer_pool_size; ++i) {
+    EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
+  }
+
+  // Scenario: Once the buffer pool is full, we should not be able to create any new pages.
+  EXPECT_EQ(nullptr, bpm->NewPage(&page_id_temp));
+
+  // Scenario: After unpinning pages {0, 1} we should be able to create 2 new pages
+  for (int i = 0; i < 2; ++i) {
+    EXPECT_EQ(true, bpm->UnpinPage(i, true));
+    bpm->FlushPage(i);
+  }
+  for (int i = 0; i < 2; ++i) {
+    EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
+    bpm->UnpinPage(page_id_temp, false);
+  }
+}
+
 // NOLINTNEXTLINE
 // Check whether pages containing terminal characters can be recovered
 TEST(BufferPoolManagerInstanceTest, BinaryDataTest) {

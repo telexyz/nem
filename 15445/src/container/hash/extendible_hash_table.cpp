@@ -221,7 +221,7 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
     bool move = (move_to_bucket != bucket);
     if (move) {
       // assert(move_to_bucket == new_bucket);
-      assert(move_to_bucket->Insert(key, it->second));  // !!! Giữ lại !!!
+      move_to_bucket->Insert(key, it->second);
       it = list->erase(it);
 
       // std::cout << key << " (";

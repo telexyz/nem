@@ -63,8 +63,9 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
     frame_id = free_list_.front();
     free_list_.pop_front();
 
-  } else if (replacer_->Size() > 0) {     // then use replacer_
-    assert(replacer_->Evict(&frame_id));  // chắc chắn phải lấy lại được 1 frame
+  } else if (replacer_->Size() > 0) {  // then use replacer_
+    // BUSTUB_ASSERT(replacer_->Evict(&frame_id));  // chắc chắn phải lấy lại được 1 frame
+    replacer_->Evict(&frame_id);
     // * If the replacement frame has a dirty page, you should write it back to the disk first.
     Page *evict_page = &pages_[frame_id];
     page_id_t pid = evict_page->GetPageId();
@@ -93,7 +94,7 @@ auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
     ResetPage(evict_page);
   }
   if (LOG_DEBUG) {
-    std::cout << "`\n";
+    std::cout << "\n";
   }
   return frame_id;
 }
@@ -116,13 +117,12 @@ auto BufferPoolManagerInstance::NewPgImp(page_id_t *page_id) -> Page * {
   // * first), and then call the AllocatePage() method to get a new page id.
   frame_id_t frame_id = PrepareFrame();
   if (LOG_DEBUG) {
-    std::cout << ">>> NewPgImp: frame_id ";
-    std::cout << frame_id;
+    std::cout << ">>> NewPgImp: frame_id " << frame_id;
   }
 
   if (frame_id == -1) {  // there is neither empty nor evictable frame
     if (LOG_DEBUG) {
-      std::cout << std::endl;
+      std::cout << ". Cannot issue new page. \n";
     }
     page_id = nullptr;
     return nullptr;
