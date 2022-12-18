@@ -20,11 +20,11 @@
 // const bool LOG_INPUT = true;
 // const bool LOG_DEBUG = false;
 
-const bool LOG_INPUT = false;
-const bool LOG_DEBUG = true;
-
 // const bool LOG_INPUT = false;
-// const bool LOG_DEBUG = false;
+// const bool LOG_DEBUG = true;
+
+const bool LOG_INPUT = false;
+const bool LOG_DEBUG = false;
 
 namespace bustub {
 
@@ -298,6 +298,7 @@ auto BufferPoolManagerInstance::FlushPgImp(page_id_t page_id) -> bool {
     assert(page_id != INVALID_PAGE_ID);
     disk_manager_->WritePage(page_id, pages_[frame_id].data_);
     pages_[frame_id].is_dirty_ = false;  // unset dirty flag
+    return true;
   }
   return false;
 }

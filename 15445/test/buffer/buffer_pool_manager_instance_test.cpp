@@ -152,12 +152,11 @@ TEST(BufferPoolManagerInstanceTest, gradescope7) {
 
   auto *disk_manager = new DiskManager(db_name);
   auto *bpm = new BufferPoolManagerInstance(2, disk_manager, 5);
-  // auto page0 = bpm->NewPage(&page_id_temp);
+  auto page0 = bpm->NewPage(&page_id_temp);
   // Scenario: Once we have a page, we should be able to read and write content.
-  // snprintf(page0->GetData(), BUSTUB_PAGE_SIZE, "page0");
-  // EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
+  snprintf(page0->GetData(), BUSTUB_PAGE_SIZE, "page0");
+  EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
 
-  bpm->NewPage(&page_id_temp);
   bpm->NewPage(&page_id_temp);
   bpm->UnpinPage(0, true);
   bpm->UnpinPage(1, true);
@@ -173,7 +172,7 @@ TEST(BufferPoolManagerInstanceTest, gradescope7) {
   bpm->UnpinPage(4, true);
   bpm->NewPage(&page_id_temp);
   bpm->UnpinPage(5, true);
-  Page *page0 = bpm->FetchPage(0);
+  page0 = bpm->FetchPage(0);
   EXPECT_EQ(0, strcmp(page0->GetData(), "page0"));
   // /autograder/source/bustub/test/buffer/grading_buffer_pool_manager_instance_test.cpp:24Failure
   // Expected equality of these values:
