@@ -27,7 +27,6 @@ ExtendibleHashTable<K, V>::ExtendibleHashTable(size_t bucket_size)
     : global_depth_(0), bucket_size_(bucket_size), num_buckets_(1), num_inserts_(0) {
   // khởi tạo bucket đầu tiên của hashtable với local depth = global depth = 0
   dir_.push_back(std::make_shared<Bucket>(Bucket(bucket_size, 0)));
-  dir_[0]->id_ = 0;
 }
 
 template <typename K, typename V>
@@ -101,13 +100,8 @@ template <typename K, typename V>
 void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   int index = IndexOf(key);
   auto insert_bucket = dir_[index];
-  auto before_insert_bucket = *insert_bucket;
-  bool inserted = insert_bucket->Insert(key, value);
 
-  num_inserts_++;
-
-  if (!inserted) {
-    assert(insert_bucket->IsFull());
+  if (insert_bucket->IsFull()) {
     assert(dir_.size() == (1 << global_depth_));
 
     if (insert_bucket->GetDepth() == global_depth_) {
@@ -124,6 +118,8 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
 
     RedistributeBucket(insert_bucket);
     InsertInternal(key, value);
+  } else {
+    insert_bucket->Insert(key, value);
   }
 }
 
@@ -132,7 +128,6 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   // Split the bucket
   bucket->IncrementDepth();
   auto new_bucket = std::make_shared<Bucket>(Bucket(bucket_size_, bucket->GetDepth()));
-  new_bucket->id_ = num_buckets_;
   num_buckets_++;
 
   // Bit mới được mở ra do tăng local depth
@@ -148,26 +143,24 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   }
 
   // Redistribute
-  auto list = &bucket->GetItems();
-  auto it = list->begin();
-  auto before_redis_total_capacity = list->size() + new_bucket->GetItems().size();
+  auto before_redis_total_capacity = bucket->curr_size_ + new_bucket->curr_size_;
 
-  while (it != list->end()) {
-    auto key = it->first;
+  size_t i = 0;
+  while (i < bucket->curr_size_) {
+    auto key = bucket->list_k_[i];
     int index = IndexOf(key);
     auto move_to_bucket = dir_[index];
     bool move = (move_to_bucket != bucket);
     if (move) {
       assert(move_to_bucket == new_bucket);
-      move_to_bucket->Insert(key, it->second);
-      it = list->erase(it);
-
+      move_to_bucket->Insert(key, bucket->list_v_[i]);
+      bucket->RemoveIndex(i);
     } else {
-      ++it;
+      ++i;
     }
   }
 
-  assert(before_redis_total_capacity == list->size() + new_bucket->GetItems().size());
+  assert(before_redis_total_capacity == bucket->curr_size_ + new_bucket->curr_size_);
   assert(!bucket->IsFull() || !new_bucket->IsFull());
 }
 
@@ -176,14 +169,16 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
 //===--------------------------------------------------------------------===//
 template <typename K, typename V>
 ExtendibleHashTable<K, V>::Bucket::Bucket(size_t array_size, int depth) : size_(array_size), depth_(depth) {
-  assert(list_.empty());
+  assert(curr_size_ == 0);
+  list_k_ = new K[array_size];
+  list_v_ = new V[array_size];
 }
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) -> bool {
-  for (auto &kv : list_) {
-    if (kv.first == key) {
-      value = kv.second;
+  for (size_t i = 0; i < curr_size_; i++) {
+    if (list_k_[i] == key) {
+      value = list_v_[i];
       return true;
     }
   }
@@ -192,9 +187,9 @@ auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) -> bool {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Bucket::Remove(const K &key) -> bool {
-  for (auto it = list_.begin(); it != list_.end(); ++it) {
-    if (it->first == key) {
-      list_.erase(it);
+  for (size_t i = 0; i < curr_size_; ++i) {
+    if (list_k_[i] == key) {
+      RemoveIndex(i);
       return true;
     }
   }
@@ -207,14 +202,19 @@ auto ExtendibleHashTable<K, V>::Bucket::Insert(const K &key, const V &value) -> 
     return false;
   }
 
-  for (auto it = list_.begin(); it != list_.end(); ++it) {
-    if (it->first == key) {  // if key exists,
-      it->second = value;    // update value
+  for (size_t i = 0; i < curr_size_; ++i) {
+    if (list_k_[i] == key) {  // if key exists,
+      list_v_[i] = value;     // update value
       return true;
     }
   }
 
-  list_.push_back(std::pair<K, V>(key, value));
+  // list_.push_back(std::pair<K, V>(key, value));
+  assert(curr_size_ < size_);
+  list_k_[curr_size_] = key;
+  list_v_[curr_size_] = value;
+  curr_size_++;
+
   return true;
 }
 

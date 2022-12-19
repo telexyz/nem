@@ -40,6 +40,16 @@ class ExtendibleHashTable : public HashTable<K, V> {
    * @param bucket_size: fixed size for each bucket
    */
   explicit ExtendibleHashTable(size_t bucket_size);
+  ~ExtendibleHashTable() override {
+    for (size_t i = 0; i < dir_.size(); i++) {
+      auto bucket = dir_[i];
+      if (bucket->size_ > 0) {
+        bucket->size_ = 0;
+        delete[] bucket->list_k_;
+        delete[] bucket->list_v_;
+      }
+    }
+  }
 
   /**
    * @brief Get the global depth of the directory.
@@ -99,17 +109,16 @@ class ExtendibleHashTable : public HashTable<K, V> {
   class Bucket {
    public:
     explicit Bucket(size_t size, int depth = 0);
+    // ~Bucket() { delete[] list_k_; delete[] list_v_; }
 
     /** @brief Check if a bucket is full. */
-    inline auto IsFull() const -> bool { return list_.size() == size_; }
+    inline auto IsFull() const -> bool { return curr_size_ == size_; }
 
     /** @brief Get the local depth of the bucket. */
     inline auto GetDepth() const -> int { return depth_; }
 
     /** @brief Increment the local depth of a bucket. */
     inline void IncrementDepth() { depth_++; }
-
-    inline auto GetItems() -> std::list<std::pair<K, V>> & { return list_; }
 
     /**
      * @brief Find the value associated with the given key in the bucket.
@@ -126,6 +135,11 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Remove(const K &key) -> bool;
 
+    auto RemoveIndex(const size_t i) -> void {
+      list_k_[i] = list_k_[--curr_size_];  // erase(i);
+      list_v_[i] = list_v_[curr_size_];    // erase(i);
+    }
+
     /**
      * @brief Insert the given key-value pair into the bucket.
      *      1. If a key already exists, the value should be updated.
@@ -136,13 +150,15 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Insert(const K &key, const V &value) -> bool;
 
-    int id_;  // helper for better printout final result
+    // public data to replace GetItem()
+    K *list_k_;
+    V *list_v_;
+    size_t curr_size_{0};
 
-   private:
+    // private:
     // TODO(student): You may add additional private members and helper functions
-    size_t size_;
-    int depth_;
-    std::list<std::pair<K, V>> list_;
+    size_t size_;  // tổng số thành viên bucket có thể chứa
+    int depth_;    // độ sâu hiện tại
   };
 
  private:
