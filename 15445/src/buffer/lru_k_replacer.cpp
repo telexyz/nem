@@ -106,39 +106,27 @@ auto LRUKReplacer::Evict(frame_id_t *frame_id) -> bool {
   return EvictInternal(frame_id);
 }
 auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
-  if (curr_history_size_ > 0) {  // should evict from history_list_ first
-    auto rit = history_list_.rbegin();
-    while (!frame_entries_[*rit].evictable_) {
-      rit++;
-    }
-    *frame_id = *rit;
-    frame_entries_[*frame_id].is_active_ = false;
-    frame_entries_[*frame_id].hits_count_ = 0;
-    frame_entries_[*frame_id].evictable_ = true;
-
-    // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
-    history_list_.erase(std::next(rit).base());
-    curr_history_size_--;
-    curr_size_--;
-
-    return true;
+  if (curr_size_ == 0) {
+    return false;
   }
-  if (curr_size_ > 0) {  // nếu ko evict from cache_list_
-    auto rit = cache_list_.rbegin();
-    while (!frame_entries_[*rit].evictable_) {
-      rit++;
-    }
-    *frame_id = *rit;
-    frame_entries_[*frame_id].is_active_ = false;
-    frame_entries_[*frame_id].hits_count_ = 0;
-    frame_entries_[*frame_id].evictable_ = true;
-    // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
-    cache_list_.erase(std::next(rit).base());
-    curr_size_--;
 
-    return true;
+  bool evict_from_history = (curr_history_size_ > 0);
+  auto &list = evict_from_history ? history_list_ : cache_list_;
+  auto rit = list.rbegin();
+  while (!frame_entries_[*rit].evictable_) {
+    rit++;
   }
-  return false;
+
+  *frame_id = *rit;
+  frame_entries_[*frame_id].is_active_ = false;
+  frame_entries_[*frame_id].hits_count_ = 0;
+  frame_entries_[*frame_id].evictable_ = true;
+
+  // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
+  list.erase(std::next(rit).base());
+  curr_history_size_ -= evict_from_history;  // NOLINT
+  curr_size_--;
+  return true;
 }
 
 void LRUKReplacer::Remove(frame_id_t frame_id) {
