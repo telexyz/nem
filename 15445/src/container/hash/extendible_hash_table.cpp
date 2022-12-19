@@ -26,13 +26,11 @@ template <typename K, typename V>
 ExtendibleHashTable<K, V>::ExtendibleHashTable(size_t bucket_size)
     : global_depth_(0), bucket_size_(bucket_size), num_buckets_(1), num_inserts_(0) {
   // khởi tạo bucket đầu tiên của hashtable với local depth = global depth = 0
-  assert(dir_size_ == 1);
-  dir_ = new std::shared_ptr<Bucket>[512];
-  dir_[0] = std::make_shared<Bucket>(Bucket(bucket_size, 0));
+  dir_.push_back(std::make_shared<Bucket>(Bucket(bucket_size, 0)));
 }
 
 template <typename K, typename V>
-inline auto ExtendibleHashTable<K, V>::IndexOf(const K &key) -> size_t {
+auto ExtendibleHashTable<K, V>::IndexOf(const K &key) -> size_t {
   int mask = (1 << global_depth_) - 1;
   // 2^global_depth_ - 1 => lấy global_depth_ bits cuối (LSBs: least significant bits) làm mask
   return std::hash<K>()(key) & mask;
@@ -57,7 +55,7 @@ auto ExtendibleHashTable<K, V>::GetLocalDepth(int dir_index) const -> int {
 
 template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::GetLocalDepthInternal(int dir_index) const -> int {
-  assert(dir_index < static_cast<int>(dir_size_));
+  assert(dir_index < static_cast<int>(dir_.size()));
   return dir_[dir_index]->GetDepth();
 }
 
@@ -76,7 +74,7 @@ template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Find(const K &key, V &value) -> bool {
   latch_.lock();
   auto index = IndexOf(key);
-  assert(index < dir_size_);
+  assert(index < dir_.size());
   bool result = dir_[index]->Find(key, value);
   latch_.unlock();
   return result;
@@ -86,7 +84,7 @@ template <typename K, typename V>
 auto ExtendibleHashTable<K, V>::Remove(const K &key) -> bool {
   latch_.lock();
   auto index = IndexOf(key);
-  assert(index < dir_size_);
+  assert(index < dir_.size());
   bool result = dir_[index]->Remove(key);
   latch_.unlock();
   return result;
@@ -104,18 +102,18 @@ void ExtendibleHashTable<K, V>::InsertInternal(const K &key, const V &value) {
   auto insert_bucket = dir_[index];
 
   if (insert_bucket->IsFull()) {
-    assert(dir_size_ == (1 << global_depth_));
+    assert(dir_.size() == (1 << global_depth_));
 
     if (insert_bucket->GetDepth() == global_depth_) {
       // Redistribute directory pointers
-      for (int i = 0, n = dir_size_; i < n; i++) {
+      for (int i = 0, n = dir_.size(); i < n; i++) {
         // tham chiếu tới bucket đang có
-        dir_[dir_size_++] = dir_[i];
+        dir_.push_back(dir_[i]);
         assert(dir_[i + n] == dir_[i]);
       }
 
       global_depth_++;
-      assert(dir_size_ == (1 << global_depth_));
+      assert(dir_.size() == (1 << global_depth_));
     }
 
     RedistributeBucket(insert_bucket);
@@ -136,7 +134,7 @@ void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket> bucke
   int unlock_bit = 1 << (bucket->GetDepth() - 1);
 
   // Tìm dir_ index map tới new bucket
-  for (int i = 0, n = dir_size_; i < n; i++) {
+  for (int i = 0, n = dir_.size(); i < n; i++) {
     if (dir_[i] == bucket) {  // tìm thấy vị trí của bucket khi chưa split
       if ((i & unlock_bit) > 0) {
         dir_[i] = new_bucket;

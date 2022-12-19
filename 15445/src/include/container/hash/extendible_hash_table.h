@@ -17,8 +17,11 @@
 
 #pragma once
 
+#include <list>
 #include <memory>
 #include <mutex>  // NOLINT
+#include <utility>
+#include <vector>
 
 #include "container/hash/hash_table.h"
 
@@ -38,7 +41,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
    */
   explicit ExtendibleHashTable(size_t bucket_size);
   ~ExtendibleHashTable() override {
-    for (size_t i = 0; i < dir_size_; i++) {
+    for (size_t i = 0; i < dir_.size(); i++) {
       auto bucket = dir_[i];
       if (bucket->size_ > 0) {
         bucket->size_ = 0;
@@ -46,7 +49,6 @@ class ExtendibleHashTable : public HashTable<K, V> {
         delete[] bucket->list_v_;
       }
     }
-    delete[] dir_;
   }
 
   /**
@@ -133,7 +135,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Remove(const K &key) -> bool;
 
-    inline auto RemoveIndex(const size_t i) -> void {
+    auto RemoveIndex(const size_t i) -> void {
       list_k_[i] = list_k_[--curr_size_];  // erase(i);
       list_v_[i] = list_v_[curr_size_];    // erase(i);
     }
@@ -153,7 +155,8 @@ class ExtendibleHashTable : public HashTable<K, V> {
     V *list_v_;
     size_t curr_size_{0};
 
-    // chuyển thành public để tiện truy cập
+    // private:
+    // TODO(student): You may add additional private members and helper functions
     size_t size_;  // tổng số thành viên bucket có thể chứa
     int depth_;    // độ sâu hiện tại
   };
@@ -167,8 +170,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
   int num_buckets_;     // The number of buckets in the hash table
   int num_inserts_;
   mutable std::mutex latch_;
-  std::shared_ptr<Bucket> *dir_;  // The directory of the hash table
-  size_t dir_size_{1};
+  std::vector<std::shared_ptr<Bucket>> dir_;  // The directory of the hash table
 
   // The following functions are completely optional, you can delete them if you have your own ideas.
 
