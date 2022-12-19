@@ -1,6 +1,16 @@
+## Speed up
+
+Best: 0.75
+
+1/ (1.55961 -> 1.43976) bpm: Thay free_list_ (link list) bằng array stacks_
+
+2/ (1.43976 -> 1.31799) replacer: Thay map unordered_map frame_entries_ bằng array
+
 ## Fix Segmentation Fault
 
 1/ Re-compile your code in release mode to re-produce the bug
+2/ Turn out it's due to putting logic code in to assert(), release mode skips all assert()
+   including BUSTUB_ASSERT()
 
 
 ## [Task #3 - Buffer Pool Manager Instance](https://15445.courses.cs.cmu.edu/fall2022/project1/#buffer-pool-instance)

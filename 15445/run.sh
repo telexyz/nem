@@ -30,8 +30,8 @@ make check-lint
 # rm ./test/lru_k_replacer_test
 # rm ./test/buffer_pool_manager_instance_test
 # make buffer_pool_manager_instance_test \
-#  	extendible_hash_table_test lru_k_replacer_test \
-#  	buffer_pool_manager_instance_test -j8
+#  	extendible_hash_table_test \
+#  	lru_k_replacer_test -j8
 # ./test/extendible_hash_table_test && \
 # 	./test/lru_k_replacer_test && \
 # 	rm testdb.*; ./test/buffer_pool_manager_instance_test
@@ -40,7 +40,7 @@ make check-lint
 # - - - - -
 
 rm test/b_plus_tree_concurrent_test
-make b_plus_tree_concurrent_test -j8
+make b_plus_tree_concurrent_test b_plus_tree_printer -j8
 ./test/b_plus_tree_concurrent_test
 
 # make format && make check-lint && make check-clang-tidy-p1 && rm ../project1-submission.zip; make submit-p1
