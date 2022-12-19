@@ -8,6 +8,8 @@ Other Best: 0.75
 
 3/ (1.31799 -> 1.28866) extendible hash: thay Bucket list_ (linked list of <K,V>) bằng array list_k_ & list_v_
 
+4/ Thăm dò:
+
 replacer's history_list_ chứa tới [15k phần tử](https://www.gradescope.com/courses/425272/assignments/2305366/submissions/154869292#Leaderboard.Time) => có thể cải tiến tốc độ từ đây !!
 
 - history_list_ lưu frame_id có theo thứ tự giảm dần của thời gian được add vào (mới đầu, cũ sau)
@@ -17,9 +19,9 @@ replacer's history_list_ chứa tới [15k phần tử](https://www.gradescope.c
   frame_id chỉ được thêm vào khi gọi hàm RecordAccesss()
 
 Đo khoảng cách dò ngược của history_list_ và cache_list_ đến khi tìm được evictable frame:
+https://www.gradescope.com/courses/425272/assignments/2305366/submissions/154872844#Leaderboard.Time
+Hoàn toàn là `c_0` => phần tử cuối của cache_list_
 
-
-4/ 
 
 
 ## Fix Segmentation Fault

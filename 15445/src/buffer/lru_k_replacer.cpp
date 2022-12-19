@@ -108,12 +108,9 @@ auto LRUKReplacer::Evict(frame_id_t *frame_id) -> bool {
 auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
   if (curr_history_size_ > 0) {  // should evict from history_list_ first
     auto rit = history_list_.rbegin();
-    size_t counter = 0;
     while (!frame_entries_[*rit].evictable_) {
       rit++;
-      counter++;
     }
-    std::cout << " h_" << counter;  // LOG
     *frame_id = *rit;
     frame_entries_[*frame_id].is_active_ = false;
     frame_entries_[*frame_id].hits_count_ = 0;
@@ -124,17 +121,13 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
     curr_history_size_--;
     curr_size_--;
 
-    // std::cout << "h-" << history_list_.size() << " ";
     return true;
   }
   if (curr_size_ > 0) {  // nếu ko evict from cache_list_
     auto rit = cache_list_.rbegin();
-    size_t counter = 0;
     while (!frame_entries_[*rit].evictable_) {
       rit++;
-      counter++;
     }
-    std::cout << " c_" << counter;  // LOG
     *frame_id = *rit;
     frame_entries_[*frame_id].is_active_ = false;
     frame_entries_[*frame_id].hits_count_ = 0;
@@ -143,7 +136,6 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
     cache_list_.erase(std::next(rit).base());
     curr_size_--;
 
-    // std::cout << "c-" << curr_size_ - cache_list_.size() << " ";
     return true;
   }
   return false;
@@ -159,16 +151,10 @@ void LRUKReplacer::Remove(frame_id_t frame_id) {
     if (frame_entry->hits_count_ > 0 && frame_entry->hits_count_ < k_) {  // in history_list_
       history_list_.erase(frame_entry->pos_);
       curr_history_size_--;
-
-      // std::cout << "h-" << history_list_.size() << " ";
+      curr_size_--;
 
     } else if (frame_entry->hits_count_ >= k_) {  // in cache_list_
       cache_list_.erase(frame_entry->pos_);
-
-      // std::cout << "c-" << curr_size_ - cache_list_.size() << " ";
-    }
-
-    if (frame_entry->hits_count_ > 0) {
       curr_size_--;
     }
 
