@@ -16,6 +16,9 @@ replacer's history_list_ chứa tới [15k phần tử](https://www.gradescope.c
 - Một cách thay thế cho việc lưu theo chiều thời gian là lưu trực tiếp timestamp hoặc RecordAccess_count vì
   frame_id chỉ được thêm vào khi gọi hàm RecordAccesss()
 
+Đo khoảng cách dò ngược của history_list_ và cache_list_ đến khi tìm được evictable frame:
+
+
 4/ 
 
 

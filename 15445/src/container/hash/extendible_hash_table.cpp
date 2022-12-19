@@ -27,7 +27,7 @@ ExtendibleHashTable<K, V>::ExtendibleHashTable(size_t bucket_size)
     : global_depth_(0), bucket_size_(bucket_size), num_buckets_(1), num_inserts_(0) {
   // khởi tạo bucket đầu tiên của hashtable với local depth = global depth = 0
   assert(dir_size_ == 1);
-  dir_ = new std::shared_ptr<Bucket>[64];
+  dir_ = new std::shared_ptr<Bucket>[512];
   dir_[0] = std::make_shared<Bucket>(Bucket(bucket_size, 0));
 }
 
