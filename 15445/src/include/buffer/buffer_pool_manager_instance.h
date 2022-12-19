@@ -54,7 +54,7 @@ class BufferPoolManagerInstance : public BufferPoolManager {
 
   // helper
   auto ShowPages() -> void {
-    std::cout << "\n$$$ evictable: " << replacer_->Size() << ", free: " << free_list_.size() << "\n";
+    std::cout << "\n$$$ evictable: " << replacer_->Size() << ", free: " << free_frames_ << "\n";
     for (size_t i = 0; i < pool_size_; i++) {
       auto p = &pages_[i];
       if (p->page_id_ == INVALID_PAGE_ID) {
@@ -160,7 +160,7 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   /** Replacer to find unpinned pages for replacement. */
   LRUKReplacer *replacer_;
   /** List of free frames that don't have any pages on them. */
-  std::list<frame_id_t> free_list_;
+  // std::list<frame_id_t> free_list_; // thay thế bằng stack_
   /** This latch protects shared data structures. We recommend updating this comment to describe what it protects. */
   std::mutex latch_;
 
@@ -179,16 +179,19 @@ class BufferPoolManagerInstance : public BufferPoolManager {
   }
 
   // You may add additional private members and helper functions
+  size_t *stack_;
+  size_t free_frames_{0};
+
   auto PrepareFrame() -> frame_id_t;  // get a free frame or an evictable one (after evicted)
 
-  auto PinFrame(frame_id_t frame_id) -> void {
+  inline auto PinFrame(frame_id_t frame_id) -> void {
     pages_[frame_id].pin_count_++;
     replacer_->RecordAccess(frame_id);
     replacer_->SetEvictable(frame_id, false);
   }
 
-  auto ResetPage(Page *evict_page) -> void {
-    memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
+  inline auto ResetPage(Page *evict_page) -> void {
+    // memset(evict_page->data_, Page::OFFSET_PAGE_START, BUSTUB_PAGE_SIZE);
     evict_page->is_dirty_ = false;
     evict_page->pin_count_ = 0;
     evict_page->page_id_ = INVALID_PAGE_ID;

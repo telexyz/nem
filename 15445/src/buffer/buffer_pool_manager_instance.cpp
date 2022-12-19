@@ -24,27 +24,30 @@ BufferPoolManagerInstance::BufferPoolManagerInstance(size_t pool_size, DiskManag
     : pool_size_(pool_size), disk_manager_(disk_manager), log_manager_(log_manager) {
   // we allocate a consecutive memory space for the buffer pool
   pages_ = new Page[pool_size_];
+  stack_ = new size_t[pool_size_];
+
   page_table_ = new ExtendibleHashTable<page_id_t, frame_id_t>(bucket_size_);
   replacer_ = new LRUKReplacer(pool_size, replacer_k);
 
   // Initially, every page is in the free list.
+  free_frames_ = pool_size_;
   for (size_t i = 0; i < pool_size_; ++i) {
-    free_list_.emplace_back(static_cast<int>(i));
+    stack_[i] = i;
   }
 }
 
 BufferPoolManagerInstance::~BufferPoolManagerInstance() {
   delete[] pages_;
+  delete[] stack_;
   delete page_table_;
   delete replacer_;
 }
 
 // helper
 auto BufferPoolManagerInstance::PrepareFrame() -> frame_id_t {
-  frame_id_t frame_id = -1;   // -1 = invalid frame_id
-  if (!free_list_.empty()) {  // pick a new frame from free_list_ first
-    frame_id = free_list_.front();
-    free_list_.pop_front();
+  frame_id_t frame_id = -1;  // -1 = invalid frame_id
+  if (free_frames_ > 0) {    // pick a new frame_id from stack_
+    frame_id = stack_[--free_frames_];
 
   } else if (replacer_->Size() > 0) {  // then use replacer_
     replacer_->Evict(&frame_id);
@@ -244,7 +247,7 @@ auto BufferPoolManagerInstance::DeletePgImp(page_id_t page_id) -> bool {
     }
     page_table_->Remove(page_id);
     // DeallocatePage(page_id);
-    free_list_.emplace_back(frame_id);
+    stack_[free_frames_++] = frame_id;
     ResetPage(&pages_[frame_id]);
   }
   return true;  // if page_id not in memory
