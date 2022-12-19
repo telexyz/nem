@@ -43,6 +43,7 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
       curr_history_size_++;
     }
 
+    // std::cout << "h+" << history_list_.size() << " ";
     assert(frame_entries_[frame_id].hits_count_ == 1);
     assert(frame_entries_[frame_id].evictable_);
 
@@ -57,6 +58,7 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
     cache_list_.emplace_front(frame_id);
     frame_entry->pos_ = cache_list_.begin();
 
+    // std::cout << "c+" << curr_size_ - cache_list_.size() << " ";
     assert(frame_entries_[frame_id].hits_count_ == k_);
     assert(frame_entries_[frame_id].pos_ == cache_list_.begin());
 
@@ -106,7 +108,7 @@ auto LRUKReplacer::Evict(frame_id_t *frame_id) -> bool {
   return EvictInternal(frame_id);
 }
 auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
-  if (curr_history_size_ > 0) {  // should evict from history_list_
+  if (curr_history_size_ > 0) {  // should evict from history_list_ first
     auto rit = history_list_.rbegin();
     while (!frame_entries_[*rit].evictable_) {
       rit++;
@@ -120,9 +122,11 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
     history_list_.erase(std::next(rit).base());
     curr_history_size_--;
     curr_size_--;
+
+    // std::cout << "h-" << history_list_.size() << " ";
     return true;
   }
-  if (curr_size_ > 0) {
+  if (curr_size_ > 0) {  // nếu ko evict from cache_list_
     auto rit = cache_list_.rbegin();
     while (!frame_entries_[*rit].evictable_) {
       rit++;
@@ -134,6 +138,8 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
     // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
     cache_list_.erase(std::next(rit).base());
     curr_size_--;
+
+    // std::cout << "c-" << curr_size_ - cache_list_.size() << " ";
     return true;
   }
   return false;
@@ -150,8 +156,12 @@ void LRUKReplacer::Remove(frame_id_t frame_id) {
       history_list_.erase(frame_entry->pos_);
       curr_history_size_--;
 
+      // std::cout << "h-" << history_list_.size() << " ";
+
     } else if (frame_entry->hits_count_ >= k_) {  // in cache_list_
       cache_list_.erase(frame_entry->pos_);
+
+      // std::cout << "c-" << curr_size_ - cache_list_.size() << " ";
     }
 
     if (frame_entry->hits_count_ > 0) {

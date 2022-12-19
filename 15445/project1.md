@@ -1,12 +1,22 @@
 ## Speed up
 
-Best: 0.75
+Other Best: 0.75
 
-1/ (1.55961 -> 1.43976) bpm: thay free_list_ (link list) bằng array stacks_
+1/ (1.55961 -> 1.43976) bpm: thay free_list_ (linked list) bằng array stacks_
 
 2/ (1.43976 -> 1.31799) replacer: thay map unordered_map frame_entries_ bằng array
 
-3/ (1.31799 -> 1.28866) extendible hash: thay Bucket list_ (list of <K,V>) bằng array list_k_ & list_v_
+3/ (1.31799 -> 1.28866) extendible hash: thay Bucket list_ (linked list of <K,V>) bằng array list_k_ & list_v_
+
+replacer's history_list_ chứa tới [15k phần tử](https://www.gradescope.com/courses/425272/assignments/2305366/submissions/154869292#Leaderboard.Time) => có thể cải tiến tốc độ từ đây !!
+
+- history_list_ lưu frame_id có theo thứ tự giảm dần của thời gian được add vào (mới đầu, cũ sau)
+- Nếu frame_id ko được đánh dấu evictable_, thì cần tìm frame_id khác để loại ra khi cần
+=> Tìm theo chiều ngược (rit) của history_list_ phần tử frame_id đầu tiên có evictable_ = true 
+- Một cách thay thế cho việc lưu theo chiều thời gian là lưu timestamp hoặc RecordAccess_count vì
+  frame_id chỉ được thêm vào khi gọi hàm RecordAccesss()
+
+4/ 
 
 
 ## Fix Segmentation Fault

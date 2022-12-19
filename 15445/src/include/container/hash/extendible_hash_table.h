@@ -17,11 +17,8 @@
 
 #pragma once
 
-#include <list>
 #include <memory>
 #include <mutex>  // NOLINT
-#include <utility>
-#include <vector>
 
 #include "container/hash/hash_table.h"
 
@@ -41,7 +38,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
    */
   explicit ExtendibleHashTable(size_t bucket_size);
   ~ExtendibleHashTable() override {
-    for (size_t i = 0; i < dir_.size(); i++) {
+    for (size_t i = 0; i < dir_size_; i++) {
       auto bucket = dir_[i];
       if (bucket->size_ > 0) {
         bucket->size_ = 0;
@@ -49,6 +46,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
         delete[] bucket->list_v_;
       }
     }
+    delete[] dir_;
   }
 
   /**
@@ -170,7 +168,8 @@ class ExtendibleHashTable : public HashTable<K, V> {
   int num_buckets_;     // The number of buckets in the hash table
   int num_inserts_;
   mutable std::mutex latch_;
-  std::vector<std::shared_ptr<Bucket>> dir_;  // The directory of the hash table
+  std::shared_ptr<Bucket> *dir_;  // The directory of the hash table
+  size_t dir_size_{1};
 
   // The following functions are completely optional, you can delete them if you have your own ideas.
 
