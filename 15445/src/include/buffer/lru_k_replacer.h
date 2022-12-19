@@ -124,13 +124,12 @@ class LRUKReplacer {
     bool is_active_{false};
     std::list<frame_id_t>::iterator pos_;
   };
+
   // std::unordered_map<frame_id_t, FrameEntry> frame_entries_; // thay bằng frame_entries_ array
   FrameEntry *frame_entries_;  // frame_id chính là index
   std::list<frame_id_t> history_list_;
   std::list<frame_id_t> cache_list_;
-  // You can replace these member variables as you like.
-  // Remove maybe_unused if you start using them.
-  [[maybe_unused]] size_t current_timestamp_{0};
+
   size_t curr_history_size_{0};
   size_t curr_size_{0};
   size_t replacer_size_;  // = num_frames, số lượng tối đa frames mà buffer pool chứa được

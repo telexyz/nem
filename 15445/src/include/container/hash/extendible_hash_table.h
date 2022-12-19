@@ -133,7 +133,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
      */
     auto Remove(const K &key) -> bool;
 
-    auto RemoveIndex(const size_t i) -> void {
+    inline auto RemoveIndex(const size_t i) -> void {
       list_k_[i] = list_k_[--curr_size_];  // erase(i);
       list_v_[i] = list_v_[curr_size_];    // erase(i);
     }
@@ -153,8 +153,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
     V *list_v_;
     size_t curr_size_{0};
 
-    // private:
-    // TODO(student): You may add additional private members and helper functions
+    // chuyển thành public để tiện truy cập
     size_t size_;  // tổng số thành viên bucket có thể chứa
     int depth_;    // độ sâu hiện tại
   };

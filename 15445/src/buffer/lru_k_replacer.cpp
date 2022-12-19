@@ -26,8 +26,6 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
   // * You can also use BUSTUB_ASSERT to abort the process if frame id is invalid.
   BUSTUB_ASSERT(frame_id < static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
 
-  // frame_entries_[frame_id] có thể đã tồn tại từ trước
-  // do SetEvictable(frame_id, ..) được gọi trước
   FrameEntry *frame_entry = &frame_entries_[frame_id];
   frame_entry->is_active_ = true;
   size_t updated_hits_count = ++frame_entry->hits_count_;
@@ -110,9 +108,12 @@ auto LRUKReplacer::Evict(frame_id_t *frame_id) -> bool {
 auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
   if (curr_history_size_ > 0) {  // should evict from history_list_ first
     auto rit = history_list_.rbegin();
+    size_t counter = 0;
     while (!frame_entries_[*rit].evictable_) {
       rit++;
+      counter++;
     }
+    std::cout << " h_" << counter;  // LOG
     *frame_id = *rit;
     frame_entries_[*frame_id].is_active_ = false;
     frame_entries_[*frame_id].hits_count_ = 0;
@@ -128,9 +129,12 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
   }
   if (curr_size_ > 0) {  // nếu ko evict from cache_list_
     auto rit = cache_list_.rbegin();
+    size_t counter = 0;
     while (!frame_entries_[*rit].evictable_) {
       rit++;
+      counter++;
     }
+    std::cout << " c_" << counter;  // LOG
     *frame_id = *rit;
     frame_entries_[*frame_id].is_active_ = false;
     frame_entries_[*frame_id].hits_count_ = 0;

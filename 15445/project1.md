@@ -13,7 +13,7 @@ replacer's history_list_ chứa tới [15k phần tử](https://www.gradescope.c
 - history_list_ lưu frame_id có theo thứ tự giảm dần của thời gian được add vào (mới đầu, cũ sau)
 - Nếu frame_id ko được đánh dấu evictable_, thì cần tìm frame_id khác để loại ra khi cần
 => Tìm theo chiều ngược (rit) của history_list_ phần tử frame_id đầu tiên có evictable_ = true 
-- Một cách thay thế cho việc lưu theo chiều thời gian là lưu timestamp hoặc RecordAccess_count vì
+- Một cách thay thế cho việc lưu theo chiều thời gian là lưu trực tiếp timestamp hoặc RecordAccess_count vì
   frame_id chỉ được thêm vào khi gọi hàm RecordAccesss()
 
 4/ 
