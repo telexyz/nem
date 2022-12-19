@@ -17,7 +17,9 @@
 
 namespace bustub {
 
-LRUKReplacer::LRUKReplacer(size_t num_frames, size_t k) : replacer_size_(num_frames), k_(k) {}
+LRUKReplacer::LRUKReplacer(size_t num_frames, size_t k) : replacer_size_(num_frames), k_(k) {
+  frame_entries_ = new FrameEntry[num_frames];
+}
 
 void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
   std::scoped_lock<std::mutex> lock(latch_);
@@ -27,6 +29,7 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
   // frame_entries_[frame_id] có thể đã tồn tại từ trước
   // do SetEvictable(frame_id, ..) được gọi trước
   FrameEntry *frame_entry = &frame_entries_[frame_id];
+  frame_entry->is_active_ = true;
   size_t updated_hits_count = ++frame_entry->hits_count_;
 
   assert(updated_hits_count > 0);
@@ -79,21 +82,20 @@ void LRUKReplacer::SetEvictable(frame_id_t frame_id, bool set_evictable) {
   std::scoped_lock<std::mutex> lock(latch_);
   BUSTUB_ASSERT(frame_id < static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
 
-  auto frame_it = frame_entries_.find(frame_id);
-  bool found = (frame_it != frame_entries_.end());
-  bool hit_before = (found && frame_it->second.hits_count_ > 0);
-  auto previously_is_evictable = hit_before && frame_it->second.evictable_;
+  auto frame = frame_entries_[frame_id];
+  bool hit_before = (frame.is_active_ && frame.hits_count_ > 0);
+  auto previously_is_evictable = hit_before && frame.evictable_;
   auto currently_is_evictable = hit_before && set_evictable;
   frame_entries_[frame_id].evictable_ = set_evictable;
 
   if (!previously_is_evictable && currently_is_evictable) {
     curr_size_++;
-    if (frame_it->second.hits_count_ < k_) {  // in history_list_
+    if (frame.hits_count_ < k_) {  // in history_list_
       curr_history_size_++;
     }
   } else if (previously_is_evictable && !currently_is_evictable) {
     curr_size_--;
-    if (frame_it->second.hits_count_ < k_) {  // in history_list_
+    if (frame.hits_count_ < k_) {  // in history_list_
       curr_history_size_--;
     }
   }
@@ -110,7 +112,10 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
       rit++;
     }
     *frame_id = *rit;
-    frame_entries_.erase(*frame_id);
+    frame_entries_[*frame_id].is_active_ = false;
+    frame_entries_[*frame_id].hits_count_ = 0;
+    frame_entries_[*frame_id].evictable_ = true;
+
     // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
     history_list_.erase(std::next(rit).base());
     curr_history_size_--;
@@ -123,7 +128,9 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
       rit++;
     }
     *frame_id = *rit;
-    frame_entries_.erase(*frame_id);
+    frame_entries_[*frame_id].is_active_ = false;
+    frame_entries_[*frame_id].hits_count_ = 0;
+    frame_entries_[*frame_id].evictable_ = true;
     // https://stackoverflow.com/questions/1830158/how-to-call-erase-with-a-reverse-iterator
     cache_list_.erase(std::next(rit).base());
     curr_size_--;
@@ -135,25 +142,25 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
 void LRUKReplacer::Remove(frame_id_t frame_id) {
   std::scoped_lock<std::mutex> lock(latch_);
 
-  if (frame_id < static_cast<frame_id_t>(replacer_size_)) {  // validate frame_id
-    auto it = frame_entries_.find(frame_id);
-    if (it != frame_entries_.end()) {
-      auto frame_entry = &it->second;
-      BUSTUB_ASSERT(frame_entry->evictable_, "Can't remove an inevictable frame.");
-      if (frame_entry->hits_count_ > 0 && frame_entry->hits_count_ < k_) {  // in history_list_
-        history_list_.erase(frame_entry->pos_);
-        curr_history_size_--;
+  assert(frame_id < static_cast<frame_id_t>(replacer_size_));
+  auto frame_entry = &frame_entries_[frame_id];
+  if (frame_entry->is_active_) {
+    BUSTUB_ASSERT(frame_entry->evictable_, "Can't remove an inevictable frame.");
+    if (frame_entry->hits_count_ > 0 && frame_entry->hits_count_ < k_) {  // in history_list_
+      history_list_.erase(frame_entry->pos_);
+      curr_history_size_--;
 
-      } else if (frame_entry->hits_count_ >= k_) {  // in cache_list_
-        cache_list_.erase(frame_entry->pos_);
-      }
-
-      if (frame_entry->hits_count_ > 0) {
-        curr_size_--;
-      }
-
-      frame_entries_.erase(frame_id);
+    } else if (frame_entry->hits_count_ >= k_) {  // in cache_list_
+      cache_list_.erase(frame_entry->pos_);
     }
+
+    if (frame_entry->hits_count_ > 0) {
+      curr_size_--;
+    }
+
+    frame_entries_[frame_id].is_active_ = false;
+    frame_entries_[frame_id].hits_count_ = 0;
+    frame_entries_[frame_id].evictable_ = true;
   }
 }
 

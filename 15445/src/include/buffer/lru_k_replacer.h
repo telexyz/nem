@@ -15,7 +15,6 @@
 #include <limits>
 #include <list>
 #include <mutex>  // NOLINT
-#include <unordered_map>
 #include <vector>
 
 #include "common/config.h"
@@ -47,7 +46,7 @@ class LRUKReplacer {
   /**
    * @brief Destroys the LRUReplacer.
    */
-  ~LRUKReplacer() = default;
+  ~LRUKReplacer() { delete[] frame_entries_; }
 
   /**
    * @brief Record the event that the given frame id is accessed at current timestamp.
@@ -119,12 +118,15 @@ class LRUKReplacer {
 
  private:
   auto EvictInternal(frame_id_t *frame_id) -> bool;
+
   struct FrameEntry {
     size_t hits_count_{0};
     bool evictable_{true};
+    bool is_active_{false};
     std::list<frame_id_t>::iterator pos_;
   };
-  std::unordered_map<frame_id_t, FrameEntry> frame_entries_;
+  // std::unordered_map<frame_id_t, FrameEntry> frame_entries_; // thay bằng frame_entries_ array
+  FrameEntry *frame_entries_;  // frame_id chính là index
   std::list<frame_id_t> history_list_;
   std::list<frame_id_t> cache_list_;
   // You can replace these member variables as you like.
@@ -132,7 +134,7 @@ class LRUKReplacer {
   [[maybe_unused]] size_t current_timestamp_{0};
   size_t curr_history_size_{0};
   size_t curr_size_{0};
-  size_t replacer_size_;
+  size_t replacer_size_;  // = num_frames, số lượng tối đa frames mà buffer pool chứa được
   size_t k_;
 
   std::mutex latch_;
