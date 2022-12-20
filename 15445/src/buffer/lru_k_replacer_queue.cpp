@@ -10,9 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <algorithm>
-#include <iostream>
 #include "buffer/lru_k_replacer.h"
+#include <algorithm>
 #include "common/logger.h"
 
 namespace bustub {
@@ -37,6 +36,7 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
 
   if (updated_hits_count == 1) {  // first time
     frame_entry->pos_ = history_queue_->Insert(frame_id);
+    history_queue_->AdjustEvictFirst(frame_entry->pos_, true, frame_entries_);
     if (frame_entry->evictable_) {
       curr_size_++;
       curr_history_size_++;
@@ -47,17 +47,18 @@ void LRUKReplacer::RecordAccess(frame_id_t frame_id) {
 
   } else if (updated_hits_count == k_) {
     // move from history_queue_ to cache_queue_
-    history_queue_->Evict(frame_entry->pos_);
+    history_queue_->Evict(frame_entry->pos_, frame_entries_);
     if (frame_entry->evictable_) {
       curr_history_size_--;
     }
-    // add to begin of the cache_queue_
+    // add to begin of the cache_queue_ (first time)
     frame_entry->pos_ = cache_queue_->Insert(frame_id);
+    cache_queue_->AdjustEvictFirst(frame_entry->pos_, true, frame_entries_);
 
   } else if (updated_hits_count > k_) {
     if (frame_entry->pos_ != cache_queue_->end_ - 1) {
       // switch to begin of the cache_queue_
-      cache_queue_->Evict(frame_entry->pos_);
+      cache_queue_->Evict(frame_entry->pos_, frame_entries_);
       frame_entry->pos_ = cache_queue_->Insert(frame_id);
     }
   }
@@ -67,21 +68,27 @@ void LRUKReplacer::SetEvictable(frame_id_t frame_id, bool set_evictable) {
   std::scoped_lock<std::mutex> lock(latch_);
   BUSTUB_ASSERT(frame_id < static_cast<frame_id_t>(replacer_size_), "Invalid frame_id");
 
-  auto frame = frame_entries_[frame_id];
+  auto &frame = frame_entries_[frame_id];
   bool hit_before = (frame.is_active_ && frame.hits_count_ > 0);
   auto previously_is_evictable = hit_before && frame.evictable_;
   auto currently_is_evictable = hit_before && set_evictable;
-  frame_entries_[frame_id].evictable_ = set_evictable;
+  frame.evictable_ = set_evictable;
 
   if (!previously_is_evictable && currently_is_evictable) {
     curr_size_++;
     if (frame.hits_count_ < k_) {  // in history_queue_
       curr_history_size_++;
+      history_queue_->AdjustEvictFirst(frame.pos_, true, frame_entries_);
+    } else {  // in cache_queue_
+      cache_queue_->AdjustEvictFirst(frame.pos_, true, frame_entries_);
     }
   } else if (previously_is_evictable && !currently_is_evictable) {
     curr_size_--;
     if (frame.hits_count_ < k_) {  // in history_queue_
       curr_history_size_--;
+      history_queue_->AdjustEvictFirst(frame.pos_, false, frame_entries_);
+    } else {
+      cache_queue_->AdjustEvictFirst(frame.pos_, false, frame_entries_);
     }
   }
 }
@@ -102,12 +109,12 @@ auto LRUKReplacer::EvictInternal(frame_id_t *frame_id) -> bool {
     i++;
   }
 
-  *frame_id = queue->Get(i);
+  *frame_id = queue->Get(queue->evict_first_);
   frame_entries_[*frame_id].is_active_ = false;
   frame_entries_[*frame_id].hits_count_ = 0;
   frame_entries_[*frame_id].evictable_ = true;
 
-  queue->Evict(i);
+  queue->Evict(queue->evict_first_, frame_entries_);
   curr_history_size_ -= evict_from_history;  // NOLINT
   curr_size_--;
   return true;
@@ -121,12 +128,12 @@ void LRUKReplacer::Remove(frame_id_t frame_id) {
   if (frame_entry->is_active_) {
     BUSTUB_ASSERT(frame_entry->evictable_, "Can't remove an inevictable frame.");
     if (frame_entry->hits_count_ > 0 && frame_entry->hits_count_ < k_) {  // in history_queue_
-      history_queue_->Evict(frame_entry->pos_);
+      history_queue_->Evict(frame_entry->pos_, frame_entries_);
       curr_history_size_--;
       curr_size_--;
 
     } else if (frame_entry->hits_count_ >= k_) {  // in cache_queue_
-      cache_queue_->Evict(frame_entry->pos_);
+      cache_queue_->Evict(frame_entry->pos_, frame_entries_);
       curr_size_--;
     }
 

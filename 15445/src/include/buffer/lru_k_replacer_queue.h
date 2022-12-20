@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <limits>
 #include <mutex>  // NOLINT
 
@@ -118,6 +119,13 @@ class LRUKReplacer {
    */
   auto Size() -> size_t;
 
+  struct FrameEntry {
+    size_t hits_count_{0};
+    bool evictable_{true};
+    bool is_active_{false};
+    size_t pos_;
+  };
+
   class Queue {
    public:
     explicit Queue(size_t size) : size_(size) {
@@ -133,32 +141,51 @@ class LRUKReplacer {
       return end_++;
     }
 
-    inline auto Evict(size_t pos) -> void {
+    inline auto Evict(size_t pos, FrameEntry *frame_entries_) -> void {
       assert(pos >= 0 && pos < size_);
       queue_[pos] = -1;
-      while (queue_[begin_] == -1 && begin_ < end_) {
-        begin_++;
-      }
+      AdjustEvictFirst(pos, false, frame_entries_);
     }
 
     inline auto Get(size_t pos) -> frame_id_t { return queue_[pos]; }
 
+    auto AdjustEvictFirst(size_t pos, bool evictable, FrameEntry *frame_entries_) -> void {
+      // std::cout << "(( pos " << pos << ", evictable " << evictable << ")) ";
+      // std::cout << "(( queue " << this << ")) ";
+      // for (size_t i = begin_; i < end_; i++) {
+      //   std::cout << i << ":" << queue_[i] << ":" << (queue_[i] >= 0 && frame_entries_[queue_[i]].evictable_ ? "true"
+      //   : "false") << ", ";
+      // }
+      // std::cout << "\n";
+
+      if (evictable && pos < evict_first_) {
+        evict_first_ = pos;
+        // std::cout << ">>> " << this << ": evict_first_ " << pos << ", evictable " << evictable << std::endl;
+      }
+      if (!evictable && pos == evict_first_) {
+        while (evict_first_ < end_) {
+          auto frame_id = queue_[evict_first_];
+          // std::cout << "!!! evict_first_ " << evict_first_ << ", end_ " << end_;
+          // std::cout << ", frame_id " << frame_id << ", evictable_ ";
+          // std::cout << (frame_id >= 0 && frame_entries_[frame_id].evictable_) << std::endl;
+          if (frame_id >= 0 && frame_entries_[frame_id].evictable_) {
+            break;
+          }
+          evict_first_++;
+        }
+        // std::cout << ">>> " << this << ": evict_first_ " << pos << ", evictable " << evictable << std::endl;
+      }
+    }
+
     size_t size_;
     size_t begin_{0};
     size_t end_{0};
+    size_t evict_first_{999999999};
     frame_id_t *queue_;
   };
 
  private:
   auto EvictInternal(frame_id_t *frame_id) -> bool;
-
-  struct FrameEntry {
-    size_t hits_count_{0};
-    bool evictable_{true};
-    bool is_active_{false};
-    size_t pos_;
-  };
-
   // std::unordered_map<frame_id_t, FrameEntry> frame_entries_; // thay bằng frame_entries_ array
   FrameEntry *frame_entries_;  // frame_id chính là index
   Queue *history_queue_;
