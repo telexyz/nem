@@ -2,7 +2,7 @@
 
 Other Best: 0.75
 
-1/ (1.55961 -> 1.43976) bpm: thay free_list_ (linked list) bằng array stacks_
+1/ (1.55961 -> 1.43976) bpm: thay free_list_ (linked list) bằng array
 
 2/ (1.43976 -> 1.31799) replacer: thay map unordered_map frame_entries_ bằng array
 
