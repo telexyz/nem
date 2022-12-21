@@ -20,6 +20,7 @@
 #include <list>
 #include <memory>
 #include <mutex>  // NOLINT
+#include <shared_mutex>
 #include <utility>
 #include <vector>
 
@@ -169,7 +170,8 @@ class ExtendibleHashTable : public HashTable<K, V> {
   size_t bucket_size_;  // The size of a bucket
   int num_buckets_;     // The number of buckets in the hash table
   int num_inserts_;
-  mutable std::mutex latch_;
+  // mutable std::mutex latch_;
+  mutable std::shared_mutex latch_;
   std::vector<std::shared_ptr<Bucket>> dir_;  // The directory of the hash table
 
   // The following functions are completely optional, you can delete them if you have your own ideas.
@@ -179,6 +181,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
    * @param bucket The bucket to be redistributed.
    */
   auto RedistributeBucket(std::shared_ptr<Bucket> bucket) -> void;
+  auto IndexOf(const K &key) -> size_t;
 
   /*****************************************************************
    * Must acquire latch_ first before calling the below functions. *
@@ -189,12 +192,10 @@ class ExtendibleHashTable : public HashTable<K, V> {
    * @param key The key to be hashed.
    * @return The entry index in the directory.
    */
-  auto IndexOf(const K &key) -> size_t;
-
   auto InsertInternal(const K &key, const V &value) -> void;
-  auto GetGlobalDepthInternal() const -> int;
-  auto GetLocalDepthInternal(int dir_index) const -> int;
-  auto GetNumBucketsInternal() const -> int;
+  // auto GetGlobalDepthInternal() const -> int;
+  // auto GetLocalDepthInternal(int dir_index) const -> int;
+  // auto GetNumBucketsInternal() const -> int;
 };
 
 }  // namespace bustub
