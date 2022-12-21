@@ -109,17 +109,17 @@ class ExtendibleHashTable : public HashTable<K, V> {
    */
   class Bucket {
    public:
-    explicit Bucket(size_t size, int depth = 0);
+    explicit Bucket(size_t size, int depth = 0) noexcept;
     // ~Bucket() { delete[] list_k_; delete[] list_v_; }
 
     /** @brief Check if a bucket is full. */
-    inline auto IsFull() const -> bool { return curr_size_ == size_; }
+    inline auto IsFull() const noexcept -> bool { return curr_size_ == size_; }
 
     /** @brief Get the local depth of the bucket. */
-    inline auto GetDepth() const -> int { return depth_; }
+    inline auto GetDepth() const noexcept -> int { return depth_; }
 
     /** @brief Increment the local depth of a bucket. */
-    inline void IncrementDepth() { depth_++; }
+    inline void IncrementDepth() noexcept { depth_++; }
 
     /**
      * @brief Find the value associated with the given key in the bucket.
@@ -127,16 +127,16 @@ class ExtendibleHashTable : public HashTable<K, V> {
      * @param[out] value The value associated with the key.
      * @return True if the key is found, false otherwise.
      */
-    auto Find(const K &key, V &value) -> bool;
+    auto Find(const K &key, V &value) noexcept -> bool;
 
     /**
      * @brief Given the key, remove the corresponding key-value pair in the bucket.
      * @param key The key to be deleted.
      * @return True if the key exists, false otherwise.
      */
-    auto Remove(const K &key) -> bool;
+    auto Remove(const K &key) noexcept -> bool;
 
-    auto RemoveIndex(const size_t i) -> void {
+    inline auto RemoveIndex(const size_t i) noexcept -> void {
       list_k_[i] = list_k_[--curr_size_];  // erase(i);
       list_v_[i] = list_v_[curr_size_];    // erase(i);
     }
@@ -149,7 +149,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
      * @param value The value to be inserted.
      * @return True if the key-value pair is inserted, false otherwise.
      */
-    auto Insert(const K &key, const V &value) -> bool;
+    auto Insert(const K &key, const V &value) noexcept -> bool;
 
     // public data to replace GetItem()
     K *list_k_;

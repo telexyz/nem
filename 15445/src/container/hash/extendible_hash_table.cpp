@@ -150,14 +150,14 @@ inline void ExtendibleHashTable<K, V>::RedistributeBucket(std::shared_ptr<Bucket
 // Bucket
 //===--------------------------------------------------------------------===//
 template <typename K, typename V>
-ExtendibleHashTable<K, V>::Bucket::Bucket(size_t array_size, int depth) : size_(array_size), depth_(depth) {
+ExtendibleHashTable<K, V>::Bucket::Bucket(size_t array_size, int depth) noexcept : size_(array_size), depth_(depth) {
   assert(curr_size_ == 0);
   list_k_ = new K[array_size];
   list_v_ = new V[array_size];
 }
 
 template <typename K, typename V>
-auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) -> bool {
+auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) noexcept -> bool {
   for (size_t i = 0; i < curr_size_; i++) {
     if (list_k_[i] == key) {
       value = list_v_[i];
@@ -168,7 +168,7 @@ auto ExtendibleHashTable<K, V>::Bucket::Find(const K &key, V &value) -> bool {
 }
 
 template <typename K, typename V>
-auto ExtendibleHashTable<K, V>::Bucket::Remove(const K &key) -> bool {
+auto ExtendibleHashTable<K, V>::Bucket::Remove(const K &key) noexcept -> bool {
   for (size_t i = 0; i < curr_size_; ++i) {
     if (list_k_[i] == key) {
       RemoveIndex(i);
@@ -179,7 +179,7 @@ auto ExtendibleHashTable<K, V>::Bucket::Remove(const K &key) -> bool {
 }
 
 template <typename K, typename V>
-auto ExtendibleHashTable<K, V>::Bucket::Insert(const K &key, const V &value) -> bool {
+auto ExtendibleHashTable<K, V>::Bucket::Insert(const K &key, const V &value) noexcept -> bool {
   if (IsFull()) {  // return false if bucket is full
     return false;
   }
