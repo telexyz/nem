@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "buffer/lru_k_replacer.h"
 #include <algorithm>
 #include <iostream>
+#include "buffer/lru_k_replacer.h"
 #include "common/logger.h"
 
 namespace bustub {
