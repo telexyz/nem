@@ -8,6 +8,11 @@
 // Copyright (c) 2018, Carnegie Mellon University Database Group
 //
 //===----------------------------------------------------------------------===//
+
+// B+Tree Parent Page
+// This is the parent class that both the Internal Page and Leaf Page inherit from.
+// The Parent Page only contains information that both child classes share.
+
 #pragma once
 
 #include <cassert>
@@ -42,25 +47,30 @@ enum class IndexPageType { INVALID_INDEX_PAGE = 0, LEAF_PAGE, INTERNAL_PAGE };
  */
 class BPlusTreePage {
  public:
-  auto IsLeafPage() const -> bool;
-  auto IsRootPage() const -> bool;
-  void SetPageType(IndexPageType page_type);
 
-  auto GetSize() const -> int;
-  void SetSize(int size);
-  void IncreaseSize(int amount);
+  inline auto IsLeafPage() const -> bool { return page_type_ == IndexPageType::LEAF_PAGE; }
+  inline auto IsRootPage() const -> bool { return parent_page_id_ == INVALID_PAGE_ID; }
+  inline void SetPageType(IndexPageType page_type) { page_type_ = page_type; }
 
-  auto GetMaxSize() const -> int;
-  void SetMaxSize(int max_size);
-  auto GetMinSize() const -> int;
+  inline auto GetSize() const -> int { return size_; }
+  inline void SetSize(int size) { size_ = size; }
+  inline void IncreaseSize(int amount) { size_ += amount; }
 
-  auto GetParentPageId() const -> page_id_t;
-  void SetParentPageId(page_id_t parent_page_id);
+  auto GetMaxSize() const -> int { return max_size_; }
+  void SetMaxSize(int max_size) { max_size_ = max_size; }
+/*
+ * Helper method to get min page size
+ * Generally, min page size == max page size / 2
+ */
+  auto GetMinSize() const -> int { return max_size_ / 2; }
 
-  auto GetPageId() const -> page_id_t;
-  void SetPageId(page_id_t page_id);
+  auto GetParentPageId() const -> page_id_t { return parent_page_id_; }
+  void SetParentPageId(page_id_t parent_page_id) { parent_page_id_ = parent_page_id; }
 
-  void SetLSN(lsn_t lsn = INVALID_LSN);
+  auto GetPageId() const -> page_id_t { return page_id_; }
+  void SetPageId(page_id_t page_id) { page_id_ = page_id; }
+
+  void SetLSN(lsn_t lsn = INVALID_LSN) { lsn_ = lsn; }
 
  private:
   // member variable, attributes that both internal and leaf page share
