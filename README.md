@@ -4,24 +4,21 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 09/2022-12/2022
 
-- Hoàn thành `10714`, tự xây dựng thư viện học sâu `kim`
+- [+] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
 ## 12/2022-06/2023
 
-- Hoàn thành `15445`, hiểu cách xây dựng một database cơ bản
+- [-] Hoàn thành [15445](https://15445.courses.cs.cmu.edu/fall2022/schedule.html), hiểu cách xây dựng một database cơ bản
 
-- Hoàn thành `15721`, [Advanced Database Systems](https://15721.courses.cs.cmu.edu/spring2020/schedule.html)
+- Hoàn thành [15721](https://15721.courses.cs.cmu.edu/spring2020/schedule.html), Advanced Database Systems
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
 ### Nice to learn
 
-- [15418](http://15418.courses.cs.cmu.edu) Parallel Computer Architecture and Programming
+- [-] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149][cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
 
 - [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
-
-> Coi videos ở [15418](http://15418.courses.cs.cmu.edu/spring2016) làm bài tập ở [cs149](https://gfxcourses.stanford.edu/cs149) vì 2 khóa này của cùng 1 giáo.
-_source https://csdiy.wiki_
 
 ## 07/2023-xxx
 
@@ -88,7 +85,9 @@ https://github.com/telexyz/bon
 - - -
 
 
-### Others
+### Other Interests
+
+- [Practical Data Science](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2)
 
@@ -106,6 +105,8 @@ https://github.com/telexyz/bon
 - https://github.com/codecrafters-io/build-your-own-x
 
 - - -
+
+### Good Foundation
 
 - [CS61A](https://cs61a.org) Structure and Interpretation of Computer Programs
 - [14002](https://github.com/courseworks) Advanced Programming Course
