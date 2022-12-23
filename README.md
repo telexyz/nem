@@ -8,18 +8,18 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 12/2022-06/2023
 
-- [+] Hoàn thành [15445](https://15445.courses.cs.cmu.edu/fall2022/schedule.html) Database Systems
+- [ ] Hoàn thành [15445](https://15445.courses.cs.cmu.edu/fall2022/schedule.html) Database Systems
 , hiểu cách xây dựng một database cơ bản
 
-- Hoàn thành [15721](https://15721.courses.cs.cmu.edu/spring2020/schedule.html) Advanced Database Systems
+- [ ] Hoàn thành [15721](https://15721.courses.cs.cmu.edu/spring2020/schedule.html) Advanced Database Systems
 
 Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
 
 ### Nice to learn
 
-- [+] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
+- [ ] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
 
-- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
+- [ ] [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
 
 ## 07/2023-xxx
 
@@ -38,7 +38,7 @@ Có thể tham gia sâu hơn và Zig bằng cách:
 
 ## xxx-xxx
 
-Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS/serenity
+Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS
 
 Dự án khởi đầu của một cựu lập trình viên Apple, tự code một hệ điều hành lý tưởng theo cách bạn ấy tưởng tượng (Unix style + retro windows 9.x ui/ux) như là một cách phục hồi sau khi cai nghiện. Bạn này chia sẻ những gì mình làm trên youtube và nhận được hưởng ứng lớn từ cộng đồng với gần 1000 contributors. Mọi thứ được viết từ đầu hết mà ko dùng thư viện có sẵn, kể cả web browser. Nghe có vẻ điên rồ nhưng bạn ấy và cộng đồng đã và đang làm rất tốt.
 
