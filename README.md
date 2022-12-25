@@ -38,10 +38,10 @@ Có thể tham gia sâu hơn và Zig bằng cách:
 
 ## xxx-xxx
 
-Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS
+Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS (C++ hoặc [Jakt](https://github.com/SerenityOS/jakt))
 
-Dự án khởi đầu của một cựu lập trình viên Apple, tự code một hệ điều hành lý tưởng theo cách bạn ấy tưởng tượng (Unix style + retro windows 9.x ui/ux) như là một cách phục hồi sau khi cai nghiện. Bạn này chia sẻ những gì mình làm trên youtube và nhận được hưởng ứng lớn từ cộng đồng với gần 1000 contributors. Mọi thứ được viết từ đầu hết mà ko dùng thư viện có sẵn, kể cả web browser. Nghe có vẻ điên rồ nhưng bạn ấy và cộng đồng đã và đang làm rất tốt.
-
+- Viết bộ gõ tiếng Việt cho Serenity
+- ...
 
 - - -
 

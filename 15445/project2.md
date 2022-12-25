@@ -1,3 +1,12 @@
+Skip https://github.com/cmu-db/bustub/pull/452
+
+In general, as a note to everyone, the p2 project is hard. Most people struggle to complete it perfectly. 
+If you want to skip ahead to p3 and p4, Chi wrote something that you can use instead.
+
+.. which I think might be worth pinning; p3 and p4 are pretty cool IMO and you may want to tackle those first if you're frustrated with p2. IMO, if you can pass the single threaded versions of p2 / can pass p2 using a global latch, you've understood "enough" about how a B-Tree works -- the rest is careful engineering, you may want to reimplement p2 in the future, for now it would also be OK to just skip ahead 
+
+- - -
+
 https://15445.courses.cs.cmu.edu/fall2022/project2/
 
 
