@@ -4,9 +4,9 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 09/2022-12/2022
 
-- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
+- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (học cùng [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
 
-- [ ] Học chung với [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning bổ trợ kiến thức rất tốt, nhất là với ai chưa biết nhiều về Deep Learning.
+- [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
 ## 12/2022-06/2023
 
@@ -91,8 +91,6 @@ https://github.com/telexyz/bon
 
 
 ### Other Interests
-
-- [ ] [Practical Data Science](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
 - [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2)
 
