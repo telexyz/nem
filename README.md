@@ -6,6 +6,8 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
+- [ ] Học chung với [11785](https://deeplearning.cs.cmu.edu/F22/index.html) Introduction to Deep Learning bổ trợ kiến thức rất tốt, nhất là với ai chưa biết nhiều về Deep Learning.
+
 ## 12/2022-06/2023
 
 - [ ] Hoàn thành [15445](https://15445.courses.cs.cmu.edu/fall2022/schedule.html) Database Systems
@@ -19,10 +21,9 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 
 - [ ] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
 
-- [ ] [6.5830](http://dsg.csail.mit.edu/6.5830/assign.php) Database Systems
-
 - [ ] [CS839](https://pages.cs.wisc.edu/~yxy/cs839-s20/) Design the Next-Generation Database
 
+- [ ] [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22/index.html) Topics in Database Management Systems
 
 ## 07/2023-xxx
 
@@ -125,9 +126,9 @@ https://github.com/telexyz/bon
 - [6.858](http://css.csail.mit.edu/6.858) Computer System Security
 
 - [CS186](https://cs186berkeley.net) Introduction to Database Systems
+- [6.5830](http://dsg.csail.mit.edu/6.5830/assign.php) Database Systems
 - [CS122](http://courses.cms.caltech.edu/cs122) Database System Implementation
 - [CS346](https://web.stanford.edu/class/cs346) Database System Implementation
-- [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22/index.html) Topics in Database Management Systems
   
 - [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
 
