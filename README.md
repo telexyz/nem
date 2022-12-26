@@ -19,7 +19,10 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 
 - [ ] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
 
-- [ ] [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
+- [ ] [6.5830](http://dsg.csail.mit.edu/6.5830/assign.php) Database Systems
+
+- [ ] [CS839](https://pages.cs.wisc.edu/~yxy/cs839-s20/) Design the Next-Generation Database
+
 
 ## 07/2023-xxx
 
@@ -104,6 +107,8 @@ https://github.com/telexyz/bon
 - https://github.com/dendibakh/perf-ninja
 - https://github.com/pingcap/talent-plan
 - https://github.com/codecrafters-io/build-your-own-x
+- [Making a RISC-V Operating System using Rust](https://osblog.stephenmarz.com)
+- [More challenging projects every programmer should try](https://austinhenley.com/blog/morechallengingprojects.html)
 
 - - -
 
@@ -122,5 +127,8 @@ https://github.com/telexyz/bon
 - [CS186](https://cs186berkeley.net) Introduction to Database Systems
 - [CS122](http://courses.cms.caltech.edu/cs122) Database System Implementation
 - [CS346](https://web.stanford.edu/class/cs346) Database System Implementation
+- [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22/index.html) Topics in Database Management Systems
+  
+- [6.824](https://pdos.csail.mit.edu/6.824) Distributed System ([more](https://www.youtube.com/watch?v=rZPRjLMWOao&list=PLNPUF5QyWU8PydLG2cIJrCvnn5I_exhYx))
 
 _source https://csdiy.wiki_
