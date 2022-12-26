@@ -2,7 +2,7 @@
 
 Thích gì học nấy deep learning, database, intepreter - compiler - programming language, system programming, parallel and distributed programming.
 
-## 09/2022-12/2022
+## 09/2022-03/2023
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (học cùng [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
 
@@ -25,6 +25,7 @@ Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/D
 
 - [ ] [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22) Topics in Database Management Systems
 
+
 ## 07/2023-xxx
 
 Có thể học viết trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
@@ -39,6 +40,7 @@ Có thể tham gia sâu hơn và Zig bằng cách:
 - Chữa những lỗi đơn giản như một người mới
 - Cải tiến nvptx backend chạy mượt [zcuda](https://github.com/gwenzek/cudaz) (xem [video](https://www.youtube.com/watch?v=rvfsWm6TckA&t=5351s))
 - ...
+
 
 ## xxx-xxx
 
@@ -87,6 +89,7 @@ https://github.com/telexyz/bon
 
 - Tham khảo https://github.com/fengwang/ceras 
 
+
 - - -
 
 
@@ -101,12 +104,14 @@ https://github.com/telexyz/bon
 
 - [Machine Learning Systems Design](https://stanford-cs329s.github.io/syllabus.html)
 
-- - -
-
 - https://github.com/dendibakh/perf-ninja
+
 - https://github.com/pingcap/talent-plan
+
 - https://github.com/codecrafters-io/build-your-own-x
+
 - [Making a RISC-V Operating System using Rust](https://osblog.stephenmarz.com)
+
 - [More challenging projects every programmer should try](https://austinhenley.com/blog/morechallengingprojects.html)
 
 - - -
