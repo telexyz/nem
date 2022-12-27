@@ -2,20 +2,32 @@
 
 Thích gì học nấy deep learning, database, intepreter - compiler - programming language, system programming, parallel and distributed programming.
 
-## 09/2022-03/2023
+## 09/2022-12/2022
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (học cùng [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
 
+## 01/2023-03/2023
+
 - [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
-## 12/2022-06/2023
+- [ ] [cs285](http://rail.eecs.berkeley.edu/deeprlcourse) Deep Reinforcement Learning
+
+- [ ] [NPFL122](https://ufal.mff.cuni.cz/courses/npfl122) Deep Reinforcement Learning
+
+## 01/2023-06/2023
 
 - [ ] Hoàn thành [15445](https://15445.courses.cs.cmu.edu) Database Systems
 , hiểu cách xây dựng một database cơ bản
 
 - [ ] Hoàn thành [15721](https://15721.courses.cs.cmu.edu) Advanced Database Systems
 
-Database quan tâm https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
+__Database quan tâm__:
+
+- https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
+
+- https://github.com/unum-cloud/UKV Universal Keys & Values, Unum tận dụng thế mạnh phần cứng hiện đại để lưu trữ và xử lý dữ liệu đơn giản [hiệu quả hơn nhiều](https://unum.cloud/post/2022-09-13-ucsb-10tb)
+
+![](https://github.com/unum-cloud/UKV/raw/main/assets/UKV.png)
 
 ### Nice to learn
 
