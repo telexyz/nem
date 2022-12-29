@@ -10,9 +10,7 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 - [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
-- [ ] [cs285](http://rail.eecs.berkeley.edu/deeprlcourse) Deep Reinforcement Learning
-
-- [ ] [NPFL122](https://ufal.mff.cuni.cz/courses/npfl122) Deep Reinforcement Learning
+- [ ] [6.S965](https://efficientml.ai/schedule) TinyML and Efficient Deep Learning
 
 ## 01/2023-06/2023
 
@@ -107,9 +105,11 @@ https://github.com/telexyz/bon
 
 ### Other Interests
 
-- [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2)
+- [ ] [cs285](http://rail.eecs.berkeley.edu/deeprlcourse) Deep Reinforcement Learning
 
-- [TinyML and Efficient Deep Learning](https://efficientml.ai/schedule/)
+- [ ] [NPFL122](https://ufal.mff.cuni.cz/courses/npfl122) Deep Reinforcement Learning
+
+- [Hardware for Machine Learning](https://inst.eecs.berkeley.edu/~ee290-2)
 
 - [Efficient Computing for Deep Learning](https://www.youtube.com/watch?v=WbLQqPw_n88) | 
 [slides](https://www.rle.mit.edu/eems/wp-content/uploads/2020/09/2020_uwisconsin_compressed.pdf)
