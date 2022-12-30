@@ -10,6 +10,7 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 - [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
+- [ ] [Machine Learning Compilation](https://mlc.ai/summer22)
 - [ ] [6.S965](https://efficientml.ai/schedule) TinyML and Efficient Deep Learning
 
 ## 01/2023-06/2023
