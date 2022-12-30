@@ -4,7 +4,7 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 09/2022-12/2022
 
-- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (học cùng [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
+- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (có thể học cùng với [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
 
 ## 01/2023-03/2023
 
