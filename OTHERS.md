@@ -1,8 +1,10 @@
+## Other Interests
 
-- - -
+- [ ] [6.S965](https://efficientml.ai/schedule) TinyML and Efficient Deep Learning
 
+- [ ] [Deep Learning in Practice](https://www.youtube.com/playlist?list=PLVSIY7rG0A3e2OU8oqM1ASyecPON8s8E1)
 
-### Other Interests
+- [ ] [Machine Learning Compilation](https://mlc.ai/summer22)
 
 - [ ] [cs285](http://rail.eecs.berkeley.edu/deeprlcourse) Deep Reinforcement Learning
 
