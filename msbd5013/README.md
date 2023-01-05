@@ -1,17 +1,22 @@
-https://yao-lab.github.io/course/msbd5013/2022/
+https://yao-lab.github.io/course/msbd5013/2022
 
+https://github.com/yao-lab/yao-lab.github.io/tree/master/course/msbd5013/2022
 
-## "(Re-)Imag(in)ing Price Trends", Chicago Booth Report, Aug 2021
+Data https://www.statlearning.com/resources-second-edition
 
-https://yao-lab.github.io/course/msbd5013/2022/slides/Xiu_Papers.pdf
+# Mid-term Project
+- https://yao-lab.github.io/course/msbd5013/2022/project1/MSBD5013_project1.pdf
+- https://github.com/yao-lab/yao-lab.github.io/tree/master/course/msbd5013/2022/project1
 
-```
-[ train ] Epoch: 0 Batch: 1999 Acc: 51.3% Loss: 0.6971: 100%|████████████████████████████| 2000/2000 [13:12<00:00,  2.52it/s]
-[ valid ] Epoch: 0 Batch: 19 Acc: 50.3% Loss: 0.6972: 20it [00:12,  1.64it/s]
-[ train ] Epoch: 1 Batch: 1999 Acc: 51.6% Loss: 0.6942: 100%|████████████████████████████| 2000/2000 [13:10<00:00,  2.53it/s]
-[ valid ] Epoch: 1 Batch: 19 Acc: 49.3% Loss: 0.7002: 20it [00:11,  1.67it/s]
-[ train ] Epoch: 2 Batch: 1999 Acc: 51.8% Loss: 0.6930: 100%|████████████████████████████| 2000/2000 [12:57<00:00,  2.57it/s]
-[ valid ] Epoch: 2 Batch: 19 Acc: 46.7% Loss: 0.7067: 20it [00:12,  1.62it/s]
-[ train ] Epoch: 3 Batch: 1999 Acc: 52.1% Loss: 0.6923: 100%|████████████████████████████| 2000/2000 [13:34<00:00,  2.45it/s]
-[ valid ] Epoch: 3 Batch: 19 Acc: 52.2% Loss: 0.6928: 20it [00:12,  1.60it/s]
-```
+# Final Project
+- https://yao-lab.github.io/course/msbd5013/2022/project2/MSBD5013_project2.pdf
+- https://github.com/yao-lab/yao-lab.github.io/tree/master/course/msbd5013/2022/project2
+
+## Empirical Asset Pricing via Machine Learning
+- Slides https://yao-lab.github.io/course/msbd5013/2022/slides/Xiu_Papers.pdf
+- Article https://dachxiu.chicagobooth.edu/download/ML.pdf
+- Data https://www.dropbox.com/s/zzgjdubvv23xkfp/datashare.zip?dl=0
+
+## (Re-)Imag(in)ing Price Trends
+- https://dachxiu.chicagobooth.edu/download/img_demo.html
+- Data https://www.dropbox.com/s/njehqednn8mycze/img_data.zip?dl=0
