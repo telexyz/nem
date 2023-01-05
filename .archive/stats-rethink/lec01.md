@@ -8,3 +8,4 @@ Thống kê hay đúng hơn là hoạt động thực sự khó là làm cho s�
 
 ![](files/lec01-00.png)
 
+	
