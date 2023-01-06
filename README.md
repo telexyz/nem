@@ -10,6 +10,8 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 - [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
 
+- [ ] [CS246](http://web.stanford.edu/class/cs246) Mining Massive Data Sets [videos](https://www.youtube.com/watch?v=jofiaetm5bY&list=PLoCMsyE1cvdVnCgHk43vRy7PVTVWJ6WVR)
+
 - [ ] [AIR](https://github.com/sebastian-hofstaetter/teaching#lectures) Advanced Information Retrieval
 
 ## 02/2023-06/2023
