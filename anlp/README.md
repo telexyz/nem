@@ -13,8 +13,9 @@ https://www.youtube.com/playlist?list=PLWnsVgP6CzadI4-FT2Po4wsEK7MHCIQ-d
 https://www.youtube.com/playlist?list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ
 
 
-# [Deep Learning for NLP](https://harvard-iacs.github.io/CS287)
+# [Havard CS287 DL for NLP](https://harvard-iacs.github.io/CS287)
 
+# [MIT 6.861* Quantitative Methods for NLP](https://mit-6861.github.io/schedule)
 
 # [NLP4You](https://lena-voita.github.io/nlp_course.html)
 
