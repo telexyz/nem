@@ -8,6 +8,8 @@ Notes for CMU DL Systems Course (2022 online public run).
 * 📒 [Public jupyter notebooks from lectures](https://github.com/dlsyscourse/public_notebooks)
 
 # Table of Contents
+* [Lecture 1 - Introduction and Logistics](#lec1)
+* [Lecture 2 - ML Refresher / Softmax Regression](#lec2)
 * Lecture 3
   * [Part I - "Manual" Neural Networks](#lec3-1)
   * [Part II - "Manual" Neural Networks](#lec3-2)
@@ -23,9 +25,29 @@ Notes for CMU DL Systems Course (2022 online public run).
 * [Lecture 13 - Hardware Acceleration Implemention](#lec13)
 * [Lecture 14 - Implementing Convolutions](#lec14)
 * [Lecture 15 - Training Large Models](#lec15)
+* [Lecture 16 - Generative Adversarial Networks](#lec16)
+* [Lecture 17 - Generative Adversarial Networks Implementation](#lec17)
 * [Lecture 18 - Sequence Modeling and Recurrent Networks](#lec18)
+* [Lecture 19 - RNN Implementation](#lec19)
+* [Lecture 20 - Transformers and Attention](#lec20)
+* [Lecture 21 - Transformer Implementation](#lec21)
+* [Lecture 23 - Model Deployment](#lec23)
+* [Lecture 24 - Machine Learning Compilation and Deployment Implementation](#lec24)
 
 # Notes
+
+
+<a id="lec1"></a>
+
+## [Lecture 1](https://www.youtube.com/watch?v=ftP5HeOvsI0) - Introduction and Logistics
+* TODO
+
+
+<a id="lec2"></a>
+
+## [Lecture 2](https://www.youtube.com/watch?v=MlivXhZFbNA) - ML Refresher / Softmax Regression
+* TODO
+
 
 <a id="lec3-1"></a>
 
@@ -182,21 +204,22 @@ and let NN decide what activation function to use?
 * It's really important where you start, what initialization use
 * Differences in weights initialization with subsequent optimization can far outweight the differences in weights optimization alone.
 * After optimization model weights often stay relatively close to their initialization values.
-* **Kaiming initizalition**: $w_{i}\sim\mathcal{N}(0; \frac{2}{n_{i}})$, where $n_i$ is the size of individual actication on layer $i$<br>
+* **Kaiming normal initizalition**: 
+  $w_{i}\sim\mathcal{N}(0; \frac{2}{n_{i}})$, where $n_i$ is the size of individual actication on layer $i$<br>
   When **ReLU is a non-linearity function**, Kaiming initialization ensures that $z_i \sim \mathcal{N}(0, 1)$ for each hidden layer.<br>
   Derivation for element of activation matrix:<br>
   
   $z_i \sim \mathcal{N}(0,I_{n_i}),\ z_i \in \mathbb{R}^{n_i}$ - activation vector<br>
   
-  $\large w_i \sim \mathcal{N}(0,\frac{2}{n} I_{n_i}),\ w_i \in \mathbb {R}^{n_i}$ - parameter vector <br>
+  $\large w_i \sim \mathcal{N}(0,\frac{2}{n_i} I_{n_i}),\ w_i \in \mathbb {R}^{n_i}$ - parameter vector <br>
   
-  $\large Var(w_i z_i) = Var(\sum\limits^{n}\limits_{k=1}{w_{i, k} z_{i, k}}) = [w_i \text{ and } z_i \text{ are independent}] = n Var(w_{i,k}) Var(z_{i,k}) = n \frac{2}{n} 1 = 2$ <br>
+  $\large Var(w_i z_i) = Var(\sum\limits^{n_i}\limits_{k=1}{w_{i, k} z_{i, k}}) = [w_i \text{ and } z_i \text{ are independent}] = n_i Var(w_{i,k}) Var(z_{i,k}) = n_i \frac{2}{n_i} 1 = 2$ <br>
   
   ReLU operation keeps only positive values in the sum - approximately half of values for vector from gaussian. Thus:<br>
   
-  $Var(\large z_{i+1}) = Var(ReLU(w_i z_i)) = Var(ReLU(\sum\limits^{n}\limits_{k=1}{w_{i, k} z_{i, k}})) = \frac{n}{2} Var(w_{i,k}) Var(z_{i,k}) = \frac{n}{2} \frac{2}{n} 1 = 1$<br>
+  $Var(\large z_{i+1}) = Var(ReLU(w_i z_i)) = Var(ReLU(\sum\limits^{n_i}\limits_{k=1}{w_{i, k} z_{i, k}})) = \frac{n_i}{2} Var(w_{i,k}) Var(z_{i,k}) = \frac{n_i}{2} \frac{2}{n_i} 1 = 1$<br>
   
-  $\mathbb{E}z_{i+1} = \mathbb{E}(ReLU(w_i z_i)) = \sum\limits^{n}\limits_{k=1} ReLU(\mathbb{E}(w_{i, k} z_{i, k})) = \sum\limits^{n}\limits_{k=1} ReLU(\mathbb{E}w_{i, k} \mathbb{E}z_{i, k}) = 0$
+  $\mathbb{E}z_{i+1} = \mathbb{E}(ReLU(w_i z_i)) = \sum\limits^{n_i}\limits_{k=1} ReLU(\mathbb{E}(w_{i, k} z_{i, k})) = \sum\limits^{n_i}\limits_{k=1} ReLU(\mathbb{E}w_{i, k} \mathbb{E}z_{i, k}) = 0$
 
 
 ### Questions:
@@ -1000,9 +1023,9 @@ that allow to get a maximum benefit of a GPU accelerator if used in combination:
   buffer A to store `x` and buffer B to store `f(x)`. Then we write `f(x)` to A and `g(f(x))` to B and proceed. 
   For more complex cases, due to locality of intermediate activation nodes dependencies, we still can perform
   inference with a constant memory usage.
-* Training N-layer network requires $O(N)$ memory without any optimizations.
-  The reason is that intermediate activation values being used 
-  during backward pass.
+* Training N-layer network requires $O(N)$ memory
+  (no optimizer state and no model weights are included into consideration - only activation values).<br>
+  The reason is that intermediate activation values are used during backward pass.
 * **Activation checkpointing** (or simply **checkpointing**, or **re-materialization technique**) helps to 
   reduce amount of memory needed to run training.
   * The idea is that we save (checkpoint) only a portion of intermediate activations during a forward pass
@@ -1019,6 +1042,24 @@ that allow to get a maximum benefit of a GPU accelerator if used in combination:
     In this case memory saving will be less, but the compute will take less time.
 
 ### Parallel and distributed training
+* TODO
+
+### Questions:
+* when using activation checkpointing, I guess whe need to use some clever checkpointing technique to deal with 
+  skip connections or other complex elements of a network.<br>
+  to compute gradient for a node `x` we need to access (recompute if needed) all activation values for
+  parents of node `x`.
+
+
+<a id="lec16"></a>
+
+## [Lecture 16](https://www.youtube.com/watch?v=iIx_8_pxzhs) - Generative Adversarial Networks
+* TODO
+
+
+<a id="lec17"></a>
+
+## [Lecture 17](https://www.youtube.com/watch?v=DmBw8SEeAc0) - Generative Adversarial Networks Implementation
 * TODO
 
 
@@ -1206,3 +1247,69 @@ that allow to get a maximum benefit of a GPU accelerator if used in combination:
   sigmoid or tanh as activation follows the same idea of normalizing
   next layer inputs
   * Answer: that is exactly what happens in LSTM
+
+
+<a id="lec19"></a>
+
+## [Lecture 19](https://www.youtube.com/watch?v=q12VPh-bK7k) - RNN Implementation
+
+### Batching
+* We use batching (where each element in a batch is an independent sequence) to increase computations efficiency.
+* The reason is that without batching for each time step we would perform 2 matrix-vector multiplications:
+  $W_{hh} h_{t - 1} + W_{hi} x_t$. $h_t$ and $x_t$ are vectors
+* Matrix-vector multiplication is much slower than matrix-matrix multiplication, 
+  thus we combine inputs into batches and make $h_t$ and $x_t$ to be matrices
+* For LSTMs we break the convention of the order of input tensor dimension to make Matrix multiplication contiguous
+  * $L$ - sequence length, $n$ - input size, $d$ - hidden size, $b$ - batch size
+  * We use $x \in \mathbb{R}^{L \times b \times n}$ instead of $x \in \mathbb{R}^{b \times L \times n}$
+  * Reason is that inside LSTM we iterate over time steps and access $x_t$
+  * if `batch_first=False` than we get contiguous chunk of memory: $x_t$ = `x[t, :, :]`
+  * else we get non-contiguous chunk of memory: $x_t$ = `x[:, t, :]`
+
+### Backpropagation through time
+* To avoid running out of memory during training RNN on long sequences, we use 
+  **Truncated Backpropagation Through Time** (TBPTT)
+* Input sequence is split into chunks. Each chunk is then passed through RNN to compute loss and update model params
+* Without TBPTT we would create inappropriately large computational graph that will consume all the memory
+* To preserve information about previous sequence chunk we use **Hidden unit repackaging** (aka **Stop-gradient call**):
+  * we save last hidden state **value** (detached value, not the graph tensor. else we won't save any memory) 
+    obtained during previous sequence chunk processing
+  * and pass it to be initial value of RNN hidden state when processing next chunk
+* Hidden unit repackaging is the reason why pytorch returns `H, (hn, cn)` from LSTM
+* Input sequence could be split into chunks using different stride values (1, 2, ..., chunk_len)
+
+### Questions 
+* in [23:57](https://youtu.be/q12VPh-bK7k?t=1437) 
+  it was mentioned that matrix-vector multiplication is much slower than matrix-matrix multiplication. why?
+
+
+<a id="lec20"></a>
+
+## [Lecture 20](https://www.youtube.com/watch?v=IFKRf-BAqZo) - Transformers and Attention
+* TODO
+* 42:30
+
+### Transofrmer block
+
+#### Causal dependency
+
+#### Positional encodings
+* 1:02:50
+
+
+<a id="lec21"></a>
+
+## [Lecture 21](https://www.youtube.com/watch?v=OzFmKdAHJn0) - Transformer Implementation
+* TODO
+
+
+<a id="lec23"></a>
+
+## [Lecture 23](https://www.youtube.com/watch?v=jCBrUisBQ0A) - Model Deployment
+* TODO
+
+
+<a id="lec24"></a>
+
+## [Lecture 24](https://www.youtube.com/watch?v=HIwsCzdW_pw) - Machine Learning Compilation and Deployment Implementation
+* TODO
