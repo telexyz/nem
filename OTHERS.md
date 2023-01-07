@@ -1,5 +1,7 @@
 ## Other Interests
 
+- [ ] [15388](http://www.datasciencecourse.org/lectures) Practical Data Science [2019-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22618ea253-ca45-4b14-9f1d-aab501543bd2%22) | [2018-videos](https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22912b80a3-625d-405d-8905-a8620133666b%22)
+
 - [ ] [6.S965](https://efficientml.ai/schedule) TinyML and Efficient Deep Learning
 
 - [ ] [Deep Learning in Practice](https://www.youtube.com/playlist?list=PLVSIY7rG0A3e2OU8oqM1ASyecPON8s8E1)
