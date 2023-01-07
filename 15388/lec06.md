@@ -32,4 +32,17 @@ Nó cũng dễ dàng hơn để tạo ra các công thức toán học tổng qu
 - Matrix đơn vị: I, `I A = A = A I`
 - Matrix nghịch đảo với A in R^{n x n} A là square matrix, `A A^-1 = I = A^-1 A` => `A x = b <=> x = A^-1 b`. Matrix nghịch đảo không phải luôn tồn tại với mọi ma trận (chỉ khi có nghiệm thì mới tồn tại). Ma trận nghịch đảo giúp giải các phương trình tuyến tính nhanh chóng.
 
-- X, Y là 2 vector thuộc R^n `X^T Y = Y^T X` 
+- X, Y là 2 vector thuộc R^n `X^T Y = Y^T X`
+
+## Software for linear algebra
+!!! Đại số tuyến tính là nền tảng cho hầu hết các thuật toán học máy và thống kê !!!
+
+### Numpy
+Cung cấp cả công cụ để lưu dữ liệu dạng bảng như là một mảng nhiều chiều và các phép toán đại số tuyến tính trên nó.
+
+Lưu ý rằng: numpy ndarrays là mảng nhiều chiều, nó không phải matrix and vector (có những routins để hỗ trợ nó hoạt động như matrix and vector).
+
+![](files/lec06-02.png)
+
+![](files/lec06-03.png)
+
