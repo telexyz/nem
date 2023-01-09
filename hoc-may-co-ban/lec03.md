@@ -39,6 +39,47 @@ Hàm biến ngẫu nhiên có 2 khái niệm thôi: Kỳ vọng + phương sai.
 
 !!! Tuy nhiên tính kỳ vọng và phương sai rất là khó, hầu hết ta không tính được !!! Chúng ta chỉ tính được xấp xỉ thôi. Thành ra là nếu ta tính càng tốt kỳ vọng và phương sai thì chúng ta càng có một hệ thống AI rất là tốt.
 
+Nói về mặt toán học nó sẽ sâu xa hơn. Hiện tại ta nói một cách dễ hiểu là kỳ vọng và phương sai sẽ giúp chúng ta hiểu được về mặt toán học thông qua một định lý nổi tiếng gọi là định luật giới hạn trung tâm (center limit theorem).
 
-__Định lý giới hạn trung tâm__: mọi phân bố xác xuất đều có thể biểu diễn lại bằng một tập các phân bố chuẩn (Gaussian).
-Như GMM: Gausian Mixture Model được sử dụng trong HMM vậy.
+## Định lý giới hạn trung tâm 00:25
+_Idea ở đây là cho dù hàm khối xác suất có thể phức tạp tới mức như thế nào thì chúng ta có thể bằng một cách nào đó xấp xỉ một số tính chất quan trọng của hàm khối xác suất đó thông qua phân phối chuẩn_
+
+Đây là nói high level, không đi sâu vào mặt toán học làm mọi người sợ vì nhiều người ở đây không biết về toán học.
+
+Nhắc lại: Định lý này nói rằng ta có thể xấp xỉ một số tính chất quan trọng của bất kỳ hàm khối xác suất nào thông qua phân phối chuẩn. Phân phối chuẩn là phân phối mà nó capture rất nhiều những thứ trong hiện tại, chúng ta có thể biểu diễn cái phân phối chuẩn này, chỉ bằng kỳ vọng và phương sai. Tức là khi biết được kv và ps thì chúng ta sẽ biểu diễn được cái phân phối này.
+
+Phân phối chuẩn là một trong những cái phân phối rất là quan trọng để biểu diễn dữ liệu. Tức là cho dù hàm khối xác xuất có phức tạp đến ntn thì chúng ta có thể biểu diễn được hàm khối xác suất này thông qua một hỗn hợp phân phối chuẩn (mixture of Gaussian distributions, GMM Gausian mixture model). Đây là một trong những công cụ rất là quan trọng trong AI và học máy. Nó sẽ giúp ta biểu diễn được hầu hết các hàm phân phối. Và mỗi Gaussian thì có thể bd hoàn toàn bởi kv và ps. Đó là lý do tại sao kv và ps lại rất quan trọng khi học về dữ liệu.
+
+Thực tế sẽ phải học nhiều hơn nhưng kv và ps được coi là hai thống kê cơ bản và quan trọng nhất trong học máy nếu chúng ta muốn dùng 1 cái gì đó để ước lượng hàm khối xác suất của chúng ta. Khi bạn đọc 1 bài báo về AI thì người ta thường report kq thông qua kv và ps. __Không chỉ đơn giản là hiểu về mặt toán mà còn phải hiểu tầm quan trọng của khái niệm__
+
+Khi quảng cáo về AI, người ta sẽ show ra các kết quả tốt nhất trong kỳ vọng và không đề cập tới phương sai (những sai lệch ngoài kỳ vọng). Thậm chí họ bỏ đi cả kỳ vọng (average) mà chỉ show ra những kết quả tốt nhất (best). Bạn phải hiểu là họ đã bỏ đi những bức ảnh bị lỗi rồi. Nó rất là nguy hiểm vì khi họ làm điều đó vào y tế đi. Đó là lý tại sao sử dụng các công cụ AI trong ý tế đang rất hạn chế. 
+
+__Bởi các công cụ AI hiện tại dựa quá nhiều vào học sâu, mà học sâu độ tin cậy nó ko explain được, nó không thể diễn giải tốt. Tức là nó không thể nào cho bạn khoảng tin cậy tốt được.__ Còn các công cụ bên học máy, học dữ liệu lại cho bạn khoảng tin cậy rất là tốt. Ví dụ bạn có thể dùng các công cụ truyền thống xây dựng được khoảng tin cậy là 88%-90% (rất là nhỏ). Nhưng khi bạn xài những công cụ như học sâu thì khoảng tin cậy có thể từ 50-90%, khoảng tin cậy quá lớn khiến chúng ta không thể tin tưởng kết quả đó.
+
+=> Liên hệ: có thể đó là lý do khi mà LLM sai thì rất là ngớ ngẩn và khó đỡ. Còn nếu chẳng may đúng thì nó như một phép màu.
+
+Ví dụ nữa là dự đoán điểm tín dụng của một người, khi apply thẻ ngân hàng, sẽ có 1 thuật toán tính ra khoảng tin cậy của việc trả nợ của bạn, nếu thuật toán có độ tin cậy càng cao thì ngân hàng càng đỡ thiệt hại khi cho vay. Hiện tại họ vẫn làm bằng tay, thuê rất nhiều người xem hồ sơ của bạn, thông qua rất nhiều khâu để mà kiểm tra.
+
+!!! Vậy nên AI đang được ứng dụng rất là hạn chế trong y tế và kinh tế !!! Bên đó họ cần một công cụ có độ tin cậy cao, không biến thiên quá nhiều.
+
+![](files/lec03-06.png)
+
+Tính chất cộng giúp chúng ta chia nhỏ bài toán phức tạp thành nhiều bài toán đơn giản và tính kỳ vọng cho từng bài toán đơn giản đó. Nếu chúng ta chia nhỏ mô hình phức tạp thành nhiều mô hình nhỏ hơn.
+![](files/lec03-07.png)
+Ví dụ X là tập ảnh mặt người (rất là phức tạp), nhưng được biểu diễn lại thông qua phân phối chuẩn, và Y1, Y2, ... là các tính chất như mắt, chân mày, mũi, râu, tóc ... và ta có thể dụng các biến con Y1, Y2 .. đó để xác định xem ảnh mặt người X đó có phải là ảnh mặt của một người Việt Nam không chẳng hạn. Và đặc biệt là nếu ta có thể học được kỳ vọng của Y1, Y2 ... thì ta sẽ học được cách biểu diễn mặt người Việt Nam. Chúng ta cũng tính được những biến thiên của khuôn mặt, thông qua biến thiên của chân mày, tóc râu, da mặt, ...
+
+__2 tính chất này rất là quan trọng vì nó hầu như giúp chúng ta biểu diễn được dữ liệu phức tạp thành những dữ liệu đơn giản hơn mà bạn có thể thao tác được__ Khi mà có được 2 tính chất này thì ta có thể hiểu rằng có thể biểu diễn bất cứ dữ liệu nào thông qua các tính chất nhỏ hơn. Đây cũng là 1 idea rất lớn trong học sâu !!!
+
+![](files/lec03-08.png)
+
+__Tính độ tin cậy của mô hình cần rất nhiều thứ, ko chỉ kv và ps__
+
+[ 1:25 ]
+
+![](files/lec03-09.png)
+
+Khi có dữ liệu phải xem xem chúng có độc lập với nhau hay không? Hay bị phụ thuộc (theo thời gian như giá cổ phiếu), hoặc không gian (địa chất). Vì nếu ta xây dựng mô hình độc lập cho dữ liệu không độc lập thì đã sai rồi! Ngược lại xây dựng một mô hình không độc lập cho dữ liệu độc lập thì ko make sense. Đây là cơ bản nhất chúng ta phải xác định khi làm bài toán. Khi khi xây dựng AI cho videos thì phải hiểu được sử phụ thuộc giữa các frames, sự biến thiên của ảnh ... Vì vậy AI hiện tại hiệu quả cho các bài toán dữ liệu độc lập. Ví dụ bài toán NLP, các từ trong câu có sự liên hệ với nhau, vậy nên khi học AI chúng ta phải hiểu được mối liên hệ giữa các câu từ trong đó. Vậy nên trong bài toán dịch có hiện tượng AI không hiểu sự liên kết giữa các câu. Và khi translate nó ra một câu vô nghĩa. Thực tế dữ liệu của chúng ta không thỏa mãn nhứng assumptions về sự độc lập của mô hình được huấn luyện, thành ra nó bị giảm hiệu quả. Vì vậy có thể hiểu tại sao chúng ta còn rất nhiều room để làm những bài toán về NLP, videos, finance hay time series, health care ...
+
+Để ý nhé AI học về ảnh rất nhiều (vì ảnh khá độc lập với nhau), nhưng AI học về videos chưa có nhiều vì video là time series nên có sự ảnh hưởng lẫn nhau. 
+
+Stochastic process = biến ngẫu nhiên không độc lập.
