@@ -9,3 +9,4 @@ The course is well rounded in terms of concepts. It helps us understand the fund
 ## Kaggle: Data Science
 Kaggle is where we test your understanding and ability to extend neural network architectures discussed in lecture. Similar to how AutoLab shows scores, Kaggle also shows scores, so don't feel intimidated -- we're here to help. We work on hot AI topics, like speech recognition, face recognition, and neural machine translation.
 
+![](ready.png)

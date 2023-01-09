@@ -4,13 +4,11 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 09/2022-12/2022
 
-- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim) (có thể học cùng với [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning)
+- [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
 ## 01/2023-03/2023
 
-- [ ] [CS246](http://web.stanford.edu/class/cs246) Mining Massive Data Sets [videos](https://www.youtube.com/watch?v=jofiaetm5bY&list=PLoCMsyE1cvdVnCgHk43vRy7PVTVWJ6WVR)
-
-- [ ] [AIR](https://github.com/sebastian-hofstaetter/teaching#lectures) Advanced Information Retrieval
+- [ ] [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning
 
 ## 02/2023-06/2023
 
