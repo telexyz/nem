@@ -37,6 +37,7 @@ Hàm biến ngẫu nhiên có 2 khái niệm thôi: Kỳ vọng + phương sai.
 
 => __Kỳ vọng + phương sai giúp chúng ta hiểu những tính chất cơ bản của hàm khối xác suất__
 
+!!! Tuy nhiên tính kỳ vọng và phương sai rất là khó, hầu hết ta không tính được !!! Chúng ta chỉ tính được xấp xỉ thôi. Thành ra là nếu ta tính càng tốt kỳ vọng và phương sai thì chúng ta càng có một hệ thống AI rất là tốt.
 
 
 __Định lý giới hạn trung tâm__: mọi phân bố xác xuất đều có thể biểu diễn lại bằng một tập các phân bố chuẩn (Gaussian).
