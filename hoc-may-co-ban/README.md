@@ -2,3 +2,4 @@
 - videos https://drive.google.com/drive/folders/17s9KBf1GhgP4xoIDsNmTeEEuhiQnJkDG
 - ebooks https://github.com/tiepvupsu/ebookMLCB
 - data414 https://github.com/kamperh/data414
+- Andrew Ng https://www.youtube.com/watch?v=y8JgiWcUnU8&list=PLxfEOJXRm7eZKJyovNH-lE3ooXTsOCvfC
