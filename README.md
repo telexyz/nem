@@ -8,6 +8,8 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 01/2023-03/2023
 
+- [ ] [6.S898](https://phillipi.github.io/6.s898/#schedule) Deep Learning
+
 - [ ] [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning
 
 ## 02/2023-06/2023
