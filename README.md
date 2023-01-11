@@ -100,6 +100,8 @@ https://github.com/telexyz/bon
 
 ## 6/ Tiny projects
 
+- https://github.com/karpathy/nanoGPT
+
 - [bert-one-day-one-gpu.md](./tiny-projects/bert-one-day-one-gpu.md)
 
 - [lsm-in-a-week.md](./tiny-projects/lsm-in-a-week.md)
