@@ -1,5 +1,9 @@
 ## Other Interests
 
+- [ ] [6.S898](https://phillipi.github.io/6.s898/#schedule) Deep Learning
+
+- [ ] [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning
+
 - [ ] [CS246](http://web.stanford.edu/class/cs246) Mining Massive Data Sets [videos](https://www.youtube.com/watch?v=jofiaetm5bY&list=PLoCMsyE1cvdVnCgHk43vRy7PVTVWJ6WVR)
 
 - [ ] [AIR](https://github.com/sebastian-hofstaetter/teaching#lectures) Advanced Information Retrieval

@@ -2,19 +2,23 @@
 
 Thích gì học nấy deep learning, database, intepreter - compiler - programming language, system programming, parallel and distributed programming.
 
-## 09/2022-12/2022
+## 09/2022-01/2023
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
-## 01/2023-03/2023
+## 01/2023-06/2023
 
-- [ ] [6.S898](https://phillipi.github.io/6.s898/#schedule) Deep Learning
+- [ ] https://karpathy.ai/zero-to-hero.html
 
-- [ ] [11785](https://deeplearning.cs.cmu.edu) Introduction to Deep Learning
+- [ ] [cs234](https://stanford-cs324.github.io/winter2023/syllabus) Foundation Models
 
-## 02/2023-06/2023
+- [ ] [cs25](https://web.stanford.edu/class/cs25) Transformers United V2
 
-- [ ] [15445](https://15445.courses.cs.cmu.edu) Database Systems, hiểu cách xây dựng một database cơ bản
+> AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune (a.k.a foundation models) trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
+
+- - -
+
+## 01/2023-06/2023
 
 - [ ] [15721](https://15721.courses.cs.cmu.edu) Advanced Database Systems
 
@@ -34,8 +38,9 @@ __Database quan tâm__:
 
 - [ ] [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22) Topics in Database Management Systems
 
+- [ ] [15445](https://15445.courses.cs.cmu.edu) Database Systems, hiểu cách xây dựng một database cơ bản
 
-## 07/2023-xxx
+## xxx-xxx
 
 Có thể học viết trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
 
