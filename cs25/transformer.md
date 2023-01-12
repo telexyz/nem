@@ -28,6 +28,8 @@ __Điều này khiến latent state aproarch works in therory nhưng trong thự
 
 ![](files/tfm-01.jpg)
 
+
+
 - - -
 
 # "Phillip Isola" on transformer
@@ -177,6 +179,92 @@ Như vậy nếu có positional encoding, thì nó sẽ là sequence. Còn khôn
 
 Q: Bạn bắt đầu với ý tưởng về token như một loại cấu trúc dữ liệu mới, but just a few sencences before, you said smt that may sounds like the idea of tokens is rather weakened that the transformers work better when you have individual bits of data, like pixels. Vì thế tôi càm thấy ý tưởng về token không phải là cốt lõi của toàn bộ ý tưởng này, mà attn mới là phần quan trọng nhất. Và ý tưởng có thể attend dynamically anywhere in the picture là ý tưởng gives power in these algorithms, chứ không phải là tokens?
 A: Tôi không biết. Và tôi nghĩ rằng that's kind of the open debate. It's fun to keep discussing it. So I think the field is kind of split right now between people thinking that it's the tokens and the vector, encapsulated vectors that are important to this versus the attention, and really if you just have intentional mechanism, you can still be operating over neurons. It doesn't have to be about tokens. Tôi nghĩ rằng cả 2 đều quan trọng để thành công. Một ví dụ phản công là nếu attention matter is there are these other architectures now, sometimes called MLP-mixer, nó sử dụng token chứ không phải attention. Cơ bản MLP-Mixer là ConvNet over tokens, one-by-one conv over tokens, họ gọi nó là MLP-mixer khiến nó trở nên khó hiểu, but anyway MLP-Mixer không có attn. But it's still, in my view, it's a token net, and that seems competitive on some tasks with attention networks. So maybe attention is, maybe it's not.
+
+![](files/tfm-17.jpg)
+https://youtu.be/Smav86u60FM?t=1664 đoạn này thảo luận về cách nhìn nhận attn dưới góc độ toán học, nó tương đương với phép biến đổi nào ... kiểu đơn giản nó là phép nhân ma trận nên nó sẽ thế này thế kia ...
+
+Q: tại sao không bỏ hết các khái niệm về q, k, v rồi W_q, W_k, W_v đi và chỉ dùng một ma trận để biến đổi vector input thành vector output?
+A: Tôi nghĩ sometimes it works just as well. I don't follow latest on that but you can have queries, keys, and values là các hàm tuyến tính of your code vector z, hoặc nó có thể là non-linear functions, hoặc nó có thể là identity. And i'm not sure that there's a consensus (sự nhất trí) on where you need which. Có 1 điều thú vị là nếu bạn dùng identity để tạo ra queries và keys, you're basically creating a grand matrix between all of your token vectors with themselves (hình dưới).
+
+![](files/tfm-18.jpg)
+
+it's going to cluster the data, and there's been some analysis of how identity, attention ... indentity queries and keys will create this cluster, like spectral clustering type matrix. That will create similarity matrix. When you hit the data with that similar matrix, it'll group things that are similar. And maybe you can understand a little bit what going on from that perspective like linear queries and keys are just some projection of that kind of thing.
+
+Q: And how does that work if you don't have the W_q and W_k matrix, but just identity?
+A: So ResMLPs are actually like this spectral matrix because what you do is you process the input, transpose it, process it again. If you work out both operations in sequence, they end up becoming Z-transpose, Z with a matrix in the middle. So I think it does work, I guest. ... thảo luận thêm xem nó work and not just well ...
+
+https://youtu.be/Smav86u60FM?t=2113 đoạn này thảo luận về ý tưởng xưa trong CV và cũng có người đã đề xuất dùng pixel + derivate (tức là có thông tin của pixels bên cạnh) để làm inputs và nó chính xác là tokens :D Như vậy ý tưởng về tokens không mới. It's just help me to coalesce around (đoàn kết) in term of tokens. When I think of all operations in terms of tokens, but we used to talk about hypercolumns, and feature vectors, and there's a milion names for the same concepts. 
+
+Rồi, thảo luận thêm về graph network và transformer cái nào tổng quát hơn? Phillip cho rằng GN tổng quát hơn. Và transformer là một GN được kết nối đầy đủ, node nào cũng có thể attn tới node khác ... Và người làm GN thực sự  đã làm attn từ trước. Như vậy ý tưởng attn cũng không hề mới ...
+
+## Brian Cheung: Lesser know facts about transformers https://youtu.be/Smav86u60FM?t=2213
+
+![](files/tfm-19.jpg)
+
+Ta sẽ nói nhiều hơn về quan điểm của cộng đồng ML về attn, và những sự phát triển đang có trong cộng đồng, and go over some kind of unintutive things about transformer that I think are surprising, I guest, to a lot of people now. 
+
+![](files/tfm-20.jpg)
+
+Transformer khởi đầu như là một LM, và họ có một title không thể tuyệt hơn "sự chú ý là tất cả những gì chúng ta cần". Và hóa ra điều đó đang dần trở thành hiện thực hơn mọi người có thể tưởng tượng. Hiện nay transformers đã cover language, speech, vision. Cơ bản nó là một universal model now for all modalities, that people apply to data, actually. Attn không phải là 1 ý tưởng mới.
+
+![](files/tfm-21.jpg)
+
+Trước đó đã có nhiều bài báo nói về điều tương tự. Minh họa trên nói về một thứ rất tương tự như vision transformer, attention where they create, essentially, attendable feature maps at the last layer or the next to last layer or the next to last layer of a VGG network that was so spatial. And they able to use it to show that when you do image captioning, it would attend to the correct part of an object. 
+
+![](files/tfm-22.jpg)
+
+Đoạn này nói về sự thành công và tầm quan trọng của Transformer. Tác giả nói rằng khi một mô hình nào đó thành công, là người ta sẽ liên tưởng tới não bộ, liệu não bộ người sẽ làm điều tương tự như thế nào? Có điểm gì chung ở đây không? ...
+
+![](files/tfm-23.jpg)
+
+Bài báo nói rằng CLIP (transformer based) lý giải thành công nhất cách con người hoạt động trong vision, tại sao họ lại fail ...
+CLIP is an outlier (ngoại lệ) for their comparisons to human behavior.
+
+## Why should we care? https://youtu.be/Smav86u60FM?t=2417
+
+![](files/tfm-24.jpg)
+
+
+Và Transformer ngày càng đạt kết quả tốt hơn CNN trong CV khiến chúng ta đặt ra câu hỏi, thế giữa CNN và Transformer cái nào gần với human vision hơn?
+
+![](files/tfm-25.jpg)
+
+And intutively, you would think that there are certain properties of conv that make conv a conv, and a tfm a tfm. And what makes, what we believe, convolutional convolution is the fact of equiveriance, meaning, as Phil mentioned, when you apply an operation to the input, the operation applied to the output, should be the same type of operation. 
+
+Now the issue is that this turns out not to be exactly true. Turn out __after training, the ViT is more equivariant to translation than a ConVnet__, which i think is quite surprising. So Phil might actually already know the issues with the conv not being equivariant, one thing being that a lot of pooling and other operations even the nonlinearity, contribute to hurting or harming the quivariance performance.
+
+So this plot here is showing this paper's measure, which is rederiative, the equivariance error, of a conVnet, this is ResNet-50 vs a ViT. And it turns out after training, a ViT is translationally more equivariant that a ConVnet which i think is quite non-intutive in the sense that we built in the equivariance, specifically for a ConVnet. Yet, here we are the ViT are more equivariant after training. And some sample on the right show measure of CNN, ViT and MLP-Mixer, Mixer also has surpoisingly high equivariance after training. And equivariance increase after you improve test accuracy.
+
+## Scaling https://youtu.be/Smav86u60FM?t=2656
+
+![](files/tfm-26.jpg)
+Đoạn này nói về 1 xu hướng trong cộng đồng về scaling ... nên xem để biết chi tiết ...
+
+__Người ta cố gắng triển khai những mô hình có số params nhiều, dùng nhiều data và FLOPs tính toán để thay vì cho inductive bias vào model trước khi huấn luyện thì để mô hình tự học inductive bias từ dữ liệu__
+
+Như vậy trong tương lai sẽ có có ít indutive biases trong cộng đồng học máy because they are willing to pay this cost of compute to not have built-in inductive bias that they would normally have to build in for smaller data sets. 
+
+## https://youtu.be/Smav86u60FM?t=2994
+
+![](files/tfm-27.jpg)
+
+"I think this (picture) tells you a story that maybe the machine learning community is going towards, which is not the fact that architecture matter the most, but the fact that data is actually the really important aspect. And I think they are building now architectures that aren't necessarily good at working well without being trained, but furthermore, work well at aborbing data lot more efficiently than other architectures."
+
+And I think we should think about the things that lead to the resulting model that we work these days, which is the idea that it's not just the model itself, with it's architecture. But there are priors about the compute, the capacity of the model to train over that data, and also, more importantly, now more recently, the nice thing is that, as Phil mentioned, the notion that __a lot of these models don't require supervision__ so they can absorb larger and larger data sets without much economic cost to the person training it.
+
+![](files/tfm-28.jpg)
+
+And also one other aspect of transformer is the way it was created was mainly as an alternative to RNN and the reason for that is because you see on the left here, I mentioned HW. And one of the things about transformers is that they're much more parallel-able in GPUs than a RNN and they run much more better on like superly parallel software than a RNN does, and that why they've become very popular also is because the parallelization of them is much easier than other sequence models.
+
+## Discussion
+
+- By introducing the idea of attn dynamically handled by the data, you kind of have i don't, it's an overstatement, but as general architectual as you can have. Like you have really powerful architecture and now to train it you need a lot of data. And this is realy where we are now. and more data  does better just because the architecture is extremely general, much more than conv as you said.
+- Phil: They are lacking in one thing, which is __vanilla transformers don't have memory__, they don't have feedback connection, and so they not trained completely in the same way that an RNN is. Of course people adding memory and recurrence to transformers, but still, the majority of them don't have that. So that's actually, I think, a big limitaion. They don't have memory.
+The second point is evetually lookup tables will perform best, or nearest neighbor will perform best, because the limit of infinite data does work, and we dont know if these work in the limit of infinite data. I think it less surpising that you need less structure with more data.
+
+__Main point of the discussion__: So the question is, what are we interested in, in terms of if these architectures become less biased to wards being structually more 	relevant to neuroscience, but just being more task-relevant to neuroscience? Are we going to be stuck at some level of understanding that's only functional? ...
+
+Xem tiếp ở đây https://youtu.be/Smav86u60FM?t=3200
 
 - - -
 
