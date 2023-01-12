@@ -8,8 +8,6 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 ## 01/2023-06/2023
 
-- [ ] https://karpathy.ai/zero-to-hero.html
-
 - [ ] [cs234](https://stanford-cs324.github.io/winter2023/syllabus) Foundation Models
 
 - [ ] [cs25](https://web.stanford.edu/class/cs25) Transformers United V2
