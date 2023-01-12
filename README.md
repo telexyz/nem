@@ -63,48 +63,18 @@ Học lập trình hệ thống bằng cách tham gia https://github.com/Serenit
 
 - - -
 
-
 # Làm (dự án)
 
-Cần kiến thức lập trình hệ thống, toán, cấu trúc dữ liệu và giải thuật, kiến trúc máy tính cơ bản (phân cấp bộ nhớ, cache, nhân xử lý ...), lập trình hướng dữ liệu, lập trình song song / phân tán, lập trình hiệu năng cao.
-
-
-## 1/ Dùng GPU xử lý dữ liệu lớn
-
-Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
-
-
-## 2/ Bộ gõ tiếng Việt thông minh (xem demo)
-
-https://github.com/telexyz/nem/tree/main/marktone#readme
-
-
-## 3/ Train mô hình ngôn ngữ RWKV cho tiếng Việt
-
-Ưu điểm train nhanh, độ chính xác ~ Transformer, inference cực nhanh (chỉ cần nhân vector với matrix), có thể triển khai trên smartphone. Nhược điểm không phổ biến và được hỗ trợ rộng rãi như transformer
-
-https://github.com/BlinkDL/RWKV-LM
-
-
-## 4/ Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
-
-https://github.com/telexyz/bon
-
-
-## 5/ Viết Deep Learning Framework hiệu năng cao
-
-- Python baseline https://github.com/telexyz/kim
-
-- Có thể viết bằng https://github.com/exaloop/codon để sử dụng lại Python baseline
-
-- Có thể viết lại bằng Zig nếu Zig, tập trung multi-CPUs + data-oriented và thuần perf.
-
-- Tham khảo https://github.com/fengwang/ceras 
-
-## 6/ Tiny projects
-
+## 1/ Viết transfomer tối ưu cho pytorch để có thể train LM trên 1 GPU
+- Sử dụng những kỹ thuật tối ưu hóa từ Flash Attention, Triton compiler ...
 - https://github.com/karpathy/nanoGPT
-
 - [bert-one-day-one-gpu.md](./tiny-projects/bert-one-day-one-gpu.md)
 
-- [lsm-in-a-week.md](./tiny-projects/lsm-in-a-week.md)
+## 2/ Dùng GPU xử lý dữ liệu lớn
+Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
+
+## 3/ Bộ gõ tiếng Việt thông minh (xem demo)
+https://github.com/telexyz/nem/tree/main/marktone#readme
+
+## 4/ Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
+https://github.com/telexyz/bon

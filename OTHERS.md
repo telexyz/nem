@@ -1,4 +1,26 @@
-## Other Interests
+# Other projects
+
+## Train mô hình ngôn ngữ RWKV cho tiếng Việt
+
+Ưu điểm train nhanh, độ chính xác ~ Transformer, inference cực nhanh (chỉ cần nhân vector với matrix), có thể triển khai trên smartphone. Nhược điểm không phổ biến và được hỗ trợ rộng rãi như transformer
+
+https://github.com/BlinkDL/RWKV-LM
+
+## Viết Deep Learning Framework hiệu năng cao
+
+- Python baseline https://github.com/telexyz/kim
+
+- Có thể viết bằng https://github.com/exaloop/codon để sử dụng lại Python baseline
+
+- Có thể viết lại bằng Zig nếu Zig, tập trung multi-CPUs + data-oriented và thuần perf.
+
+- Tham khảo https://github.com/fengwang/ceras 
+
+## Tiny projects
+
+- [lsm-in-a-week.md](./tiny-projects/lsm-in-a-week.md)
+
+# Other Interests
 
 - [ ] [6.S898](https://phillipi.github.io/6.s898/#schedule) Deep Learning
 
