@@ -14,10 +14,10 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 > AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune (a.k.a foundation models) trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
 
-# Làm (dự án)
+# Làm
 
 ## 1/ Viết transfomer tối ưu cho pytorch để có thể train LM trên 1 GPU
-- Sử dụng những kỹ thuật tối ưu hóa từ Flash Attention, Triton compiler ...
+- Sử dụng những kỹ thuật tối ưu hóa từ Flash Attention, Triton compiler, bitnbytes quantization
 - https://github.com/karpathy/nanoGPT
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
 - https://babylm.github.io
