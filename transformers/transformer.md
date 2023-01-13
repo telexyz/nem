@@ -22,7 +22,7 @@ __bản chất của RNN là "latten state" approach__ chúng lấy chuỗi đ�
 - pros: RNN có thể capture infinite history, và có compact representation
 - cons: compute path quá dài từ time bắt đầu cho tới current => vanishing / exploding gradients, hard to learn
 
-__Điều này khiến latent state aproarch works in therory nhưng trong thực tế sẽ có vấn đề__
+__Điều này khiến latent state aproarch works in theory nhưng trong thực tế sẽ có vấn đề__
 
 ## 2 cách tiếp cận time series: direct prediction approach
 
@@ -39,7 +39,40 @@ https://youtu.be/IFKRf-BAqZo?t=678
 Trước khi tôi giới thiệu transformer như là 1 cách dự đoán trực tiếp. Tôi muốn nhấn mạnh rằng có một phương pháp dự đón chuỗi thời gian trực tiếp cổ điển là dùng CNN.
 
 ![](files/tfm-30.jpg)
+...
 
+## Self-attn and tfm
+__Ra đời 2017, và trở thành kiến trúc thống trị học sâu__ (5 năm tuổi). Chúng ta sẽ nói về tfm áp dụng trong chuỗi thời gian nhưng phải nói rằng chúng ta đang sống trong thời đại của tfm. Tức là những kiến trúc tốt nhất trong các lĩnh vựa tend to be tfm.
+
+> Attn trong DL về cơ bản có ý nghĩa là bất cứ cơ chế nào trong đó các thành phần hoặc trạng thái riêng rẻ trong mạng được weighted và sau đó kết hợp với nhau. Nó có thể là một định nghĩa rộng nhưng tôi nghĩ nó bao trùm. Và nó là một định nghĩa tốt nó  bao gồm phần lớn những gì chúng ta muốn nói khi nói về attn in DL.
+
+Thực tế attn trong DL ban đầu được đề xuất theo một cách khác, sử dụng một dạng kiến trúc khác, hơn là self-attn đang được sử dụng bây giờ, và nó được giới thiệu trong ngữ cảnh của RNN.
+
+![](files/tfm-31.jpg)
+
+![](files/tfm-32.jpg)
+
+## Thuộc tính của self-attn https://youtu.be/IFKRf-BAqZo?t=2340
+
+![](files/tfm-33.jpg)
+
+Thuộc tính thứ 2, sự ảnh hương lẫn nhau giữa k, q, v qua thời gian mà không cần tăng số lượng tham số là một thuộc tính hay cho dữ liệu chuỗi thời gian. So sánh với temporal CNN, thì để có độ ảnh hưởng qua thời gian lớn hơn bạn phải tăng số layer lên. Trong khi đó self-attn trộn toàn bộ chuỗi với nhau bất kể độ dài của chuỗi, nó cũng cung cấp loại trộn một lớp của toàn bộ chuỗi mà không cần bổ xung thêm bất cứ tham số nào.
+
+![](files/tfm-34.jpg)
+
+Kiến trúc xếp chồng giống temporal cnn :D
+
+Để duy trì casual property (tính nhân quả), thì cần thay đổi cơ chế self-attn, vì self-attn sẽ trộn mọi tokens đầu vào nghĩa là một tokens đầu ra sẽ bị ảnh hưởng bởi mội tkn đầu vào.
+
+![](files/tfm-35.jpg)
+
+![](files/tfm-36.jpg)
+
+![](files/tfm-37.jpg)
+
+![](files/tfm-38.jpg)
+
+![](files/tfm-39.jpg)
 
 - - -
 
