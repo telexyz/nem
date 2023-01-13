@@ -1,6 +1,6 @@
 # Học
 
-Thích gì học nấy deep learning, database, intepreter - compiler - programming language, system programming, parallel and distributed programming.
+
 
 ## 09/2022-01/2023
 
@@ -12,7 +12,7 @@ Thích gì học nấy deep learning, database, intepreter - compiler - programm
 
 - [ ] [cs25](https://web.stanford.edu/class/cs25) Transformers United V2
 
-> AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune (a.k.a foundation models) trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
+> AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune (fomo) trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
 
 # Làm
 
