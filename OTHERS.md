@@ -1,3 +1,50 @@
+## 01/2023-06/2023
+
+- [ ] [15721](https://15721.courses.cs.cmu.edu) Advanced Database Systems
+
+__Database quan tâm__:
+
+- https://github.com/tigerbeetledb/tigerbeetle/blob/main/docs/DESIGN.md: The distributed financial accounting database designed for mission critical safety and performance.
+
+- https://github.com/unum-cloud/UKV Universal Keys & Values, Unum tận dụng thế mạnh phần cứng hiện đại để lưu trữ và xử lý dữ liệu đơn giản [hiệu quả hơn nhiều](https://unum.cloud/post/2022-09-13-ucsb-10tb)
+
+![](https://github.com/unum-cloud/UKV/raw/main/assets/UKV.png)
+
+### Nice to learn
+
+- [ ] [15418](http://15418.courses.cs.cmu.edu/spring2016)+[cs149](https://gfxcourses.stanford.edu/cs149) Parallel Computing
+
+- [ ] [CS839](https://pages.cs.wisc.edu/~yxy/cs839-s20) Design the Next-Generation Database
+
+- [ ] [CS764](https://pages.cs.wisc.edu/~yxy/cs764-f22) Topics in Database Management Systems
+
+- [ ] [15445](https://15445.courses.cs.cmu.edu) Database Systems, hiểu cách xây dựng một database cơ bản
+
+## xxx-xxx
+
+Có thể học viết trình thông dịch theo hướng dẫn trong cuốn https://craftinginterpreters.com bằng ngôn ngữ https://ziglang.org
+
+Hoặc tìm hiểu về trình biên dịch và LLVM qua mã nguồn Zig, bắt đầu từ https://mitchellh.com/zig
+
+### Tại sao chọn Zig?
+Zig là một ngôn ngữ lập trình hệ thống hiện đại, đơn giản và mạnh mẽ. Có thể học syntax trong buổi sáng và chiều làm dự án luôn. Zig mới và chưa ra bản 1.0 (có lẽ vào cuối 2023) nhưng đã có 2 startups thành công sử dụng Zig (Bun.js và TigerBeetle). Cộng đồng rất mạnh.
+
+Có thể tham gia sâu hơn và Zig bằng cách:
+
+- Chữa những lỗi đơn giản như một người mới
+- Cải tiến nvptx backend chạy mượt [zcuda](https://github.com/gwenzek/cudaz) (xem [video](https://www.youtube.com/watch?v=rvfsWm6TckA&t=5351s))
+- ...
+
+
+## xxx-xxx
+
+Học lập trình hệ thống bằng cách tham gia https://github.com/SerenityOS (C++ hoặc [Jakt](https://github.com/SerenityOS/jakt))
+
+- Viết bộ gõ tiếng Việt cho Serenity
+- ...
+
+- - -
+
 # Other projects
 
 ## Train mô hình ngôn ngữ RWKV cho tiếng Việt
