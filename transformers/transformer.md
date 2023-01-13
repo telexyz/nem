@@ -28,6 +28,17 @@ __Điều này khiến latent state aproarch works in therory nhưng trong thự
 
 ![](files/tfm-01.jpg)
 
+Cách tiếp cận này có vẻ dễ dàng hơn vì bạn chỉ cần chuỗi đầu vào để dự đoán đầu ra (no hidden states). Và compute path là đồng đều giữa các tokens trong sequence (trước sau đều như nhau). Trong thực tế, thường cách này sẽ dẫn đến một kiến trúc hiệu quả hơn là thực sự các thông tin thời gian.
+
+Ngược lại điểm yếu của cách tiếp cận này là nó không có biểu diễn compact state cho chuỗi, nghĩa là với direct predict bạn sẽ bị giới hạn bởi độ dài chuỗi mà mô hình có thể handle, còn trong RNN không có giới hạn này vì compact state luôn đại diện cho toàn chuỗi từ thời điểm bắt đầu cho tới nay.
+
+Tôi cho rằng __đó là khác biệt quan trọng nhất giữa RNN và Transformer trong dự đoán chuỗi thời gian__ 
+
+![](files/tfm-29.jpg)
+https://youtu.be/IFKRf-BAqZo?t=678
+Trước khi tôi giới thiệu transformer như là 1 cách dự đoán trực tiếp. Tôi muốn nhấn mạnh rằng có một phương pháp dự đón chuỗi thời gian trực tiếp cổ điển là dùng CNN.
+
+![](files/tfm-30.jpg)
 
 
 - - -
@@ -265,6 +276,10 @@ The second point is evetually lookup tables will perform best, or nearest neighb
 __Main point of the discussion__: So the question is, what are we interested in, in terms of if these architectures become less biased to wards being structually more 	relevant to neuroscience, but just being more task-relevant to neuroscience? Are we going to be stuck at some level of understanding that's only functional? ...
 
 Xem tiếp ở đây https://youtu.be/Smav86u60FM?t=3200
+
+Có bài báo nói rằng train GPT2 on 10m of tokens (usually they are trained on billions of tokens) and it explain fMRI as welll as a billion one.
+
+So there may be a shift here between models that are like and you called it out, like hey, we can instead of us having to hand design them in, this is the bitter lesson version, we'll just lean on the data with a general flexible thing and let the data push it as long as our compute can handle that, and we have enough data. And I think the question we're asking that's intersting us, some of us, is does that end state? Which of those end states looks more like the adult end state that's agnostic to whether neither of them probably followd the same biology path, but just even in that assumption state, what is the state of affairs? I don't think we know what is state of affair is for ViT relative to ConvNets, on aligments with even visual processing.
 
 - - -
 
