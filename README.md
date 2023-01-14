@@ -1,12 +1,12 @@
 # Học
 
+__Software eating the world. AI eating software. And transformers are eating AI__
+
 ## 09/2022-01/2023
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
 ## 01/2023-06/2023
-
-__Software eating the world. AI eating software. And transformers are eating AI__
 
 - [ ] [cs234](https://stanford-cs324.github.io/winter2023/syllabus) Foundation Models
 
