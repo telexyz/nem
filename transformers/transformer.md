@@ -1,5 +1,28 @@
 ![](files/transformer.png)
 
+# Karpathy on transformers
+
+https://www.youtube.com/watch?v=9uw3F6rndnA
+
+Q: Looking back what is the most beautiful or surprising idea in DL or AI in general that you've come across you've seen this field explode and grow in interesting ways?
+
+The most probably is the transformer architecture. Basically NNs have a lot of architectures that were trendy have come and gone for different sensory modalities (phương thức cảm nhận) như vision, audio, text. Bạn sẽ xử lý chúng bằng những loại NNs khác nhau. Và gần đây chúng ta thấy có sự hội tụ hướng tới một kiến trúc TFM. Bạn có thể cho nó video, image, text ... Nó giống như một máy tính đa năng, có thể đào tạo được, và rất hiệu quả để chạy trên phần cứng hiện đại.
+
+Bài báo về TFM ra mắt vào 2016, attention is all you need, tôi không chắc tác giả có nhận thức được tác động của nó không, nhưng tôi nghĩ họ đã biết về một số động lực và quyết định thiết kế đằng sau tfm và họ đã chọn không, tôi nghĩ mở rộng nó theo cách đó trong bài báo. Vì vậy tôi nghĩ chọ có một ý tưởng rằng có nhiều thứ hơn là dịch máy. Nó giống như một máy tính hiệu quả có thể tối ưu hóa nhờ đạo hàm tự động. Có thể họ đã không nhìn xa đến vậy nhưng tôi nghĩ điều đó thực sự thú vị.
+
+![](files/tfm-39.jpg)
+_TFM là một kiến trúc NN vĩ đại vì nó là một máy tính đa năng có thể đạo hàm được. Nó: 1/ expressive (in the forward pass) 2/ tối ưu hóa được (via backprob + gradient descent) 3/ hiệu quả (high parallelism compute graph)_
+
+Bạn muốn có một máy tính đa năng mà bạn có thể đào tạo về các vấn đề tùy ý, chẳng hạn như dự đoán từ tiếp theo, phát hiện một con mèo trong một bức ảnh. Và bạn muốn huấn luyện máy tính này để bạn cài đặt các trọng số của nó, và tôi nghĩ rằng có một số tiêu chuẩn thiết kế đồng thời trùng lặp trong tfm khiến nó rất thành công, và tôi nghĩ rằng các tác giả đã cố gắng tạo ra kiến trúc thực sự mạnh mẽ này và về cơ bản, nó rất mạnh mẽ trong forward pass bởi vì nó có thể thể hiện tính toán tổng quát, thứ gì đó trông giống như message passing, bạn có ác nút và tất cả chúng đều lưu trữ dưới dạng vector, và các nút này về cơ bản nhìn vào các vector của nhau và chúng có thể giao tiếp và về cơ bản các nút sẽ phát đi, hey tôi đang tìm thứ này, và sau đó các nút khác sẽ nhận được, và trả lời đây là những thứ tôi có, đó là chìa khóa và giá trị nên nó không chỉ là attn. Chính xác là tfm không chỉ là attn nó còn có nhiều thành phần kiến trúc khác. Nhưng về cơ bản có một cơ chế truyền thông điệp trong đó các nút có thể nhìn vào nhau để quyết định điều gì thú vị và sau đó cập nhật lẫn nhau. Tôi nghĩ đó một chức năng rất biểu cảm, vì vậy nó có thể thể hiện nhiều loại thuật toán khác nhau. Và trong forward pass, cách nó được thiết kế với residual connection, layernorm, softmax attn, và nó cũng có thể được tối ưu hóa, đây thực sự là very big deal. Vì có rất nhiều máy tính mạnh mẽ mà bạn không thể tối ưu hoặc chúng không dễ dàng tối ưu bằng những kỹ thuật chúng ta có đó là backprob và gradient descent. Và đây là những first-order method, very simple optimizers. Và cuối cùng bạn có thể chạy nó rất hiệu quả trên massive input GPUs, they prefer lots of parallelism, và tfm được thiết kế với điều đó. Như vậy nó được thiết kế hợp với phần cứng hiện đại, tính biểu đạt cao trong forward pass và đồng thời rất dễ tối ưu hóa trong backward pass.
+
+Q: Bạn nói rằng residual connections hỗ trợ một loại khả năng học những thuật toán ngắn nhanh chóng, và sau đó từ từ mở rộng chúng trong quá trình huấn luyện. Ý tưởng học thuật toán ngắn là gì?
+
+Về cơ bản tfm là một chuỗi các khối, và mỗi khối có attn, MLP, và khi bạn đi vào một khối và bạn quay lại residual connection pathway and you go off and you comeback và bạn có một số lượng các tầng xếp thành chuỗi. Và cách để hình dung nó là, bởi vì residual pathway, trong backward, the gradients kiểu như chảy trong nó mà không bị gián đoạn (chạy thẳng trong residual pathway từ đầu tới cuối), bởi vì phép cộng phân phối gradient bằng nhau tới mọi nhánh của nó, vì thế gradients từ người giám sát trên cùng chảy trực tiếp vào tầng đầu tiên và mọi residual connections được sắp xếp sao cho trong lần khởi tạo đầu tiên, chúng không đóng góp gì cả cho residual pathway, vì thế nó giống như hãy hình dung tfm như là một hàm của python, và bạn có rất nhiều dòng mã lệnh trong đó, bạn có 100 tầng chẳng hạn, thường là ít hơn 20 tầng, giả sử bạn có 20 dòng mã lệnh, và trong quá trình tối ưu hóa, nó giống như là, đầu tiên bạn tối ưu dòng đầu tiên, rồi tới dòng thứ hai, rồi tới tầng thứ 3, và tôi cảm nhận rằng bởi vì residual pathway và dynamics of optimization bạn có thể học được sort of learn một thuật toán rất ngắn that gets the approximate tensor nhưng sau đó các tầng khác có thể kick-in và bắt đầu đóng góp vào và cuối cùng bạn tối ưu hóa một thuật toán bao gồm cả 20 dòng code. Ngoại trừ những dòng lệnh đó rất phức tạp bởi vị một khối trong tfm có thể làm được rất nhiều.
+
+Điều thực sự thú vị là kiến trúc tfm thực sự remarkably resilient (đàn hồi, bật lên). Kiến trúc từ năm 2016 tới nay gần như giữ nguyên chỉ có sự thay đổi là bạn đổi layernorm sang pre-norm. Vì thế nó rất ổn định. Mọi người cho thêm thứ này thứ kia vào nó để cố cải tiến, but it's proven remarkably resilient. Nhưng tôi nghĩ nó vẫn có thể tốt hơn. (Phillip cho rằng điểm yến lớn nhất của tfm là nó không có bộ nhớ kiểu như RNN, đó là hạn chế của tfm)
+
+Hiện tại có thể có tfm are taking over AI.
+
 # Transformer implementation
 - 10714 https://www.youtube.com/watch?v=OzFmKdAHJn0
 - 11785 https://www.youtube.com/watch?v=X2nUH6fXfbc
