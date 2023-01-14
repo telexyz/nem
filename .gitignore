@@ -6,3 +6,4 @@ _git
 data
 __pycache__
 tiny-projects/lsm-in-a-week
+.vscode
