@@ -1,3 +1,21 @@
+https://www.youtube.com/watch?v=SY5PvZrJhLE
+
+Bài báo này là một cuộc điều tra về những gì ta có thể làm với một mô hình ngôn ngữ khổng lồ. Hóa là khi bạn huấn luyện một LM với đủ dữ liệu nó có khả năng giải quyết các tác vụ NLP that it has never seen just out of the box. 
+
+Con người không cần tới những tập dữ liệu lớn được gán nhãn để học hầu hết các tác vụ ngôn ngữ.
+
+![](files/lec02-r11.jpg)
+Mô hình ngôn ngữ đơn giản là tác vụ dự đoán từ tiếp theo. Rồi từ tiếp theo, từ tiếp theo ... Như vậy LM chỉ là một mô hình có thể sinh ra ngôn ngữ một cách xác suất hóa. Điều hay ho ở LM là bạn có thể huấn luyện nó trên bất kỳ dữ liệu text nào. Tập dữ liệu huấn luyện về cơ bản là tất cả những gì thu thập được trên Internet, tổng số dữ liệu là 300 tỉ tokens. 
+
+GPT còn đơn giản hơn Bert ở chỗ nó là mô hình tự hội quy từ trái qua phải để dự đoán từ tiếp theo (ko phải 2 chiều như bert). Huấn luyện như một mô hình ngôn ngữ đơn thuần - dự đoán từ tiếp theo. 
+
+![](files/lec02-r12.jpg)
+Với tác vụ cụ thể bạn đơn giản cho vào mô hình ngôn ngữ một đoạn text mô tả tác vụ "translate english to french", và một đoạn prompt (lời nhắc) "cheese => ". Và hy vọng rằng trong tập huấn luyện có đủ những đoạn text có cấu trúc tương tự để mô hình có thể học được "cấu trúc" đó và sinh ra kết quả mong đợi.
+
+
+
+- - -
+
 https://arxiv.org/pdf/2005.14165.pdf
 
 # Language Models are Few-Shot Learners
