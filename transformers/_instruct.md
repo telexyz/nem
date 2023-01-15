@@ -1,3 +1,6 @@
+# Scaling Instruction-Finetuned Language Models (Flan-PaLM)
+https://www.youtube.com/watch?v=QdwETwqyREY
+
 # Training language models to follow instructions with human feedback
 https://arxiv.org/pdf/2203.02155.pdf
 
@@ -50,4 +53,5 @@ we trained a model to take in a prompt and response, and output a scalar reward.
 only use 6B RMs, as this saves a lot of compute, and we found that 175B RM training could be
 unstable and thus was less suitable to be used as the value function during RL (see Appendix C for
 more details).
+
 
