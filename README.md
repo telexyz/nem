@@ -22,8 +22,8 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
 - https://babylm.github.io
 
-## 2/ Dùng GPU xử lý dữ liệu lớn
-Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
+## 2/ Làm interface cho SantaCoder
+Một mô hình ngôn ngữ 1.1B tham số cho Java, JavaScript, và Python.
 
 ## 3/ Bộ gõ tiếng Việt thông minh (xem demo)
 https://github.com/telexyz/nem/tree/main/marktone#readme

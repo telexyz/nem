@@ -4,7 +4,7 @@ https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM
 
 - Liệu có thể lặp lại scaling law chỉ với một lượng dữ liệu và tính toán hạn chế? (xem cramming paper)
 
-- Liệu có thể lặp lại scaling law chỉ với một tác vụ nhỏ trong xử lý ngôn ngữ? (bỏ hết trứng vào 1 giỏ)
+- Liệu có thể lặp lại scaling law chỉ với một tác vụ nhỏ trong xử lý ngôn ngữ? (xem santacoder)
 
 - Làm sao để tăng khả năng sử dụng tối đa sức mạnh phần cứng đang có để huấn luyện mô hình? (hiện tại 30-60%)
 
@@ -14,4 +14,4 @@ https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM
 
 - Bao nhiêu lượng dữ liệu là đủ để pre-train tiếp một mô hình đang có cho một ngôn ngữ lạ?
 
-- Liệu những gì nó học được từ ngôn ngữ khác có thể "mang sang" ngôn ngữ mới không?
+- Liệu những gì nó học được từ ngôn ngữ này có thể "mang sang" ngôn ngữ khác không?

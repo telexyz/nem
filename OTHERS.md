@@ -47,6 +47,9 @@ Học lập trình hệ thống bằng cách tham gia https://github.com/Serenit
 
 # Other projects
 
+## Dùng GPU xử lý dữ liệu lớn
+Bất kỳ dữ liệu nào, áp dụng hiểu biết về lập trình GPU và database. Có thể liên quan tới thời gian thực và tài chính.
+
 ## Train mô hình ngôn ngữ RWKV cho tiếng Việt
 
 Ưu điểm train nhanh, độ chính xác ~ Transformer, inference cực nhanh (chỉ cần nhân vector với matrix), có thể triển khai trên smartphone. Nhược điểm không phổ biến và được hỗ trợ rộng rãi như transformer
