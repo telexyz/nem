@@ -10,7 +10,7 @@ https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM
 
 - Các cách khác nhau để khai thác mô hình mà chưa cần fine-tune?
 
-- Các cách khác nhau để fine-tune một mô hình? (tiếp tục pre-train, fine-tune cho từng tác vụ, RLHL ...)
+- Các cách khác nhau để tăng độ hiệu quả của một mô hình? (tiếp tục pre-train, fine-tune cho từng tác vụ, RLHL ...)
 
 - Bao nhiêu lượng dữ liệu là đủ để pre-train tiếp một mô hình đang có cho một ngôn ngữ lạ?
 
