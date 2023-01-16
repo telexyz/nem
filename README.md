@@ -6,9 +6,7 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)
 
-## 01/2023-06/2023
-
-- [ ] [cs234](https://stanford-cs324.github.io/winter2023/syllabus) Foundation Models
+## 01/2023-xxx
 
 - [ ] [cs25](https://web.stanford.edu/class/cs25) Transformers United V2
 
@@ -16,7 +14,7 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 
 # Làm
 
-## 1/ Viết transfomer tối ưu cho pytorch để có thể train LM trên 1 GPU
+## 1/ [nam](https://github.com/telexyz/nam) Viết transfomer tối ưu cho pytorch để có thể train LM trên 1 GPU
 - Sử dụng những kỹ thuật tối ưu hóa từ Flash Attention, Triton compiler, bitnbytes quantization
 - https://github.com/karpathy/nanoGPT
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
