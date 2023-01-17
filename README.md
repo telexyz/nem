@@ -2,6 +2,8 @@
 
 __Software eating the world. AI eating software. And transformers are eating AI__
 
+[Liều thuốc đắng trong AI](./bitter-lesson.md)
+
 ## 09/2022-01/2023
 
 - [x] Hoàn thành [10714](https://dlsyscourse.org) Deep Learning Systems, tự xây dựng thư viện học sâu [kim](https://github.com/telexyz/kim)

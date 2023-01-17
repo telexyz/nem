@@ -1,3 +1,7 @@
+## Emergence and reasoning in large language models - Jason Wei (Google)
+https://www.youtube.com/watch?v=0Z1ZwY2K2-M
+
+- - -
 
 ![](files/llm-23.jpg)
 
