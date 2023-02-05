@@ -11,8 +11,9 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 ## 01/2023-xxx
 
 - [ ] [cs25](https://web.stanford.edu/class/cs25) Transformers United V2
+- [ ] [cs324](https://stanford-cs324.github.io/winter2023/syllabus) Advances in Foundation Models
 
-> AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune (fomo) trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
+> AI / Deep learning phát triển quá nhanh. Ý tưởng sau 6 tháng không thực hiện đã trở nên lạc hậu. Big foundation models + fine-tune trở thành xu hướng tất yếu. Cần nắm được xu hướng này nhất là Large Language Model.
 
 # Làm
 
