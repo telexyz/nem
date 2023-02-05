@@ -21,7 +21,7 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
 - https://babylm.github.io
 
-## 2/ Bộ gõ tiếng Việt thông minh (xem demo)
+## 2/ Bộ gõ tiếng Việt thông minh
 - https://github.com/telexyz/symato/blob/main/docs/marktone.md
 
 ## 3/ Tối ưu hóa xử lý ngữ liệu tiếng Việt
