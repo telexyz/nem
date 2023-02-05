@@ -16,17 +16,13 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 
 # Làm
 
-## 1/ [nam](https://github.com/telexyz/nam) Viết transfomer tối ưu cho pytorch để có thể train LM trên 1 GPU
-- Sử dụng những kỹ thuật tối ưu hóa từ Flash Attention, Triton compiler, bitnbytes quantization
-- https://github.com/karpathy/nanoGPT
+## 1/ [Symato](https://github.com/telexyz/symato) mô hình ngôn ngữ thuần Việt, hiệu năng cao
+- https://github.com/BlinkDL/RWKV-LM
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
 - https://babylm.github.io
 
-## 2/ Làm interface cho SantaCoder
-Một mô hình ngôn ngữ 1.1B tham số cho Java, JavaScript, và Python.
+## 2/ Bộ gõ tiếng Việt thông minh (xem demo)
+- https://github.com/telexyz/symato/blob/main/docs/marktone.md
 
-## 3/ Bộ gõ tiếng Việt thông minh (xem demo)
-https://github.com/telexyz/nem/tree/main/marktone#readme
-
-## 4/ Tối ưu hóa xử lý ngữ liệu tiếng Việt (đang làm)
+## 3/ Tối ưu hóa xử lý ngữ liệu tiếng Việt
 https://github.com/telexyz/bon
