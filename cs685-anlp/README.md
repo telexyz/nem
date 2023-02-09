@@ -1,6 +1,8 @@
 # Advanced NLP
 https://people.cs.umass.edu/~miyyer/cs685/schedule.html
 
-## Project Proposal
-https://www.overleaf.com/project/5f4faba219314100019e5282
-
+Problem sets (hw0, hw1, hw2)
+- Written: math & concept understanding
+- Programming: in Python 
+- All HWs will be on Google Colab
+Exams, and Final Project
