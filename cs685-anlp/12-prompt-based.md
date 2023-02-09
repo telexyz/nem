@@ -1,11 +1,95 @@
-https://youtu.be/8HwHGGb1zpQ
-
 https://people.cs.umass.edu/~miyyer/cs685_f22/slides/prompt_learning.pdf
 
 # What does all this scaling buy us?
 https://youtu.be/8HwHGGb1zpQ?t=348
 
+Xem [transformers/lec02-gpt3.md](../transformers/lec02-gpt3.md)
+
+## DEMO :D
+https://youtu.be/8HwHGGb1zpQ?t=999
+
+![](files/12-28.jpg)
+
+## Độ tốt
+![](files/12-29.jpg)
+
+__Với những task nhất định, LLM còn tốt hơn fine-tuned SOTA.__ Điều này có nghĩa là mô hình càng lớn, càng có nhiều dữ liệu huấn luyện, nó càng học được nhiều kết quả (được định sẵn), và có câu trả lời đúng hơn cả. Điều này không có xu hướng dừng lại! Nhưng nếu ta thay những tên người, tên địa danh trong câu hỏi bằng những cái tên không có thật thì LLM không thể nào trả lời đúng được.
+
+## Thách thức
+![](files/12-30.jpg)
+
+=> dùng prompts để giải quyết! :D
+
+![](files/12-31.jpg)
+
+## Prompt-tuning
+https://youtu.be/8HwHGGb1zpQ?t=2532
+
+![](files/12-32.jpg)
+
+Phần đầu của LM là embeddings, in prompt-tuning we learn a new sequence of embeddings, sau đó cho vào trước input của language model.
+
+![](files/12-34.jpg)
+
+T5 (encoder-decoder) model, đường màu đen là forward, đường màu đỏ là backward (update params). Đây là cách fine-tune thông thường. Vấn đề là, mỗi fine-tuned model tạo ra 1 bộ tham số mới hoàn toàn nên mỗi lần chạy là 1 lần load model mới. Với n tasks là n models mới. 
+
+Note: `<SOS>` = `Start-Of-Sequence` token.
+
+![](files/12-35.jpg)
+
+Với prompt-tuning, vẫn chuỗi vectors đầu vào như trên, ta cho thêm vào một đoạn prefix vectors (mới hoàn toàn không có trong từ điển), và được khởi tạo ngẫu nhiên.
+
+Ví dụ thường ta cho thêm "sentiment analysis" trước "this movie is awesome" như là một cách prompt engineering
+- hoặc "give me the sentiment of the sentence, " + "...",
+- hoặc "what is the sentiment of the sentence? " + "...", 
+
+Mục đích ở đây là __loại bỏ việc cho thêm các keywords vào prompt thủ công, và yêu cầu model làm điều đó__. Model làm điều đó bằng cách bỏ vào trước input vectors một prefix vectors được khởi tạo ngẫu nhiên rồi, cho toàn bộ chuỗi input mới đó vào model.
+
+![](files/12-36.jpg)
+
+Khi chúng ta tính loss với softmax ở classifier cuối, thì đường dot-line màu đỏ nghĩa là chúng ta sẽ không thực hiện params update với các tham số của mô hình mà chỉ update 2 embeding mới được thêm vào ở đầu chuỗi input (đường solid-line màu đỏ). Điều này có nghĩa là 99.9% của mô hình (mới) sẽ được giữ nguyên. Và điều này có nghĩa là mô hình đang tự học optimal continous representation of that instruction. Thay vì discrete tokens được cho thêm vào thủ công như ví dụ ở trên. Và vì lý do đó cách làm này __nói chung là tốt hơn nhiều discrete prompts that you design yourself__.
+
+Với cách làm này, ta chỉ cần swap out 2 embedding vectors của một tác vụ này bằng embedding vectors của một tác vụ khác mà không cần phải thay đổi tham số của toàn bộ mô hình lớn (dùng lại được nguyên pre-train mô hình).
+
+__Câu hỏi hay__: qua quá trình huấn luyện ta có được giá trị tốt nhất của 2 prepend embedding vectors này, ta có thể dùng nearest neighbor search để tìm xem các vectors này gần nhất với keywords nào không? => paper đã thử nhưng không tìm ra mối liên hệ rõ ràng nào (continuous có sự khác biệt so với discrete). Đôi khi chúng tương đương với các nhãn của bộ phân lớp như là positive hay negative. Xem paper để biết thêm chi tiết ...
+
+=> Bạn có thể khởi tạo tốt hơn bằng cách gán prepend embedding vectors = giá trị của class labels average thay cho random init. Hoặc khởi tạo chúng với discrete prompt (thiết kế thủ công) và để model fine-tune chúng.
+
+Điều này có nghĩa là những prepend vectors đó nằm bên ngoài word embeddings. Và tuy nearest neighbors có liên quan tới task đang thực thi nhưng khó có thể dịch ngược từ prepend vectors sang discrete prompt.
+
+Note: Cách này tuy linh hoạt và không phải thay đổi tham số của mô hình lớn nhưng kết quả của nó không tốt bằng fine-tune toàn bộ mô hình (đương nhiên là thế).
+
+![](files/12-33.jpg)
+
+__Ưu điểm của promp-tuning là trong cùng một batch, ta có thể chạy song song nhiều tasks.__
+
+![](files/12-37.jpg)
+
+Có thể thấy là với mô hình càng lớn thì độ hiệu quả của prompt-tuning càng cao, thậm chí gần sát với model-tuning. Có điều vẫn còn nhều thứ phải cải thiện như độ ổn định ... => Điều này khẳng định lại một điều là:
+> Khi mô hình càng lớn thì càng có khả năng cải thiện những tác vụ nó có thể làm được, thậm chí sinh ra những khả năng mới ...
+
+![](files/12-38.jpg)
+
+prompt-tuning (đường xanh lá cây) có số added params nhỏ nhất (chỉ 0.001%). 
+
+![](files/12-39.jpg)
+
+Mô hình càng lớn thì số lượng prepend vectors cần cho vào trước càng ít => một lần nữa chứng minh sức mạnh của large language model. Nó gợi ý điều gì?
+
+> Kết luận: với mô hình nhỏ ta nên fine-tune cả mô hình để có kết quả tốt nhất, còn với mô hình lớn ta nên prompt-tuning để số lượng tham số cần thay đổi là ít nhất mà vẫn đạt được kết quả gần như fine-tune cả mô hình lớn !!!
+
+## Prompt pretraining: the SPoT approach
+https://youtu.be/8HwHGGb1zpQ?t=3982
+
+__SPoT__: Better Frozen Model Adaptation through `Soft Prompt Transfer`.
+
+![](files/12-40.jpg)
+
+> Cuối cùng: prompt-tuning rất tốt vì chỉ có những lab / công ty lớn mới có khả năng pre-train và fine-tune LLM. Với prompt-tuning ta có thể thực hiện những thay đổi nhỏ nhất mà vẫn đạt SOTA results. => one (pre-train) model to kill them all!
+
+
 - - -
+
 
 https://www.youtube.com/watch?v=5ef83Wljm-M
 
