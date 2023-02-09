@@ -1,3 +1,13 @@
+# Pretrain, Prompt, Predict: A New Paradigm for NLP
+
+## Trend of Prompt-based Research
+http://pretrain.nlpedia.ai
+
+![](files/12-41.jpg)
+
+
+- - -
+
 https://people.cs.umass.edu/~miyyer/cs685_f22/slides/prompt_learning.pdf
 
 # What does all this scaling buy us?
