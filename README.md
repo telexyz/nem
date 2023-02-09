@@ -19,6 +19,7 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 # Làm
 
 ## 1/ [Symato](https://github.com/telexyz/symato) mô hình ngôn ngữ thuần Việt, hiệu năng cao
+- https://github.com/telexyz/symato
 - https://github.com/BlinkDL/RWKV-LM
 - [bert-one-day-one-gpu](https://github.com/jonasgeiping/cramming)
 - https://babylm.github.io
