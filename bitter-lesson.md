@@ -33,3 +33,48 @@ Bài học quan trọng nhất là sức mạnh to lớn của các phương ph�
 Bài học thứ hai là nội dung cụ thể của trí óc (con người) là vô cùng vô cùng phức tạp, chúng ta nên dừng việc cố gắng tìm ra những cách đơn giản để nghĩ về trí óc. Các cách tiếp cận đó cuối cùng đều có độ phức tạp vô tận, thay vào đó chúng ta chỉ nên xây dựng những siêu phương pháp có khả năng nắm giữ độ phức tạp tùy ý. Cốt lõi là các phương pháp đó có khả năng tìm các __xấp xỉ tốt__, nhưng việc tìm kiếm những xấp xỉ đó không phải là chúng ta! Chúng ta muốn những AI agents tìm kiếm như cách chúng ta làm, chứ không phải những gì ta đã khám phá ra. Xây dựng dựa trên những gì ta đã phám khá ra chỉ khiến nó trở nên khó khăn hơn để thấy quá trình tìm kiếm nên được hoàn thành như thế nào (3).
 
 (3) có thể đoạn này ý nói để máy tính tự học lấy, tự khám phá lấy từ dữ liệu.
+
+- - -
+
+# The Bitterest of Lessons: The Role of Data and Optimization in Emergence
+https://youtu.be/aDzQwewwvO0?t=823
+
+![](.archive/files/bitter-lesson-00.jpg)
+
+Nếu chúng ta muốn xây dựng cỗ máy thông minh, chúng ta nên nghĩ về những phương pháp đơn giản và có khả năng mở rộng hơn là những phương pháp mã hóa những niềm tin có trước của chúng ta (ones that encode our prior beliefs) about how intelligent works. Và 2 phương pháp thực sự hoạt động là LEARNING & SEARCH.
+
+- Learning là sử dụng data để trích xuất mẫu (use data to extract patterns). Là nhồi tri thức vào model và maxmium likelihood training là một quá trình nén.
+
+- Search là sử dụng computation để triết xuất inferences. Search sử dụng những gì đã học được để tạo ra inference. Về cơ bản search cũng là optimization. Some kind of interative process that extracts inferences based on what you've learn to make rational decisions.
+
+So learning allows us to understand the world and search leverages that understands for emergence. RL is search, planning model creative control these are search.
+
+Data without optimization doesn't allow us to solve new problems in the new ways. It's allows us to build machines that behave in ways analogous to how humans would behave, the human that generated data.
+
+https://youtu.be/aDzQwewwvO0?t=1115
+
+![](.archive/files/bitter-lesson-01.jpg)
+
+online RL khó, vì vậy trong thực tế người ta dùng offline RL.
+
+![](.archive/files/bitter-lesson-02.jpg)
+
+![](.archive/files/bitter-lesson-03.jpg)
+
+![](.archive/files/bitter-lesson-04.jpg)
+
+## Language and interation: emergence with people
+https://youtu.be/aDzQwewwvO0?t=1925
+
+![](.archive/files/bitter-lesson-05.jpg)
+
+![](.archive/files/bitter-lesson-06.jpg)
+
+![](.archive/files/bitter-lesson-07.jpg)
+
+![](.archive/files/bitter-lesson-08.jpg)
+
+## Kết luận
+![](.archive/files/bitter-lesson-09.jpg)
+
+> Nếu ta có thể kết hợp dữ liệu và tối ưu hóa thì then we would see powerful emergent behaviors in real world settings.
