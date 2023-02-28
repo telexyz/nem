@@ -25,7 +25,8 @@ __Software eating the world. AI eating software. And transformers are eating AI_
 - https://babylm.github.io
 
 ## 2/ Bộ gõ tiếng Việt thông minh
-https://github.com/telexyz/bon-sublime
+- https://github.com/telexyz/bon-sublime
 
 ## 3/ Tối ưu hóa xử lý ngữ liệu tiếng Việt
-https://github.com/telexyz/bon
+- https://github.com/telexyz/bon
+- https://github.com/telexyz/engine
